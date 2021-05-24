@@ -14,3 +14,4 @@ CREATE TABLE tpc_ds.Warehouse (
         w_country varchar,
         w_gmt_offset decimal
 );
+
