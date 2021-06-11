@@ -8,7 +8,7 @@
 
 # The name of the cluster. This is mainly used to prevent machines in
 # one logical cluster from joining another.
-cluster_name: 'Test Cluster'
+cluster_name:  ETL_Cassandra
 
 # This defines the number of tokens randomly assigned to this node on the ring
 # The more tokens, relative to other nodes, the larger the proportion of data
@@ -336,7 +336,7 @@ key_cache_save_period: 14400
 # headroom for OS block level cache. Do never allow your system to swap.
 #
 # Default value is 0, to disable row caching.
-row_cache_size_in_mb: 0
+row_cache_size_in_mb=2
 
 # Duration in seconds after which Cassandra should save the row cache.
 # Caches are saved to saved_caches_directory as specified in this configuration file.
@@ -459,7 +459,7 @@ seed_provider:
       parameters:
           # seeds is actually a comma-delimited list of addresses.
           # Ex: "<ip1>,<ip2>,<ip3>"
-          - seeds: "127.0.0.1:7000"
+          - seeds: "10.0.0.66"
 
 # For workloads with more data than can fit in memory, Cassandra's
 # bottleneck will be reads that need to fetch data from
@@ -659,7 +659,7 @@ ssl_storage_port: 7001
 #
 # Setting listen_address to 0.0.0.0 is always wrong.
 #
-listen_address: localhost
+listen_address: 10.0.0.66
 
 # Set listen_address OR listen_interface, not both. Interfaces must correspond
 # to a single address, IP aliasing is not supported.
@@ -673,7 +673,7 @@ listen_address: localhost
 
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
-# broadcast_address: 1.2.3.4
+broadcast_address: 10.0.0.66
 
 # When using multiple physical network interfaces, set this
 # to true to listen on broadcast_address in addition to
@@ -743,7 +743,7 @@ native_transport_allow_older_protocols: true
 # set broadcast_rpc_address to a value other than 0.0.0.0.
 #
 # For security reasons, you should not expose this port to the internet.  Firewall it if needed.
-rpc_address: localhost
+rpc_address: 0.0.0.0
 
 # Set rpc_address OR rpc_interface, not both. Interfaces must correspond
 # to a single address, IP aliasing is not supported.
@@ -759,7 +759,7 @@ rpc_address: localhost
 # be set to 0.0.0.0. If left blank, this will be set to the value of
 # rpc_address. If rpc_address is set to 0.0.0.0, broadcast_rpc_address must
 # be set.
-# broadcast_rpc_address: 1.2.3.4
+broadcast_rpc_address: 10.0.0.66
 
 # enable or disable keepalive on rpc/native connections
 rpc_keepalive: true
