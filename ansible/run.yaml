@@ -72,10 +72,10 @@
           register: cluster_worker_id
 
         - name: Add manager label
-          ansible.builtin.command: "docker node update --label-add node=n{{ 0 }} {{ cluster_manager_id.stdout_lines[0] }}"
+          ansible.builtin.command: "docker node update --label-add node=n{{ 1 }} {{ cluster_manager_id.stdout_lines[0] }}"
 
         - name: Add node labels
-          ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+1 }} {{ item }}"
+          ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+2 }} {{ item }}"
           loop: "{{ cluster_worker_id.stdout_lines }}"
           loop_control:
             index_var: node_idx

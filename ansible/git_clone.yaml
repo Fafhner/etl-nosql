@@ -4,7 +4,13 @@
   tasks:
     - name: Remove repo
       ansible.builtin.command: "rm -r etl-nosql"
+      tags: remove_repo
 
     - name: Git clone etl-nosql
       ansible.builtin.command: "git clone https://github.com/Fafhner/etl-nosql.git"
+      tags: clone_repo
+
+    - name: Git pull
+      ansible.builtin.command: "git -C etl-nosql pull"
+      tags: pull repo
 

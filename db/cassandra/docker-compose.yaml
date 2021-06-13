@@ -32,6 +32,7 @@ services:
     environment:
       CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-2
       CASSANDRA_SEEDS: "tasks.cassandra-1"
+    volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - type: bind
