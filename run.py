@@ -132,4 +132,4 @@ if __name__ == "__main__":
         write_to('docker-compose.yaml', dc, 'db/cassandra')
         # 3 ########################
         print("Running ansible")
-        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)
+        # run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)

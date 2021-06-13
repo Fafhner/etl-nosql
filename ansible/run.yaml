@@ -72,7 +72,7 @@
           register: cluster_worker_id
 
         - name: Add manager label
-          ansible.builtin.command: "docker node update --label-add node=n{{ 1 }} {{ cluster_manager_id.stdout_lines[0] }}"
+          ansible.builtin.command: "docker node update --label-add node=n1 {{ cluster_manager_id.stdout_lines[0] }}"
 
         - name: Add node labels
           ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+2 }} {{ item }}"
@@ -89,7 +89,9 @@
     - name: Create docker network
       ansible.builtin.command: "docker network create -d overlay {{ db['network_name'] }}"
       when: create_cluster_network
-      tags: tag_create_cluster_network
+      tags:
+        - tag_create_cluster
+        - tag_create_cluster
 
 
 - hosts: cluster_node_manager:cluster_node_workers
@@ -111,9 +113,6 @@
             - "{{ configs }}"
             - params
 
-        - name: Change params
-          ansible.builtin.command: "docker config create {{ item['config_name']}} {{ item.file_path }}/{{ item.file_name }}"
-          loop: "{{ configs }}"
       when: backup_files
       tags: tag_backup_files
 
@@ -125,11 +124,13 @@
       when: docker_stack_deploy
       tags: tag_docker_stack_deploy
 
-    - name: Sleep 30 sec.
+    - name: Pause for 5 minutes to build cluster
       pause:
-        seconds: 30
+        minutes: 5
       when: docker_stack_deploy
       tags: tag_docker_stack_deploy
+
+
 
 - hosts: cluster_node_manager
   tasks:
@@ -143,8 +144,9 @@
           ansible.builtin.debug:
             msg: "{{container_id}}"
 
+
         - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id}} {{namespace_conf['create']}}"
+          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -e CREATE KEYSPACE tpc_ds WITH REPLICATION = {'class':'SimpleStrategy', 'replication_factor': 3 }"
       when: create_namespace
       tags: tag_create_namespace
 

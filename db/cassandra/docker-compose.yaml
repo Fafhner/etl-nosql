@@ -17,6 +17,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -41,8 +42,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -67,8 +67,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -93,8 +92,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -119,8 +117,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -145,8 +142,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -171,8 +167,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -197,8 +192,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042
@@ -223,8 +217,7 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
     ports:
       - 7000
       - 9042

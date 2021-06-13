@@ -4,17 +4,10 @@
     "etl_driver": "cassandra",
     "docker_stack_name": "ETL",
     "db_tables_path": "/tables_data",
-    "network_name": "cassandraNet",
-    "configs": [
-      {
-
-      }
-    ]
+    "network_name": "cassandraNet"
   },
-
   "configs": [
     {
-      "config_name": "cassandra-yaml-config",
       "file_name": "cassandra.yaml",
       "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
@@ -25,7 +18,6 @@
       ]
     },
     {
-      "config_name": "cassandra-jvm-config",
       "file_name": "jvm-server.options",
       "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
@@ -38,13 +30,24 @@
           "replace": "-Xmx{{java_xms}}M"
         }
       ]
+    },
+    {
+      "file_name": "keyspace",
+      "file_path": "~/etl-nosql/db/cassandra/tables_schema",
+      "params": [
+        {
+          "regex": "__keyspace__",
+          "replace": "{{namespace}}"
+        },
+        {
+          "regex": "__rep_factor__",
+          "replace": "{{rep_factor}}"
+        }
+      ]
     }
   ],
-  "namespace_conf": {
-    "name": "tpc_ds",
-    "create": "CREATE KEYSPACE {{namespace_conf['name']}} WITH REPLICATION = {'class':  'SimpleStrategy', 'replication_factor': {{rep_factor}} };",
-    "drop": "DROP KEYSPACE IF EXISTS {{namespace_conf['name']}};"
-  },
+  "namespace": "tpc_ds",
+
   "exec_file": "cqlsh -f  ",
   "exec_string": "cqlsh -e ",
   "table_infos": [
