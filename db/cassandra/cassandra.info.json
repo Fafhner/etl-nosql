@@ -18,7 +18,7 @@
       ]
     },
     {
-      "file_name": "jvm-server.options",
+      "file_name": "jvm.options",
       "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
         {
@@ -33,7 +33,7 @@
     },
     {
       "file_name": "keyspace",
-      "file_path": "~/etl-nosql/db/cassandra/tables_schema",
+      "file_path": "~/etl-nosql/db/cassandra/tables_schema/keyspace",
       "params": [
         {
           "regex": "__keyspace__",

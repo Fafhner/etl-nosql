@@ -96,12 +96,12 @@
 
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
-    - name: Backup files, change parameters, create config
+    - name: Restore files, change parameters
       block:
-        - name: Backup files
+        - name: Restore files
           ansible.builtin.copy:
-            src: "{{ item.file_path }}/{{ item.file_name }}"
-            dest: "{{ item.file_path }}/{{ item.file_name }}.backup"
+            src: "{{ item.file_path }}/{{ item.file_name }}.backup"
+            dest: "{{ item.file_path }}/{{ item.file_name }}"
           loop: "{{ configs }}"
 
         - name: Change params
