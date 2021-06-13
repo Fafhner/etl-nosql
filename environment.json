@@ -1,20 +1,8 @@
 {
   "static": {
     "make_dirs": [
-      "~/etl-nosql/db/volumes/cassandra/etc/cassandra",
-      "~/etl-nosql/db/volumes/cassandra/var/lib/cassandra",
-      "~/etl-nosql/db/volumes/cassandra/schema",
-      "~/etl-nosql/db/tables"
     ],
     "copy_files": [
-      {
-        "src": "~/etl-nosql/db/push-down/db/cassandra/etc/cassandra",
-        "dest": "~/etl-nosql/db/volumes/cassandra/etc/cassandra/"
-      },
-      {
-        "src": "~/etl-nosql/db/push-down/db/cassandra/tables_schema",
-        "dest": "~/etl-nosql/db/volumes/cassandra/schema"
-      }
     ],
     "cluster": {
       "node_manager": "192.168.55.11",
@@ -32,7 +20,7 @@
       ]
     },
     "data_generator": {
-      "tables_dest": "$HOME/etl-nosql/db/tables",
+      "tables_dest": "$HOME/etl-nosql/db/table_data",
       "gen_path": "$HOME/etl-nosql/tpc-ds-tool/v3.0.0/tools",
       "terminate": "N",
       "rngseed": 100,
@@ -43,7 +31,7 @@
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
     "database_info_file": "cassandra.info.json",
-    "docker_compose_file": "~/etl-nosql/db/push-down/db/cassandra/docker-compose.yaml",
+    "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
     "ansible_catalog": "ansible",
     "generate_scripts_only": false,
     "tables_schema": []

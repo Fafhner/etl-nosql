@@ -16,7 +16,7 @@
     {
       "config_name": "cassandra-yaml-config",
       "file_name": "cassandra.yaml",
-      "file_path": "~/etl-nosql/db/volumes/etc/cassandra",
+      "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
         {
           "regex": "^row_cache_size_in_mb:.*",
@@ -27,7 +27,7 @@
     {
       "config_name": "cassandra-jvm-config",
       "file_name": "jvm-server.options",
-      "file_path": "~/etl-nosql/db/volumes/etc/cassandra",
+      "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
         {
           "regex": "#-Xms4G",
