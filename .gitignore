@@ -1,0 +1,8 @@
+.idea
+__pycahe__
+dask-worker-space
+.trash
+scripts
+*_test.result.json
+*.log
+*.pyc

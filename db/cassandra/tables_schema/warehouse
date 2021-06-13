@@ -1,0 +1,17 @@
+CREATE TABLE tpc_ds.Warehouse (
+        w_warehouse_sk bigint PRIMARY KEY,
+        w_warehouse_id    varchar,
+        w_warehouse_name   varchar,
+        w_warehouse_sq_ft int,
+        w_street_number varchar,
+        w_street_name varchar,
+        w_street_type varchar,
+        w_suite_number varchar,
+        w_city varchar,
+        w_county varchar,
+        w_state varchar,
+        w_zip varchar,
+        w_country varchar,
+        w_gmt_offset decimal
+);
+

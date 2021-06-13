@@ -1,0 +1,174 @@
+---
+
+
+# - Table creation - DONE
+# - Docker swarm creation - DONE
+# - Docker swarm node add labels - DONE
+# - Docker swarm network create - DONE
+# - Docker swarm backup files - DONE
+# - Docker modify files - DONE
+# - Docker stack up - DONE
+# - Docker DB create namespace - DONE
+# - Docker DB create tables_schema schema - X
+# - Docker DB load data - X
+
+
+# Tasks for generating data
+
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Create tables_schema
+      block:
+        - name: Create directory for tables_schema' data
+          file:
+            path: "{{ data_generator['tables_dest'] }}/{{ 'scale' }}"
+            state: directory
+
+        - name: Generate tables_schema
+          ansible.builtin.command: "{{ data_generator['gen_path']}}/dsdgen -DIR {{data_generator['tables_dest'] }}/{{ scale }} -SCALE {{ scale }} -TERMINATE {{ data_generator['terminate']}} -RNGSEED {{data_generator['rngseed'] }} -FORCE {{data_generator['force'] }} -DISTRIBUTIONS {{data_generator['distr'] }} -TABLE {{ item }}"
+          with_items: "{{ data_generator['tables'] }}"
+      when: create_tables
+      ignore_errors: true
+      tags: tag_create_tables
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Init docker swarm node manager
+      block:
+        - name: Init swarm
+          ansible.builtin.command:  docker swarm init
+
+        - name: Register swarm worker token
+          ansible.builtin.command: docker swarm join-token -q worker
+          register: cluster_token
+
+      when: create_cluster
+      tags: tag_create_cluster
+
+
+- hosts: cluster_node_workers
+  tasks:
+    - name: Init docker swarm workers
+      block:
+        - name: Init swarm workers
+          ansible.builtin.command:  "docker swarm join --token {{ hostvars[cluster['node_manager']]['cluster_token'].stdout }} {{cluster['node_manager']}}:2377"
+      when: create_cluster
+      tags: tag_create_cluster
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Get nodes id, add labels
+      block:
+        - name: Get manager id
+          ansible.builtin.command:  "docker node ls -q -f 'role=manager'"
+          register: cluster_manager_id
+
+        - name: Get worker id
+          ansible.builtin.command:  "docker node ls -q -f 'role=worker'"
+          register: cluster_worker_id
+
+        - name: Add manager label
+          ansible.builtin.command: "docker node update --label-add node=n{{ 0 }} {{ cluster_manager_id.stdout_lines[0] }}"
+
+        - name: Add node labels
+          ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+1 }} {{ item }}"
+          loop: "{{ cluster_worker_id.stdout_lines }}"
+          loop_control:
+            index_var: node_idx
+
+      when: create_cluster
+      tags: tag_create_cluster
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Create docker network
+      ansible.builtin.command: "docker network create -d overlay {{ db['network_name'] }}"
+      when: create_cluster_network
+      tags: tag_create_cluster_network
+
+
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Backup files, change parameters, create config
+      block:
+        - name: Backup files
+          ansible.builtin.copy:
+            src: "{{ item.file_path }}/{{ item.file_name }}"
+            dest: "{{ item.file_path }}/{{ item.file_name }}.backup"
+          loop: "{{ configs }}"
+
+        - name: Change params
+          ansible.builtin.replace:
+            path: "{{ item.0.file_path }}/{{ item.0.file_name }}"
+            regexp: "{{ item.1.regex }}"
+            replace: "{{ item.1.replace }}"
+          with_subelements:
+            - "{{ configs }}"
+            - params
+
+        - name: Change params
+          ansible.builtin.command: "docker config create {{ item['config_name']}} {{ item.file_path }}/{{ item.file_name }}"
+          loop: "{{ configs }}"
+      when: backup_files
+      tags: tag_backup_files
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Docker stack up
+      ansible.builtin.command: "docker stack deploy -c {{docker_compose_file}} {{db['docker_stack_name']}}"
+      when: docker_stack_deploy
+      tags: tag_docker_stack_deploy
+
+    - name: Sleep 30 sec.
+      pause:
+        seconds: 30
+      when: docker_stack_deploy
+      tags: tag_docker_stack_deploy
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Create DB namespace
+      block:
+        - name: Get container ID
+          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          register: container_id
+
+        - name: Container id
+          ansible.builtin.debug:
+            msg: "{{container_id}}"
+
+        - name: DB create namespace
+          ansible.builtin.command: "docker exec {{container_id}} {{namespace_conf['create']}}"
+      when: create_namespace
+      tags: tag_create_namespace
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Create DB tables schema
+      block:
+        - name: Get container ID 2
+          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          register: container_id
+
+        - name: DB create table schema
+          ansible.builtin.command: "docker exec {{container_id}} '{{exec_file}} {{db['db_tables_path']}}/{{item}}'"
+          loop: "{{tables_schema}}"
+      when: create_table_schema
+      tags: tag_create_table_schema
+
+
+
+
+
+
+
+
+
+

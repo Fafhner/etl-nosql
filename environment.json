@@ -1,0 +1,102 @@
+{
+  "static": {
+    "make_dirs": [
+      "~/etl-nosql/db/volumes/cassandra/etc/cassandra",
+      "~/etl-nosql/db/volumes/cassandra/var/lib/cassandra",
+      "~/etl-nosql/db/volumes/cassandra/schema",
+      "~/etl-nosql/db/tables"
+    ],
+    "copy_files": [
+      {
+        "src": "~/etl-nosql/db/push-down/db/cassandra/etc/cassandra",
+        "dest": "~/etl-nosql/db/volumes/cassandra/etc/cassandra/"
+      },
+      {
+        "src": "~/etl-nosql/db/push-down/db/cassandra/tables_schema",
+        "dest": "~/etl-nosql/db/volumes/cassandra/schema"
+      }
+    ],
+    "cluster": {
+      "node_manager": "192.168.55.11",
+      "node_workers": [
+        "192.168.55.11",
+        "192.168.55.12",
+        "192.168.55.13",
+        "192.168.55.14",
+        "192.168.55.15",
+        "192.168.55.16",
+        "192.168.55.17",
+        "192.168.55.18",
+        "192.168.55.19",
+        "192.168.55.20"
+      ]
+    },
+    "data_generator": {
+      "tables_dest": "$HOME/etl-nosql/db/tables",
+      "gen_path": "$HOME/etl-nosql/tpc-ds-tool/v3.0.0/tools",
+      "terminate": "N",
+      "rngseed": 100,
+      "force": "N",
+      "distr": "~/etl-nosql/tpc-ds-tool/v3.0.0/tools/tpcds.idx",
+      "tables": []
+    },
+    "database_info_path": "db/cassandra",
+    "udf_path": "db/cassandra/udf",
+    "database_info_file": "cassandra.info.json",
+    "docker_compose_file": "~/etl-nosql/db/push-down/db/cassandra/docker-compose.yaml",
+    "ansible_catalog": "ansible",
+    "generate_scripts_only": false,
+    "tables_schema": []
+  },
+  "dynamic": {
+    "udf": {
+      "context": "udf",
+      "priority": 10000,
+      "data": [
+        "10_intersect_1.json",
+        "10_intersect_2.json"
+      ]
+    },
+    "scale": {
+      "context": "table_data",
+      "priority": 999,
+      "start": 1,
+      "stop": 2,
+      "step": 1
+    },
+    "cluster_size": {
+      "context": "cluster",
+      "priority": 2,
+      "data": [
+        3,
+        4,
+        5
+      ]
+    },
+    "row_cache_size_in_mb": {
+      "context": "db_file",
+      "priority": 1,
+      "start": 1,
+      "stop": 2,
+      "step": 1
+    },
+    "rep_factor": {
+      "context": "db",
+      "priority": 2,
+      "data": [
+        3,
+        4,
+        5
+      ]
+    },
+    "java_xms": {
+      "context": "db_file",
+      "priority": 2,
+      "data": [
+        2000,
+        4000,
+        6000
+      ]
+    }
+  }
+}

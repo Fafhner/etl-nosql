@@ -1,0 +1,90 @@
+{
+
+    "datasets": {
+        "date_dim" : {
+          "table_schema": "date_dim",
+          "index": "d_date_sk",
+          "query": "SELECT d_date_sk, d_year, d_dom FROM tpc_ds.date_dim;"
+        },
+        "store_sales" : {
+          "table_schema": "store_sales",
+          "index": "ss_sold_date_sk",
+          "query": "SELECT ss_sold_date_sk, ss_customer_sk, ss_item_sk FROM tpc_ds.store_sales LIMIT 40000;"
+        },
+        "catalog_sales" : {
+          "table_schema": "catalog_sales",
+          "index": "cs_sold_date_sk",
+          "query": "SELECT cs_sold_date_sk, cs_bill_customer_sk, cs_item_sk FROM tpc_ds.catalog_sales LIMIT 40000;"
+        }
+    },
+
+    "steps": [
+         {
+            "etl_func": "filter",
+            "args_tb": {
+                "tb": "date_dim"
+            },
+             "args": {
+                 "col": "d_year",
+                 "sign":  "=",
+                 "val": 1999
+             },
+            "output": "date_dim"
+        },
+        {
+            "etl_func": "filter",
+            "args_tb": {
+                "tb": "date_dim"
+            },
+             "args": {
+                 "col": "d_dom",
+                 "sign":  "<=",
+                 "val": 4
+             },
+            "output": "date_dim"
+        },
+        {
+            "etl_func": "inner_join",
+            "args_tb": {
+                "left_tb": "store_sales",
+                "right_tb": "date_dim"
+            },
+            "args": {
+                 "left_idx": "ss_sold_date_sk",
+                 "right_idx":  "d_date_sk"
+             },
+            "output": "SS_DD",
+            "remove": ["store_sales"]
+        },
+        {
+            "etl_func": "inner_join",
+            "args_tb": {
+                "left_tb": "catalog_sales",
+                "right_tb": "date_dim"
+            },
+            "args": {
+                 "left_idx": "cs_sold_date_sk",
+                 "right_idx":  "d_date_sk"
+             },
+            "output": "CS_DD",
+            "remove": ["catalog_sales", "date_dim"]
+        },
+        {
+            "etl_func": "intersect",
+            "args_tb": {
+                 "left_tb": "SS_DD",
+                 "right_tb": "CS_DD"
+            },
+            "output": "SS_CS_DD",
+            "remove": ["SS_DD", "CS_DD"]
+        },
+        {
+            "etl_func": "count",
+            "args_tb": {
+                "tb": "SS_CS_DD"
+            },
+            "output": "SS_CS_DD_count",
+            "remove": ["SS_CS_DD"]
+        }
+    ]
+}
