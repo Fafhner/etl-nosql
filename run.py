@@ -44,7 +44,7 @@ def convert_tables_info(tables, config):
                 tables_info.append(tb_info['load'].format(
                     namespace=config['namespace'],
                     table=tb,
-                    path=config['db']['db_tables_path'],
+                    path=config['db']['db_tables_path'] + "/" + str(config['scale']),
                     file=tb_info['table']))
     return tables_info
 
@@ -101,8 +101,8 @@ if __name__ == "__main__":
         "backup_files": True,
         "docker_stack_deploy": True,
         "create_namespace": True,
-        "create_table_schema": True
-
+        "create_table_schema": True,
+        "load_data": True
     }
 
     ansi_cat = static_env['ansible_catalog']

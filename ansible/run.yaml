@@ -19,14 +19,14 @@
 
 - hosts: cluster_node_manager
   tasks:
-    - name: Create tables_schema
+    - name: Generate data
       block:
-        - name: Create directory for tables_schema' data
+        - name: Create directory for tables' data
           file:
             path: "{{ data_generator['tables_dest'] }}/{{ scale }}"
             state: directory
 
-        - name: Generate tables_schema
+        - name: Generate data
           ansible.builtin.command: "{{ data_generator['gen_path']}}/dsdgen -DIR {{data_generator['tables_dest'] }}/{{ scale }} -SCALE {{ scale }} -TERMINATE {{ data_generator['terminate']}} -RNGSEED {{data_generator['rngseed'] }} -FORCE {{data_generator['force'] }} -DISTRIBUTIONS {{data_generator['distr'] }} -TABLE {{ item }}"
           with_items: "{{ data_generator['tables'] }}"
       when: create_tables
@@ -169,16 +169,15 @@
 
 - hosts: cluster_node_manager
   tasks:
-    - name: Create DB tables schema
+    - name: Load data to DB
       block:
-        - name: Get container ID 2
+        - name: Get container ID 3
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
         - name: DB create table schema
-          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
-          loop: "{{tables_schema}}"
-      when: create_table_schema
+          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -f /tables_schema/load"
+      when: load_data
       tags: tag_load_data
 
 

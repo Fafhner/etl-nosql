@@ -149,5 +149,6 @@
     "backup_files": true,
     "docker_stack_deploy": true,
     "create_namespace": true,
-    "create_table_schema": true
+    "create_table_schema": true,
+    "load_data": true
 }
