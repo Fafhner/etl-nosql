@@ -144,9 +144,9 @@
           ansible.builtin.debug:
             msg: "{{container_id}}"
 
-
         - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -e CREATE KEYSPACE tpc_ds WITH REPLICATION = {'class':'SimpleStrategy', 'replication_factor': 3 }"
+          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -f /tables_schema/keyspace"
+
       when: create_namespace
       tags: tag_create_namespace
 

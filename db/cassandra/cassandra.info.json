@@ -36,11 +36,11 @@
       "file_path": "~/etl-nosql/db/cassandra/tables_schema/keyspace",
       "params": [
         {
-          "regex": "__keyspace__",
+          "regex": "keyspace",
           "replace": "{{namespace}}"
         },
         {
-          "regex": "__rep_factor__",
+          "regex": "rep_factor",
           "replace": "{{rep_factor}}"
         }
       ]
@@ -50,6 +50,10 @@
 
   "exec_file": "cqlsh -f  ",
   "exec_string": "cqlsh -e ",
+
+  "exec": [
+    "cqlsh -f /tables_schema/keyspace"
+  ],
   "table_infos": [
     {
       "table": "date_dim",

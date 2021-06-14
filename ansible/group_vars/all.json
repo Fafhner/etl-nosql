@@ -1,29 +1,17 @@
 {
-    "make_dirs": [
-        "~/etl-nosql/db/volumes/cassandra/etc/cassandra",
-        "~/etl-nosql/db/volumes/cassandra/var/lib/cassandra",
-        "~/etl-nosql/db/volumes/cassandra/schema",
-        "~/etl-nosql/db/tables"
-    ],
-    "copy_files": [
-        {
-            "src": "~/etl-nosql/db/push-down/db/cassandra/etc/cassandra",
-            "dest": "~/etl-nosql/db/volumes/cassandra/etc/cassandra/"
-        },
-        {
-            "src": "~/etl-nosql/db/push-down/db/cassandra/tables_schema",
-            "dest": "~/etl-nosql/db/volumes/cassandra/schema"
-        }
-    ],
+    "make_dirs": [],
+    "copy_files": [],
     "cluster": {
         "node_manager": "192.168.55.11",
         "node_workers": [
             "192.168.55.12",
-            "192.168.55.13"
+            "192.168.55.13",
+            "192.168.55.14",
+            "192.168.55.15"
         ]
     },
     "data_generator": {
-        "tables_dest": "$HOME/etl-nosql/db/tables",
+        "tables_dest": "$HOME/etl-nosql/db/table_data",
         "gen_path": "$HOME/etl-nosql/tpc-ds-tool/v3.0.0/tools",
         "terminate": "N",
         "rngseed": 100,
@@ -38,7 +26,7 @@
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
     "database_info_file": "cassandra.info.json",
-    "docker_compose_file": "~/etl-nosql/db/push-down/db/cassandra/docker-compose.yaml",
+    "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
     "ansible_catalog": "ansible",
     "generate_scripts_only": false,
     "tables_schema": [
@@ -47,11 +35,11 @@
         "catalog_sales"
     ],
     "row_cache_size_in_mb": 1,
-    "cluster_size": 3,
-    "rep_factor": 3,
-    "java_xms": 2000,
+    "cluster_size": 5,
+    "rep_factor": 5,
+    "java_xms": 6000,
     "scale": 1,
-    "udf": "10_intersect_1.json",
+    "udf": "10_intersect_2.json",
     "db": {
         "service_name": "cassandra",
         "etl_driver": "cassandra",
@@ -59,10 +47,10 @@
         "db_tables_path": "/tables_data",
         "network_name": "cassandraNet"
     },
-    "change_files": [
+    "configs": [
         {
             "file_name": "cassandra.yaml",
-            "file_path": "~/etl-nosql/db/volumes/etc/cassandra",
+            "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
             "params": [
                 {
                     "regex": "^row_cache_size_in_mb:.*",
@@ -71,8 +59,8 @@
             ]
         },
         {
-            "file_name": "cassandra.yaml",
-            "file_path": "~/etl-nosql/db/volumes/etc/cassandra",
+            "file_name": "jvm.options",
+            "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
             "params": [
                 {
                     "regex": "#-Xms4G",
@@ -83,15 +71,28 @@
                     "replace": "-Xmx{{java_xms}}M"
                 }
             ]
+        },
+        {
+            "file_name": "keyspace",
+            "file_path": "~/etl-nosql/db/cassandra/tables_schema/keyspace",
+            "params": [
+                {
+                    "regex": "keyspace",
+                    "replace": "{{namespace}}"
+                },
+                {
+                    "regex": "rep_factor",
+                    "replace": "{{rep_factor}}"
+                }
+            ]
         }
     ],
-    "namespace_conf": {
-        "name": "tpc_ds",
-        "create": "CREATE KEYSPACE {{namespace_conf['name']}} WITH REPLICATION = {'class':  'SimpleStrategy', 'replication_factor': {{rep_factor}} };",
-        "drop": "DROP KEYSPACE IF EXISTS {{namespace_conf['name']}};"
-    },
+    "namespace": "tpc_ds",
     "exec_file": "cqlsh -f  ",
     "exec_string": "cqlsh -e ",
+    "exec": [
+        "cqlsh -f /tables_schema/keyspace"
+    ],
     "table_infos": [
         {
             "table": "date_dim",
