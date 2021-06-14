@@ -30,10 +30,23 @@ def load_from(file_name, path=None):
 def generate_hosts_file(manager, workers):
     hosts = """[cluster_node_manager]\n{manager}\n[cluster_node_workers]\n{workers}"""
     hosts = hosts.format(
-                manager=manager,
-                workers="\n".join(workers)
+        manager=manager,
+        workers="\n".join(workers)
     )
     return hosts
+
+
+def convert_tables_info(tables, config):
+    tables_info = list()
+    for tb in tables:
+        for tb_info in config['table_infos']:
+            if tb in tb_info['tables']:
+                tables_info.append(tb_info['load'].format(
+                    namespace=config['namespace'],
+                    table=tb,
+                    path=config['db']['db_tables_path'],
+                    file=tb_info['table']))
+    return tables_info
 
 
 def run_script(script_name, path, acc_error=None):
@@ -92,15 +105,11 @@ if __name__ == "__main__":
 
     }
 
-
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
 
-
-
     print("Coping files")
-   # run_cmd(f"ansible-playbook -i hosts_all -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml", ansi_cat)
-
+    # run_cmd(f"ansible-playbook -i hosts_all -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml", ansi_cat)
 
     for scenario_key in scenarios.keys():
         scenario = scenarios[scenario_key]
@@ -112,7 +121,7 @@ if __name__ == "__main__":
         cluster_node_workers: list = static_env['cluster']['node_workers']
         if cluster_node_manager in cluster_node_workers:
             cluster_node_workers.remove(cluster_node_manager)
-        cluster_node_workers = cluster_node_workers[0:scenario['cluster_size']-1]
+        cluster_node_workers = cluster_node_workers[0:scenario['cluster_size'] - 1]
         hosts_file = generate_hosts_file(cluster_node_manager, cluster_node_workers)
 
         write_to('hosts', hosts_file, ansi_cat)
@@ -125,7 +134,11 @@ if __name__ == "__main__":
         conf_all['tables_schema'] = [udf['datasets'][tb]['table_schema'] for tb in udf['datasets']]
 
         print("Generating group_var/all.json file")
-        write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat+"/group_vars")
+        write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
+
+        print("   ")
+        load_file_data = convert_tables_info(conf_all['tables_schema'], conf_all)
+        write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
 
         print("Create docker-compose")
         dc = create_docker_compose(dc_json, scenario['cluster_size'])
