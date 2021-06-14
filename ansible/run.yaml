@@ -160,7 +160,7 @@
           register: container_id
 
         - name: DB create table schema
-          ansible.builtin.command: "docker exec {{container_id}.stdout_lines[0]} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
+          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
           loop: "{{tables_schema}}"
       when: create_table_schema
       tags: tag_create_table_schema
@@ -176,7 +176,7 @@
           register: container_id
 
         - name: DB create table schema
-          ansible.builtin.command: "docker exec {{container_id}.stdout_lines[0]} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
+          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
           loop: "{{tables_schema}}"
       when: create_table_schema
       tags: tag_load_data
