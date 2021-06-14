@@ -3,12 +3,12 @@
 - hosts: cluster_node_manager
   tasks:
     - name: Manager - remove stack
-      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']]}}"
+      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
       when: leave_cluster
       tags: tag_workers_leave_cluster
 
     - name: Manager - remove network
-      ansible.builtin.command: "docker network rm {{db['network_name']]}}"
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
       when: leave_cluster
       tags: tag_workers_leave_cluster
 

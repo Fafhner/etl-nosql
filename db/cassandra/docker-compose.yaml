@@ -18,10 +18,11 @@ services:
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
     ports:
-      - 7000
-      - 9042
+      - "7000:7000"
+      - "9042:9042"
     networks:
       - cassandra
+
   cassandra-2:
     image: cassandra:latest
     deploy:
@@ -46,6 +47,7 @@ services:
       - 9042
     networks:
       - cassandra
+
   cassandra-3:
     image: cassandra:latest
     deploy:
@@ -71,6 +73,7 @@ services:
       - 9042
     networks:
       - cassandra
+
   cassandra-4:
     image: cassandra:latest
     deploy:
@@ -96,6 +99,7 @@ services:
       - 9042
     networks:
       - cassandra
+
   cassandra-5:
     image: cassandra:latest
     deploy:
@@ -121,6 +125,7 @@ services:
       - 9042
     networks:
       - cassandra
+
 networks:
   cassandra:
     external:
