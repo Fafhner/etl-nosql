@@ -142,15 +142,10 @@
       ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
       register: asd
 
-    - name: asc
-      debug:
-        msg: "{{asd.stdout_lines | reject('search','^ID') | list | length != cluster_size}}"
-
-
     - name: Wait for all nodes in cluster
       ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
       register: cmd_res_wait
-      until: "cmd_res_wait.stdout_lines | list | map('regex_search', '^(U.*)$') | length == cluster_size"
+      until: "cmd_res_wait.stdout_lines | length == cluster_size + 5"
       retries: 10
       delay: 60
       when: docker_stack_deploy
