@@ -135,15 +135,18 @@ if __name__ == "__main__":
         diff = scenario_diff(prev_scenario, scenario)
         udf = load_from(scenario['udf'], static_env['udf_path'])
 
-        tags['create_cluster'] = diff['cluster_size'] and diff['scale']
-        tags['create_cluster_network'] = diff['cluster_size'] and diff['scale']
-        tags['docker_stack_deploy'] = diff['cluster_size'] and diff['scale']
-        tags['create_cluster'] = diff['cluster_size'] and diff['scale']
-        tags['create_namespace'] = diff['cluster_size'] and diff['scale']
-        tags['leave_cluster'] = diff['cluster_size'] and diff['scale']
+        # tags['create_cluster'] = diff['cluster_size'] and diff['scale']
+        # tags['create_cluster_network'] = diff['cluster_size'] and diff['scale']
+        # tags['docker_stack_deploy'] = diff['cluster_size'] and diff['scale']
+        # tags['create_cluster'] = diff['cluster_size'] and diff['scale']
+        # tags['create_namespace'] = diff['cluster_size'] and diff['scale']
+        # tags['create_table_schema'] = diff['cluster_size'] and diff['scale']
+        # tags['load_data'] = diff['cluster_size'] and diff['scale']
+        # tags['leave_cluster'] = diff['cluster_size'] and diff['scale']
+
         
         print("Clear cluster")
-        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' clear.yaml", ansi_cat)
+        # run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' clear.yaml", ansi_cat)
 
 
         # 1 ########################
@@ -171,8 +174,8 @@ if __name__ == "__main__":
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
         print("Prepare dirs")
-        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml",
-                ansi_cat)
+        #run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml",
+        #        ansi_cat)
 
         print("Prepare db data load")
         load_file_data = convert_tables_info(conf_all['tables_schema'], conf_all)
@@ -184,24 +187,24 @@ if __name__ == "__main__":
 
         # 3 ########################
         print("Running ansible")
-        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)
+        #run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)
 
-        print("Running experiment")
-        data = etl_process([conf_all["cluster"]["node_manager"]],
-                            f"{conf_all['udf_path']}/{scenario['udf']}")
+        print("Running experiments")
+        for udf in conf_all['udf']:
+            data = etl_process([conf_all["cluster"]["node_manager"]],
+                                f"{conf_all['udf_path']}/{udf}")
 
-        res = {
-            "udf": scenario['udf'],
-            "steps": data['steps'],
-            "scenario": scenario
-        }
-        print("Result:")
-        print(json.dumps(res, indent=4))
-
-        write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
-                 mode='a')
+            res = {
+                "udf": udf,
+                "steps": data['steps'],
+                "scenario": scenario
+            }
+            print("Result:")
+            print(json.dumps(res, indent=4))
+            write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
+                     mode='a')
         
     
     print("Clear all")
-    run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' --tags all clear.yaml", 
-            ansi_cat)
+    #run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' --tags all clear.yaml",
+    #        ansi_cat)

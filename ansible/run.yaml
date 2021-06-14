@@ -176,6 +176,11 @@
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
+        - name: Drop  tables
+          when: create_table_schema
+          ansible.builtin.command: "docker exec {{container_id.stdout}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
+          loop: "{{tables_schema}}"
+
         - name: DB create table schema
           ansible.builtin.command: "docker exec {{container_id.stdout}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
           loop: "{{tables_schema}}"

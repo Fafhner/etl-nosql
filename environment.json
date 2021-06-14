@@ -34,7 +34,14 @@
     "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
     "ansible_catalog": "ansible",
     "generate_scripts_only": false,
-    "tables_schema": []
+    "tables_schema": [],
+    "udf": [
+      "10_intersect_np.json",
+      "10_intersect_pp.json",
+      "18_merge_join_np.json",
+      "18_merge_join_pp.json",
+      "34_sort_fp.json"
+    ]
   },
   "dynamic": {
     "scale": {
@@ -79,17 +86,6 @@
         2000,
         3000,
         4000
-      ]
-    },
-    "udf": {
-      "context": "udf",
-      "priority": 0,
-      "data": [
-        "10_intersect_np.json",
-        "10_intersect_pp.json",
-        "18_merge_join_np.json",
-        "18_merge_join_pp.json",
-        "34_sort_fp.json"
       ]
     }
   }

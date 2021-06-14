@@ -14,7 +14,9 @@ def cassandra_process(nodes, udf_file):
     session: Session = cluster.connect()
     session.row_factory = pandas_factory
     session.default_fetch_size = None
-    return process_steps(get_steps(udf_file), session)
+    ret = process_steps(get_steps(udf_file), session)
+    cluster.shutdown()
+    return ret
 
 
 def select_driver(driver):
