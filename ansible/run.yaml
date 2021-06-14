@@ -99,7 +99,7 @@
     - name: Restore files, change parameters
       block:
         - name: Restore files
-          ansible.builtin+.copy:
+          ansible.builtin.copy:
             src: "{{ item.file_path }}/{{ item.file_name }}.backup"
             dest: "{{ item.file_path }}/{{ item.file_name }}"
           loop: "{{ configs }}"
@@ -156,11 +156,11 @@
     - name: Create DB tables schema
       block:
         - name: Get container ID 2
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
         - name: DB create table schema
-          ansible.builtin.command: "docker exec {{container_id}.stdout_lines[0]} '{{exec_file}} {{db['db_tables_schema']}}/{{item}}'"
+          ansible.builtin.command: "docker exec {{container_id}.stdout_lines[0]} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
           loop: "{{tables_schema}}"
       when: create_table_schema
       tags: tag_create_table_schema
@@ -172,11 +172,11 @@
     - name: Create DB tables schema
       block:
         - name: Get container ID 2
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
         - name: DB create table schema
-          ansible.builtin.command: "docker exec {{container_id}.stdout_lines[0]} '{{exec_file}} {{db['db_tables_schema']}}/{{item}}'"
+          ansible.builtin.command: "docker exec {{container_id}.stdout_lines[0]} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
           loop: "{{tables_schema}}"
       when: create_table_schema
       tags: tag_load_data
