@@ -32,14 +32,17 @@
     "tables_schema": [
         "date_dim",
         "store_sales",
-        "catalog_sales"
+        "catalog_sales",
+        "date_dim_2",
+        "store_sales_2",
+        "catalog_sales_2"
     ],
     "row_cache_size_in_mb": 1,
-    "cluster_size": 5,
     "rep_factor": 5,
     "java_xms": 6000,
-    "scale": 1,
+    "cluster_size": 5,
     "udf": "10_intersect_2.json",
+    "scale": 1,
     "db": {
         "service_name": "cassandra",
         "etl_driver": "cassandra",

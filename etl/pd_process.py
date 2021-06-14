@@ -1,6 +1,7 @@
 import json
 from timeit import default_timer as timer
 
+from cassandra.cluster import ResultSet
 from cassandra.query import SimpleStatement
 
 from etl import etl_func
@@ -21,7 +22,7 @@ def process_steps(udf: dict, ses):
     for step in udf['steps']:
         step_time_info = {
             "data_acquisition_time": [],
-            "data_processing_time": [],
+            "data_preprocessing_time": [],
             "etl_processing_time": -1.,
             "overall_time": -1.
         }
@@ -40,9 +41,14 @@ def process_steps(udf: dict, ses):
                 query = udf['datasets'][tb_name]['query']
                 statement = SimpleStatement(query, fetch_size=2000)
                 dat_1 = timer()
-                df = ses.execute(query, timeout=None)._current_rows
-                dat_2 = timer()
 
+                ex: ResultSet = ses.execute(statement)
+                df = ex._current_rows
+                while ex.has_more_pages:
+                    ex.fetch_next_page()
+                    df = df.append(ex._current_rows)
+
+                dat_2 = timer()
 
                 if 'index' in udf['datasets'][tb_name]:
                     df.set_index(udf['datasets'][tb_name]['index'])
@@ -53,16 +59,19 @@ def process_steps(udf: dict, ses):
                 sti_pt['time'] = dat_3 - dat_2
 
                 sti['data_acquisition_time'].append(sti_tb)
-                sti['data_processing_time'].append(sti_pt)
+                sti['data_preprocessing_time'].append(sti_pt)
             args[args_key] = dataframes[tb_name]
 
         if 'args' in step:
             args.update(step['args'])
-        spt_1 = timer()
+
         func = etl_func.func_map[step["etl_func"]]
-        spt_2 = timer()
-        sti['etl_processing_time'] = spt_2 - spt_1
+
+        spt_1 = timer()
         dataframes[step['output']] = func(**args)
+        spt_2 = timer()
+
+        sti['etl_processing_time'] = spt_2 - spt_1
         if "remove" in step:
             for rm_db in step["remove"]:
                 dataframes.pop(rm_db, None)
@@ -71,13 +80,3 @@ def process_steps(udf: dict, ses):
         step['time_info'] = sti
 
     return udf
-
-
-
-
-
-
-
-
-
-

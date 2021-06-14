@@ -1,5 +1,5 @@
 {
-
+    "type": "no-pushdown",
     "datasets": {
         "date_dim" : {
           "table_schema": "date_dim",
@@ -9,14 +9,15 @@
         "store_sales" : {
           "table_schema": "store_sales",
           "index": "ss_sold_date_sk",
-          "query": "SELECT ss_sold_date_sk, ss_customer_sk, ss_item_sk FROM tpc_ds.store_sales LIMIT 40000;"
+          "query": "SELECT ss_sold_date_sk, ss_customer_sk, ss_item_sk FROM tpc_ds.store_sales;"
         },
         "catalog_sales" : {
           "table_schema": "catalog_sales",
           "index": "cs_sold_date_sk",
-          "query": "SELECT cs_sold_date_sk, cs_bill_customer_sk, cs_item_sk FROM tpc_ds.catalog_sales LIMIT 40000;"
+          "query": "SELECT cs_sold_date_sk, cs_bill_customer_sk, cs_item_sk FROM tpc_ds.catalog_sales;"
         }
     },
+
     "steps": [
          {
             "etl_func": "filter",

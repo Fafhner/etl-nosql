@@ -1,6 +1,6 @@
 
 def count(tb):
-    c = len(tb)
+    c = len(tb.index)
     return c
 
 

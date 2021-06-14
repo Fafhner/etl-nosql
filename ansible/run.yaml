@@ -72,7 +72,7 @@
           register: cluster_worker_id
 
         - name: Add manager label
-          ansible.builtin.command: "docker node update --label-add node=n1 {{ cluster_manager_id.stdout_lines[0] }}"
+          ansible.builtin.command: "docker node update --label-add node=n1 {{ cluster_manager_id.stdout }}"
 
         - name: Add node labels
           ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+2 }} {{ item }}"
@@ -124,16 +124,33 @@
       when: docker_stack_deploy
       tags: tag_docker_stack_deploy
 
-    - name: Get container ID 0
+
+    - name: Wait for first container and get container ID
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
       register: container_id
+      until: container_id.stdout != ""
+      retries: 20
+      delay: 5
       when: docker_stack_deploy
       tags: tag_docker_stack_deploy
 
-    - name: Retry a task until a certain condition is met
-      ansible.builtin.cmd: "docker exec {{container_id}} nodetool status"
-      register: cmd_res
-      until: cmd_res.stdout_lines | reject('search','^ID') | list | count != cluster_size
+    - name: Wait for first container
+      pause:
+        seconds: 30
+
+    - name: Wait for all nodes in cluster
+      ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
+      register: asd
+
+    - name: asc
+      debug:
+        msg: "{{asd.stdout_lines | reject('search','^ID') | list | length != cluster_size}}"
+
+
+    - name: Wait for all nodes in cluster
+      ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
+      register: cmd_res_wait
+      until: "cmd_res_wait.stdout_lines | list | map('regex_search', '^(U.*)$') | length == cluster_size"
       retries: 10
       delay: 60
       when: docker_stack_deploy
@@ -149,12 +166,8 @@
           ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
           register: container_id
 
-        - name: Container id
-          ansible.builtin.debug:
-            msg: "{{container_id}}"
-
         - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -f /tables_schema/keyspace"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
 
       when: create_namespace
       tags: tag_create_namespace
@@ -169,7 +182,7 @@
           register: container_id
 
         - name: DB create table schema
-          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} {{exec_file}} {{db['db_tables_schema']}}/{{item}}"
           loop: "{{tables_schema}}"
       when: create_table_schema
       tags: tag_create_table_schema
@@ -185,7 +198,7 @@
           register: container_id
 
         - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -f /tables_schema/load"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/load"
 
       when: load_data
       tags: tag_load_data
@@ -199,7 +212,7 @@
           register: container_id
 
         - name: Exec
-          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} {{item}}"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} {{item}}"
           loop: "{{exec}}"
       when: exec_cmd
       tags: tag_exec_cmd

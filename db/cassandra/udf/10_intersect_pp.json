@@ -1,23 +1,22 @@
 {
-
+    "type": "partial-pushdown",
     "datasets": {
         "date_dim" : {
-          "table_schema": "date_dim",
+          "table_schema": "date_dim_2",
           "index": "d_date_sk",
-          "query": "SELECT d_date_sk, d_year, d_dom FROM tpc_ds.date_dim;"
+          "query": "SELECT d_date_sk, d_year, d_dom FROM tpc_ds.date_dim_2;"
         },
         "store_sales" : {
-          "table_schema": "store_sales",
+          "table_schema": "store_sales_2",
           "index": "ss_sold_date_sk",
-          "query": "SELECT ss_sold_date_sk, ss_customer_sk, ss_item_sk FROM tpc_ds.store_sales;"
+          "query": "SELECT ss_sold_date_sk, ss_customer_sk, ss_item_sk FROM tpc_ds.store_sales_2;"
         },
         "catalog_sales" : {
-          "table_schema": "catalog_sales",
+          "table_schema": "catalog_sales_2",
           "index": "cs_sold_date_sk",
-          "query": "SELECT cs_sold_date_sk, cs_bill_customer_sk, cs_item_sk FROM tpc_ds.catalog_sales;"
+          "query": "SELECT cs_sold_date_sk, cs_bill_customer_sk, cs_item_sk FROM tpc_ds.catalog_sales_2;"
         }
     },
-
     "steps": [
          {
             "etl_func": "filter",

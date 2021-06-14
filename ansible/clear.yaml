@@ -6,12 +6,13 @@
       ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
       when: leave_cluster
       tags: tag_workers_leave_cluster
+      ignore_errors: true
 
     - name: Manager - remove network
       ansible.builtin.command: "docker network rm {{db['network_name']}}"
       when: leave_cluster
       tags: tag_workers_leave_cluster
-
+      ignore_errors: true
 
 - hosts: cluster_node_workers
   tasks:
@@ -37,8 +38,8 @@
           ansible.builtin.copy:
             src: "{{ item.file_path }}/{{ item.file_name }}.backup"
             dest: "{{ item.file_path }}/{{ item.file_name }}"
-          loop: "{{ change_files }}"
+          loop: "{{ configs }}"
       when: restore_files
       tags: tag_restore_files
-
+      ignore_errors: true
 
