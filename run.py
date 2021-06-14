@@ -178,6 +178,8 @@ if __name__ == "__main__":
             "time_info": data['time_info'],
             "scenario": scenario
         }
+        print("Result:")
+        print(json.dumps(res, indent=4))
 
         write_to("run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
                  mode='a')
