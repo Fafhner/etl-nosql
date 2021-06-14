@@ -124,9 +124,18 @@
       when: docker_stack_deploy
       tags: tag_docker_stack_deploy
 
-    - name: Pause for 5 minutes to build cluster
-      pause:
-        minutes: 5
+    - name: Get container ID 0
+      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
+      register: container_id
+      when: docker_stack_deploy
+      tags: tag_docker_stack_deploy
+
+    - name: Retry a task until a certain condition is met
+      ansible.builtin.cmd: "docker exec {{container_id}} nodetool status"
+      register: cmd_res
+      until: cmd_res.stdout_lines | reject('search','^ID') | list | count != cluster_size
+      retries: 10
+      delay: 60
       when: docker_stack_deploy
       tags: tag_docker_stack_deploy
 

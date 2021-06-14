@@ -1,12 +1,14 @@
 import json
 from timeit import default_timer as timer
 
+from cassandra.query import SimpleStatement
+
 from etl import etl_func
 
 
 def get_steps(file=None):
     if file is None:
-        file = "db/cassandra/udf/pushdown.json"
+        file = "db/cassandra/udf/10_intersect_1.json"
     with open(file) as f:
         pushdown = json.load(f)
 
@@ -36,15 +38,18 @@ def process_steps(udf: dict, ses):
                 sti_pt = {"table": tb_name, "time": -1}
 
                 query = udf['datasets'][tb_name]['query']
+                statement = SimpleStatement(query, fetch_size=2000)
                 dat_1 = timer()
                 df = ses.execute(query, timeout=None)._current_rows
                 dat_2 = timer()
-                sti_tb['time'] = dat_2 - dat_1
+
 
                 if 'index' in udf['datasets'][tb_name]:
                     df.set_index(udf['datasets'][tb_name]['index'])
                 dataframes[tb_name] = df
                 dat_3 = timer()
+
+                sti_tb['time'] = dat_2 - dat_1
                 sti_pt['time'] = dat_3 - dat_2
 
                 sti['data_acquisition_time'].append(sti_tb)
