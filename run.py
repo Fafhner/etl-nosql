@@ -192,7 +192,7 @@ if __name__ == "__main__":
 
         res = {
             "udf": scenario['udf'],
-            "time_info": data['time_info'],
+            "steps": data['steps'],
             "scenario": scenario
         }
         print("Result:")
