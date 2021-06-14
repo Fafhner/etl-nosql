@@ -41,8 +41,8 @@
       "context": "table_data",
       "priority": 999,
       "start": 1,
-      "stop": 2,
-      "step": 1
+      "stop": 6,
+      "step": 2
     },
     "cluster_size": {
       "context": "cluster",

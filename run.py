@@ -1,6 +1,8 @@
 import json
+import logging
 import subprocess
 import sys
+from datetime import datetime
 
 from create import create_scenarios
 from etl.etl_setup import select_driver
@@ -75,7 +77,22 @@ def scenario_diff(prev_scenario, next_scenario):
     return diff
 
 
+logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+rootLogger = logging.getLogger()
+rootLogger.setLevel(logging.DEBUG)
+print = rootLogger.info
+
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(logFormatter)
+rootLogger.addHandler(consoleHandler)
+
+
 if __name__ == "__main__":
+    fileHandler = logging.FileHandler(f"run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
+    fileHandler.setFormatter(logFormatter)
+    rootLogger.addHandler(fileHandler)
+
+
     if len(sys.argv) == 1:
         print("No arguments given.")
         file = ""
@@ -118,12 +135,12 @@ if __name__ == "__main__":
         diff = scenario_diff(prev_scenario, scenario)
         udf = load_from(scenario['udf'], static_env['udf_path'])
 
-        tags['create_cluster'] = diff['cluster_size']
-        tags['create_cluster_network'] = diff['cluster_size']
-        tags['docker_stack_deploy'] = diff['cluster_size']
-        tags['create_cluster'] = diff['cluster_size']
-        tags['create_namespace'] = diff['cluster_size']
-        tags['leave_cluster'] = diff['cluster_size']
+        tags['create_cluster'] = diff['cluster_size'] and diff['scale']
+        tags['create_cluster_network'] = diff['cluster_size'] and diff['scale']
+        tags['docker_stack_deploy'] = diff['cluster_size'] and diff['scale']
+        tags['create_cluster'] = diff['cluster_size'] and diff['scale']
+        tags['create_namespace'] = diff['cluster_size'] and diff['scale']
+        tags['leave_cluster'] = diff['cluster_size'] and diff['scale']
         
         print("Clear cluster")
         run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' clear.yaml", ansi_cat)
@@ -181,7 +198,7 @@ if __name__ == "__main__":
         print("Result:")
         print(json.dumps(res, indent=4))
 
-        write_to("run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
+        write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
                  mode='a')
         
     
