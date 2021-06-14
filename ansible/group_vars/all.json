@@ -7,7 +7,10 @@
             "192.168.55.12",
             "192.168.55.13",
             "192.168.55.14",
-            "192.168.55.15"
+            "192.168.55.15",
+            "192.168.55.16",
+            "192.168.55.17",
+            "192.168.55.18"
         ]
     },
     "data_generator": {
@@ -18,9 +21,9 @@
         "force": "N",
         "distr": "~/etl-nosql/tpc-ds-tool/v3.0.0/tools/tpcds.idx",
         "tables": [
-            "date_dim",
-            "store_sales",
-            "catalog_sales"
+            "web_sales",
+            "warehouse",
+            "date_dim"
         ]
     },
     "database_info_path": "db/cassandra",
@@ -30,18 +33,15 @@
     "ansible_catalog": "ansible",
     "generate_scripts_only": false,
     "tables_schema": [
-        "date_dim",
-        "store_sales",
-        "catalog_sales",
-        "date_dim_2",
-        "store_sales_2",
-        "catalog_sales_2"
+        "web_sales",
+        "warehouse",
+        "date_dim"
     ],
-    "row_cache_size_in_mb": 1,
+    "udf": "18_merge_join_pp.json",
+    "row_cache_size_in_mb": 19,
     "rep_factor": 5,
-    "java_xms": 6000,
-    "cluster_size": 5,
-    "udf": "10_intersect_2.json",
+    "java_xms": 4000,
+    "cluster_size": 8,
     "scale": 1,
     "db": {
         "service_name": "cassandra",

@@ -9,7 +9,7 @@ def pandas_factory(colnames, rows):
 
 if __name__ == "__main__":
     nodes = ['192.168.55.11']
-    udf = "db/cassandra/udf/10_intersect_1.json"
+    udf = "db/cassandra/udf/10_intersect_pp.json"
 
     stat = cassandra_process(nodes=nodes, udf_file=udf)
 

@@ -1,4 +1,4 @@
-CREATE TABLE tpc_ds.Store_sales (
+CREATE TABLE tpc_ds.Store_sales_2 (
         ss_sold_date_sk bigint,
         ss_sold_time_sk bigint,
         ss_item_sk bigint,

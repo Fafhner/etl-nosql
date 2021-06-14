@@ -44,14 +44,6 @@
       "stop": 2,
       "step": 1
     },
-    "udf": {
-      "context": "udf",
-      "priority": 998,
-      "data": [
-        "10_intersect_1.json",
-        "10_intersect_2.json"
-      ]
-    },
     "cluster_size": {
       "context": "cluster",
       "priority": 997,
@@ -66,7 +58,7 @@
     },
     "row_cache_size_in_mb": {
       "context": "db",
-      "priority": 1,
+      "priority": 2,
       "start": 10,
       "stop": 20,
       "step": 1
@@ -87,6 +79,16 @@
         2000,
         3000,
         4000
+      ]
+    },
+    "udf": {
+      "context": "udf",
+      "priority": 0,
+      "data": [
+        "10_intersect_np.json",
+        "10_intersect_pp.json",
+        "18_merge_join_np.json",
+        "18_merge_join_pp.json"
       ]
     }
   }

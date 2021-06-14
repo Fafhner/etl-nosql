@@ -1,15 +1,9 @@
 import json
 import subprocess
 import sys
-import logging
-import os
-import time
 
-from create import create_scenarios, create_cluster_script, create_tables_script, create_db_config_script, \
-    create_docker_setup, create_yaml, create_load_tables_script
+from create import create_scenarios
 from etl.etl_setup import select_driver
-from grid import GridDiff
-from state import StateMachine
 
 
 def write_to(file_name, data, output_path=None, mode='w'):
@@ -71,6 +65,16 @@ def create_docker_compose(dc_json, size):
     return "\n".join(parts)
 
 
+def scenario_diff(prev_scenario, next_scenario):
+    diff = dict()
+    for sparam in next_scenario:
+        if prev_scenario is None or next_scenario[sparam] != prev_scenario[sparam]:
+            diff[sparam] = True
+        else:
+            diff[sparam] = False
+    return diff
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("No arguments given.")
@@ -92,7 +96,7 @@ if __name__ == "__main__":
     dc_json = load_from('docker-compose.yaml.json', 'db/cassandra')
     print("-" * 20)
 
-    active_tags = {
+    tags = {
         "create_tables": True,
         "create_cluster": True,
         "leave_cluster": True,
@@ -105,16 +109,25 @@ if __name__ == "__main__":
         "load_data": True,
         "exec_cmd": True
     }
-
+    
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
-
-    print("Coping files")
-    # run_cmd(f"ansible-playbook -i hosts_all -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml", ansi_cat)
-
+    prev_scenario = None
     for scenario_key in scenarios.keys():
         scenario = scenarios[scenario_key]
+        diff = scenario_diff(prev_scenario, scenario)
         udf = load_from(scenario['udf'], static_env['udf_path'])
+
+        tags['create_cluster'] = diff['cluster_size']
+        tags['create_cluster_network'] = diff['cluster_size']
+        tags['docker_stack_deploy'] = diff['cluster_size']
+        tags['create_cluster'] = diff['cluster_size']
+        tags['create_namespace'] = diff['cluster_size']
+        tags['leave_cluster'] = diff['cluster_size']
+        
+        print("Clear cluster")
+        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' clear.yaml", ansi_cat)
+
 
         # 1 ########################
         print("Generating hosts file")
@@ -128,22 +141,48 @@ if __name__ == "__main__":
         write_to('hosts', hosts_file, ansi_cat)
 
         # 2 ########################
-        conf_all = {**static_env, **scenario, **db_info, **active_tags,
-                    'cluster': {'node_manager': cluster_node_manager, 'node_workers': cluster_node_workers}}
+        print("Merge as ansible/group_vars/all.json")
+        conf_all = {**static_env,
+                    **scenario,
+                    **db_info,
+                    **tags,
+                    'cluster': {'node_manager': cluster_node_manager, 'node_workers': cluster_node_workers}
+                    }
 
         conf_all['data_generator']['tables'] = [tb for tb in udf['datasets']]
         conf_all['tables_schema'] = [udf['datasets'][tb]['table_schema'] for tb in udf['datasets']]
-
-        print("Generating group_var/all.json file")
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
-        print("   ")
+        print("Prepare dirs")
+        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml",
+                ansi_cat)
+
+        print("Prepare db data load")
         load_file_data = convert_tables_info(conf_all['tables_schema'], conf_all)
         write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
 
         print("Create docker-compose")
         dc = create_docker_compose(dc_json, scenario['cluster_size'])
         write_to('docker-compose.yaml', dc, 'db/cassandra')
+
         # 3 ########################
         print("Running ansible")
-        # run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)
+        run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)
+
+        print("Running experiment")
+        data = etl_process([conf_all["cluster"]["node_manager"]],
+                            f"{conf_all['udf_path']}/{scenario['udf']}")
+
+        res = {
+            "udf": scenario['udf'],
+            "time_info": data['time_info'],
+            "scenario": scenario
+        }
+
+        write_to("run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
+                 mode='a')
+        
+    
+    print("Clear all")
+    run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' --tags all clear.yaml", 
+            ansi_cat)

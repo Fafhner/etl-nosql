@@ -1,4 +1,4 @@
-CREATE TABLE tpc_ds.Date_dim    (
+CREATE TABLE tpc_ds.Date_dim_2    (
         d_date_sk bigint,
         d_date_id    varchar,
         d_date date,

@@ -9,7 +9,8 @@ from etl import etl_func
 
 def get_steps(file=None):
     if file is None:
-        file = "db/cassandra/udf/10_intersect_1.json"
+        print("File is None")
+        exit(-1)
     with open(file) as f:
         pushdown = json.load(f)
 
@@ -22,7 +23,6 @@ def process_steps(udf: dict, ses):
     for step in udf['steps']:
         step_time_info = {
             "data_acquisition_time": [],
-            "data_preprocessing_time": [],
             "etl_processing_time": -1.,
             "overall_time": -1.
         }
@@ -35,8 +35,7 @@ def process_steps(udf: dict, ses):
         for args_key in args_tb.keys():
             tb_name = args_tb[args_key]
             if tb_name not in dataframes:
-                sti_tb = {"table": tb_name, "time": -1}
-                sti_pt = {"table": tb_name, "time": -1}
+                sti_tb = {"table": tb_name, "time": -1, "rows": -1}
 
                 query = udf['datasets'][tb_name]['query']
                 statement = SimpleStatement(query, fetch_size=2000)
@@ -50,16 +49,12 @@ def process_steps(udf: dict, ses):
 
                 dat_2 = timer()
 
-                if 'index' in udf['datasets'][tb_name]:
-                    df.set_index(udf['datasets'][tb_name]['index'])
                 dataframes[tb_name] = df
-                dat_3 = timer()
 
                 sti_tb['time'] = dat_2 - dat_1
-                sti_pt['time'] = dat_3 - dat_2
-
+                print(f"Rows: {len(df.index)} for {tb_name}")
                 sti['data_acquisition_time'].append(sti_tb)
-                sti['data_preprocessing_time'].append(sti_pt)
+
             args[args_key] = dataframes[tb_name]
 
         if 'args' in step:
@@ -68,7 +63,8 @@ def process_steps(udf: dict, ses):
         func = etl_func.func_map[step["etl_func"]]
 
         spt_1 = timer()
-        dataframes[step['output']] = func(**args)
+        res = func(**args)
+        dataframes[step['output']] = res
         spt_2 = timer()
 
         sti['etl_processing_time'] = spt_2 - spt_1
