@@ -92,7 +92,7 @@
     "exec_file": "cqlsh -f  ",
     "exec_string": "cqlsh -e ",
     "exec": [
-        "cqlsh -f /tables_schema/keyspace"
+        "nodetool flush"
     ],
     "table_infos": [
         {
@@ -150,5 +150,6 @@
     "docker_stack_deploy": true,
     "create_namespace": true,
     "create_table_schema": true,
-    "load_data": true
+    "load_data": true,
+    "exec_cmd": true
 }

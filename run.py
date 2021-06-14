@@ -102,7 +102,8 @@ if __name__ == "__main__":
         "docker_stack_deploy": True,
         "create_namespace": True,
         "create_table_schema": True,
-        "load_data": True
+        "load_data": True,
+        "exec_cmd": True
     }
 
     ansi_cat = static_env['ansible_catalog']

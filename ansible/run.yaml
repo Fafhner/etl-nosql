@@ -175,12 +175,25 @@
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
-        - name: DB create table schema
+        - name: Load data
           ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} cqlsh -f /tables_schema/load"
+
       when: load_data
       tags: tag_load_data
 
+- hosts: cluster_node_manager
+  tasks:
+    - name: Exec
+      block:
+        - name: Get container ID 4
+          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
+          register: container_id
 
+        - name: Exec
+          ansible.builtin.command: "docker exec {{container_id.stdout_lines[0]}} {{item}}"
+          loop: "{{exec}}"
+      when: exec_cmd
+      tags: tag_exec_cmd
 
 
 
