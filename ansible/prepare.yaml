@@ -36,11 +36,9 @@
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
     - name: Delete content & directory
-      file:
-        state: absent
-        path: "~/etl-nosql/db/cassandra/var/lib/cassandra"
-      become_user: magisterka
-      become: true
+      ansible.builtin.command: "rm -r ~/etl-nosql/db/cassandra/var/lib/cassandra/*"
+      become_user: root
+      become: yes
 
     - name: Mk dir
       file:
