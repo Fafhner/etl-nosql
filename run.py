@@ -84,8 +84,8 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
         print(f"Grid: {grid}")
         print(f"Diff: {diff}")
         pb = f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_ssh_pass={password}'" \
-             f" --tags {tags} {notebook}", path
-        print("Running " + pb)
+             f" --tags {tags} {notebook}"
+        print("Running")
         run_cmd(pb, path)
 
     return r_
