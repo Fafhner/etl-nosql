@@ -170,7 +170,7 @@ if __name__ == "__main__":
             res = {
                 "udf": udf['name'],
                 "steps": data['steps'],
-                "scenario": grid.val
+                "scenario": getVals(grid)
             }
             print("Result:")
             print(json.dumps(res, indent=4))
