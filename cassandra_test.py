@@ -1,6 +1,6 @@
 
 from datetime import  datetime
-
+from cassandra.cluster import Cluster, Session
 import pandas as pd
 from etl.etl_setup import cassandra_process
 import json
@@ -66,8 +66,10 @@ if __name__ == "__main__":
 
 
     def main():
+        cluster = Cluster([conf["cluster"]["node_manager"]], request_timeout=60)
         for udf in udfs:
-            data = etl_process([conf["cluster"]["node_manager"]], udf)
+
+            data = etl_process(cluster, udf)
 
             res = {
                 "udf": udf['name'],
@@ -79,5 +81,5 @@ if __name__ == "__main__":
             write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
                      mode='a')
 
-
+        cluster.shutdown()
     main()

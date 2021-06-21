@@ -22,7 +22,7 @@ def get_steps(file=None):
     return pushdown
 
 
-def process_steps(udf: dict, nodes):
+def process_steps(udf: dict, cluster):
 
 
     dataframes = dict()
@@ -51,7 +51,6 @@ def process_steps(udf: dict, nodes):
                 statement = SimpleStatement(query, fetch_size=5000)
                 dat_1 = timer()
 
-                cluster = Cluster(nodes)
                 session: Session = cluster.connect()
                 session.row_factory = pandas_factory
 
@@ -62,7 +61,6 @@ def process_steps(udf: dict, nodes):
                     df = df.append(ex._current_rows)
 
                 session.shutdown()
-                cluster.shutdown()
 
                 dat_2 = timer()
 
