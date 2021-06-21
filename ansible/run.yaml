@@ -1,4 +1,47 @@
 ---
+#############################
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - remove stack
+      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
+      tags: tag_prepare
+      ignore_errors: true
+
+    - name: Manager - remove network
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
+      tags: tag_prepare
+      ignore_errors: true
+
+- hosts: cluster_node_workers
+  tasks:
+    - name: Workers - Leave cluster
+      ansible.builtin.command: "docker swarm leave"
+      tags: tag_prepare
+      ignore_errors: true
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - Leave cluster
+      ansible.builtin.command: "docker swarm leave --force"
+      tags: tag_prepare
+      ignore_errors: true
+
+######################
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - remove stack
+      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
+      tags: tag_rm_stack
+      ignore_errors: true
+
+    - name: Manager - remove network
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
+      tags: tag_rm_stack
+      ignore_errors: true
+
+##########################
+
 - hosts: cluster_node_manager
   tasks:
     - name: Generate data
@@ -85,11 +128,11 @@
     - name: Create docker network
       ansible.builtin.command: "docker network create -d overlay {{ db['network_name'] }}"
       when: create_cluster_network
-      tags: tag_docker_stack_deploy
+      tags: tag_deploy_stack
 
     - name: Docker stack up
       ansible.builtin.command: "docker stack deploy -c {{docker_compose_file}} {{db['docker_stack_name']}}"
-      tags: tag_docker_stack_deploy
+      tags: tag_deploy_stack
 
     - name: Wait for first container and get container ID
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
@@ -97,7 +140,7 @@
       until: container_id.stdout != ""
       retries: 20
       delay: 5
-      tags: tag_docker_stack_deploy
+      tags: tag_deploy_stack
 
     - name: Wait for first container
       pause:
@@ -109,7 +152,7 @@
       until: "cmd_res_wait.stdout_lines | length == cluster_size + 5"
       retries: 10
       delay: 60
-      tags: tag_docker_stack_deploy
+      tags: tag_deploy_stack
 
 ###############################
 
@@ -124,6 +167,33 @@
         - name: DB create namespace
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
       tags: tag_db_create_namespace
+
+###############################
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Create DB namespace
+      block:
+        - name: Get container ID
+          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          register: container_id
+
+        - name: DB update namespace
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace_update"
+      tags: tag_db_update_namespace
+
+
+########################
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Create DB namespace
+      block:
+        - name: Get container ID
+          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          register: container_id
+
+        - name: DB repair
+          ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool repair --full"
+      tags: tag_repair
 
 ###############################
 
@@ -176,73 +246,8 @@
 
       tags: tag_db_fill_tables
 
-###############################
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB update namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace_update"
-      tags: tag_db_update_namespace
-
-
-#############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Manager - remove stack
-      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
-      tags: tag_prepare
-      ignore_errors: true
-
-    - name: Manager - remove network
-      ansible.builtin.command: "docker network rm {{db['network_name']}}"
-      tags: tag_prepare
-      ignore_errors: true
-
-- hosts: cluster_node_workers
-  tasks:
-    - name: Workers - Leave cluster
-      ansible.builtin.command: "docker swarm leave"
-      tags: tag_prepare
-      ignore_errors: true
-
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Manager - Leave cluster
-      ansible.builtin.command: "docker swarm leave --force"
-      tags: tag_prepare
-      ignore_errors: true
-
-
-########################
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB repair
-          ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool repair --full"
-      tags: tag_repair
 
 
 
-######################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Manager - remove stack
-      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
 
-    - name: Manager - remove network
-      ansible.builtin.command: "docker network rm {{db['network_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
+
