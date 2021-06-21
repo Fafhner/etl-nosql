@@ -79,11 +79,14 @@ def scenario_diff(prev_scenario, next_scenario):
 
 
 def create_ansible_cmd(notebook, hosts, user, password, path):
-    def r_(env, grid, diff):
+    def r_(env, grid, diff, tags):
         print(f"Running playbook - {notebook}")
         print(f"Grid: {grid}")
         print(f"Diff: {diff}")
-        print(f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_ssh_pass={password}' {notebook}", path)
+        pb = f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_ssh_pass={password}'" \
+             f" --tags {tags} {notebook}", path
+        print("Running " + pb)
+        run_cmd(pb, path)
 
     return r_
 
@@ -195,39 +198,25 @@ if __name__ == "__main__":
         state.Node('Prepare', create_ansible_cmd('prepare.yaml', 'hosts_all', user, password, ansi_cat))
     ]
     preprocess_nodes = [
-        state.Node('create_files', create_files),
-        state.Node('create_table_data', create_ansible_cmd('create_table_data.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('rm_stack', create_ansible_cmd('rm_stack.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('init_swarm', create_ansible_cmd('init_swarm.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('files', create_ansible_cmd('files.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('deploy_stack', create_ansible_cmd('deploy_stack.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('db_create_namespace', create_ansible_cmd('db_create_namespace.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('db_update_namespace', create_ansible_cmd('db_update_namespace.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('db_fill_tables', create_ansible_cmd('db_fill_tables.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('exec', create_ansible_cmd('exec.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('prepare', create_ansible_cmd('prepare.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('repair', create_ansible_cmd('repair.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('truncate', create_ansible_cmd('db_truncate.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('db_create_schema', create_ansible_cmd('db_create_schema.yaml', 'hosts', user, password, ansi_cat)),
-        state.Node('db_drop_tables', create_ansible_cmd('db_drop_tables.yaml', 'hosts', user, password, ansi_cat))
+        state.Node('create_files', create_files)
     ]
 
     flow_tree = [
         {
             "name": "file changed",
             "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
-            "then": ['rm_stack', 'create_files', 'files', 'init_swarm', 'deploy_stack']
+            "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack']
         },
         {
             "name": "keyspace changed",
             "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
-            "then": ['create_files', 'files', 'db_update_namespace', 'repair']
+            "then": ['tag_create_files', 'tag_files', 'tag_db_update_namespace', 'tag_repair']
         },
         {
             "name": 'all',
             "if": lambda _, grid, diff: diff['cluster_size'] or diff['scale'],
-            "then": ['prepare', 'create_files', 'create_table_data', 'files', 'init_swarm',
-                     'deploy_stack', 'db_create_namespace', 'db_create_schema', 'db_fill_tables', 'exec']
+            "then": ['tag_prepare', 'tag_create_files', 'tag_create_table_data', 'tag_files', 'tag_init_swarm',
+                     'tag_deploy_stack', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
         },
 
     ]
@@ -237,6 +226,7 @@ if __name__ == "__main__":
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
     sm.setMain(main)
+    sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios)
 

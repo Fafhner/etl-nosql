@@ -10,12 +10,14 @@ class Node:
         self.name = name
         self.do = do_
 
+
 class StateMachine:
     def __init__(self):
         self.nodes: Dict[str, Node] = dict()
         self.only_once = list()
         self.flows = list()
         self.main = None
+        self.ansbile_f = None
 
     def addNodes(self, nodes: list):
         for node in nodes:
@@ -38,7 +40,7 @@ class StateMachine:
 
     def loop(self, env, scenarios):
         for doo in self.only_once:
-            doo.do(env, None, None)
+            doo.do(env, None, None, 'all')
 
         gDiff = GridDiff()
         for scenario in scenarios:
@@ -46,12 +48,12 @@ class StateMachine:
             diff = gDiff.nextState(scenario)
             env_cp = env.copy()
             grid_cp = scenario.copy()
-            flow = None
+            tags = None
             for f in self.flows:
                 if f['if'](env_cp, grid_cp, diff):
-                    flow = f
+                    tags = f
                     break
 
-            self.runPreprocess(env_cp, grid_cp, diff, flow)
+            self.ansbile_f(env_cp, grid_cp, diff, tags)
 
             self.main(env_cp, grid_cp, diff)
