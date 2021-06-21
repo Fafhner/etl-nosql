@@ -48,8 +48,6 @@
       "context": "table_data",
       "priority": 999,
       "data": [
-        1,
-        5,
         10,
         15,
         40,

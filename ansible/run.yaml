@@ -180,7 +180,7 @@
         seconds: 10
 
 ###############################
-- hosts: cluster_node_manager:cluster_node_workers
+- hosts: cluster_node_manager
   tasks:
     - name: Create DB namespace
       block:
@@ -192,6 +192,15 @@
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP KEYSPACE {{namespace}};'"
           ignore_errors: true
       tags: tag_db_create_namespace
+
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Delete content & directory
+      shell: "/bin/rm -rf /home/magisterka/etl-nosql/db/cassandra/var/lib/cassandra/data/{{namespace}}"
+      become_user: root
+      become: yes
+      tags: tag_db_create_namespace
+      ignore_errors: true
 
 
 - hosts: cluster_node_manager
@@ -244,10 +253,6 @@
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
-        - name: Drop tables
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP TABLE {{namespace}}.{{item}};'"
-          loop: "{{tables_schema}}"
-          ignore_errors: True
 
         - name: Create schema
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}"

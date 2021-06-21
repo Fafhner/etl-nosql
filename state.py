@@ -10,12 +10,13 @@ class Node:
 
 
 class StateMachine:
-    def __init__(self):
+    def __init__(self, logger):
         self.preprocess_nodes: Dict[str, Node] = dict()
         self.only_once = list()
         self.flows = list()
         self.main = None
         self.ansbile_f = None
+        self.logger = logger
 
     def addNodes(self, nodes: list):
         for node in nodes:
@@ -35,13 +36,16 @@ class StateMachine:
             self.preprocess_nodes[pk].do(env, grid, diff)
 
 
-    def loop(self, env, scenarios):
+    def loop(self, env, scenarios, pos):
         for doo in self.only_once:
             doo.do(env, None, None, 'all')
 
-        gDiff = GridDiff()
-        for scenario in scenarios:
+        if pos is None:
+            pos = 0
 
+        gDiff = GridDiff()
+        cnt = pos
+        for scenario in scenarios[cnt:]:
             diff = gDiff.nextState(scenario)
             env_cp = env.copy()
             grid_cp = scenario.copy()
@@ -50,10 +54,11 @@ class StateMachine:
                 if f['if'](env_cp, grid_cp, diff):
                     tags = '%s' % ', '.join(map(str, f['then']))
                     break
-            if tags is None:
+            if tags is None or (pos == cnt):
                 tags = '%s' % ', '.join(map(str, self.flows[-1]['then']))
+            self.logger.info(f"--- ACTIVE POS - {cnt}")
 
             self.runPreprocess(env_cp, grid_cp, diff)
             out = self.ansbile_f(env_cp, grid_cp, diff, tags)
-            print("Error: ", out)
             self.main(env_cp, grid_cp, diff)
+            cnt += 1

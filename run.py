@@ -106,6 +106,7 @@ if __name__ == "__main__":
         user = sys.argv[2]
         password = sys.argv[3]
 
+    pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
     env_ = load_from(file)
     static_env = env_['static']
     dynamic_env = env_['dynamic']
@@ -190,11 +191,21 @@ if __name__ == "__main__":
     ]
 
     flow_tree = [
-        {
-            "name": "file changed or keyspace",
-            "if": lambda _, grid, diff: (diff['db-file'] or diff['db-keyspace']) and not diff['cluster_size'] and not diff['scale'],
-            "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack', 'tag_db_update_namespace', 'tag_repair']
-        },
+        # {
+        #     "name": "keyspace",
+        #     "if": lambda _, grid, diff: diff['db-keyspace'] and not diff['db-file'] and not diff['cluster_size'] and not diff['scale'],
+        #     "then": ['tag_create_files', 'tag_files', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+        # },
+        # {
+        #     "name": "file changed",
+        #     "if": lambda _, grid, diff: diff['db-file'] and not diff['db-keyspace'] and not diff['cluster_size'] and not diff['scale'],
+        #     "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack']
+        # },
+        # {
+        #     "name": "file changed nad keyspace",
+        #     "if": lambda _, grid, diff: diff['db-file'] and diff['db-keyspace'] and not diff['cluster_size'] and not diff['scale'],
+        #     "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+        # },
         {
             "name": 'all',
             "if": lambda _, grid, diff: diff['cluster_size'] or diff['scale'],
@@ -205,13 +216,13 @@ if __name__ == "__main__":
     ]
 
 
-    sm = state.StateMachine()
+    sm = state.StateMachine(rootLogger)
     sm.setDoOnlyOnce(do_once_nodes)
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
     sm.setMain(main)
     sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
 
-    sm.loop(conf, scenarios)
+    sm.loop(conf, scenarios, pos)
 
     do_once_nodes[0].do(conf, None, None, 'all')
