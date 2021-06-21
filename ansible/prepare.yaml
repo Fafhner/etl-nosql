@@ -33,17 +33,19 @@
       tags: tag_manager_leave_cluster
       ignore_errors: true
 
+
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
     - name: Delete content & directory
-      ansible.builtin.command: "rm -rf ~/etl-nosql/db/cassandra/var/lib/cassandra/{{item}}"
+      shell: "/bin/rm -rf /home/magisterka/etl-nosql/db/cassandra/var/lib/cassandra/*"
       become_user: root
       become: yes
-      loop:
-        - data
-        - commitlog
-        - hints
-        - saved_caches
+      tags: tag_manager_leave_cluster
+      ignore_errors: true
+
+    - file: path=~/etl-nosql/db/cassandra/var/lib/cassandra/
+      ignore_errors: true
+      tags: tag_manager_leave_cluster
 
 
 
