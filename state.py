@@ -51,7 +51,7 @@ class StateMachine:
             tags = None
             for f in self.flows:
                 if f['if'](env_cp, grid_cp, diff):
-                    tags = f
+                    tags = f['then']
                     break
 
             self.ansbile_f(env_cp, grid_cp, diff, tags)
