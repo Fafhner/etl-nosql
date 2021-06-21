@@ -166,6 +166,7 @@
 
         - name: DB create namespace
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP KEYSPACE IF EXISTS {{namespace}};'"
+          ignore_errors: true
 
         - name: DB create namespace
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
