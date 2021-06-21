@@ -78,8 +78,8 @@ if __name__ == "__main__":
             }
             print("Result:")
             print(json.dumps(res, indent=4))
-            write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
-                     mode='a')
+            write_to(f"result/run_{datetime.now().strftime('%Y%m%d')}_{udf['name']}.result.json",
+                     json.dumps(res, indent=4), ".", mode='a')
 
         cluster.shutdown()
     main()

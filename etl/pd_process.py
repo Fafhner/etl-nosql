@@ -54,7 +54,7 @@ def process_steps(udf: dict, cluster):
                 session: Session = cluster.connect()
                 session.row_factory = pandas_factory
 
-                ex: ResultSet = session.execute(statement, timeout=60)
+                ex: ResultSet = session.execute(statement, timeout=120)
                 df = ex._current_rows
                 while ex.has_more_pages:
                     ex.fetch_next_page()
@@ -70,9 +70,7 @@ def process_steps(udf: dict, cluster):
                 print(f"Rows: {len(df.index)} for {tb_name}")
                 sti['data_acquisition_time'].append(sti_tb)
 
-
             args[args_key] = dataframes[tb_name]
-
 
         if 'args' in step:
             args.update(step['args'])
