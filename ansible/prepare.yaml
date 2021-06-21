@@ -25,3 +25,27 @@
       ansible.builtin.command: "docker swarm leave --force"
       tags: tag_manager_leave_cluster
       ignore_errors: true
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - Leave cluster
+      ansible.builtin.command: "docker swarm leave --force"
+      tags: tag_manager_leave_cluster
+      ignore_errors: true
+
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Delete content & directory
+      file:
+        state: absent
+        path: "~/etl-nosql/db/cassandra/var/lib/cassandra"
+
+    - name: Mk dir
+      file:
+        path: "~/etl-nosql/db/cassandra/var/lib/cassandra"
+        state: directory
+        mode: 0777
+        recurse: yes
+
+
+

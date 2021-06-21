@@ -168,7 +168,7 @@
           register: container_id
 
         - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP KEYSPACE IF EXISTS {{namespace}};'"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP KEYSPACE {{namespace}};'"
           ignore_errors: true
       tags: tag_db_create_namespace
 
@@ -183,6 +183,7 @@
 
         - name: DB create namespace
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
+          ignore_errors: true
       tags: tag_db_create_namespace
 
 ###############################
