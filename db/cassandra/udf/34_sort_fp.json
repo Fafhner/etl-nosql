@@ -1,5 +1,6 @@
 
 {
+  "name": "34_sort_fp.json",
   "type": "full-pushdown",
   "datasets": {
     "customer": {
