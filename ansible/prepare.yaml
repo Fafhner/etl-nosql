@@ -39,6 +39,8 @@
       file:
         state: absent
         path: "~/etl-nosql/db/cassandra/var/lib/cassandra"
+      become_user: magisterka
+      become: true
 
     - name: Mk dir
       file:
@@ -46,6 +48,8 @@
         state: directory
         mode: 0777
         recurse: yes
+      become_user: magisterka
+      become: true
 
 
 
