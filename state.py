@@ -13,7 +13,7 @@ class Node:
 
 class StateMachine:
     def __init__(self):
-        self.nodes: Dict[str, Node] = dict()
+        self.preprocess_nodes: Dict[str, Node] = dict()
         self.only_once = list()
         self.flows = list()
         self.main = None
@@ -21,7 +21,7 @@ class StateMachine:
 
     def addNodes(self, nodes: list):
         for node in nodes:
-            self.nodes[node.name] = node
+            self.preprocess_nodes[node.name] = node
 
     def setDoOnlyOnce(self, oo):
         self.only_once = oo
@@ -32,10 +32,9 @@ class StateMachine:
     def setFlowTree(self, flows):
         self.flows = flows
 
-    def runPreprocess(self, env, grid, diff, flow):
-        for f in flow['then']:
-            n = self.nodes[f]
-            n.do(env, grid, diff)
+    def runPreprocess(self, env, grid, diff):
+        for pk in self.preprocess_nodes:
+            self.preprocess_nodes[pk].do(env, grid, diff)
 
 
     def loop(self, env, scenarios):
@@ -54,6 +53,7 @@ class StateMachine:
                     tags = '%s' % ', '.join(map(str, f['then']))
                     break
 
+            self.runPreprocess(env_cp, grid_cp, diff)
             self.ansbile_f(env_cp, grid_cp, diff, tags)
 
             self.main(env_cp, grid_cp, diff)
