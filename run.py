@@ -70,7 +70,7 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
         pb = f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_become_password={password} ansible_ssh_pass={password}'" \
              f" {notebook} --tags \"{tags}\""
         print("Running " + pb)
-        return run_cmd(pb, path)
+        return 0 # run_cmd(pb, path)
 
     return r_
 
@@ -192,7 +192,7 @@ if __name__ == "__main__":
     flow_tree = [
         {
             "name": "file changed or keyspace",
-            "if": lambda _, grid, diff: (diff['db-file'] or diff['db-keyspace']) and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
+            "if": lambda _, grid, diff: (diff['db-file'] or diff['db-keyspace']) and not diff['cluster_size'] and not diff['scale'],
             "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack', 'tag_db_update_namespace', 'tag_repair']
         },
         {
@@ -214,4 +214,4 @@ if __name__ == "__main__":
 
     sm.loop(conf, scenarios)
 
-    do_once_nodes[0].do(conf, None, None)
+    do_once_nodes[0].do(conf, None, None, 'all')

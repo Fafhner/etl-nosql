@@ -51,9 +51,9 @@ class StateMachine:
                     tags = '%s' % ', '.join(map(str, f['then']))
                     break
             if tags is None:
-                tags = self.flows[-1]['then']
+                tags = '%s' % ', '.join(map(str, self.flows[-1]['then']))
 
             self.runPreprocess(env_cp, grid_cp, diff)
             out = self.ansbile_f(env_cp, grid_cp, diff, tags)
             print("Error: ", out)
-            self.main(env_cp, grid_cp, diff)
+            # self.main(env_cp, grid_cp, diff)
