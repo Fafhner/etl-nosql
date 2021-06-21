@@ -27,13 +27,6 @@
       tags: tag_prepare
       ignore_errors: true
 
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Remove data
-      ansible.builtin.command: "sudo rm -r ~/etl-nosql/db/cassandra/var/lib/cassandra/*"
-      become: true
-      tags: tag_prepare
-
 
 ######################
 - hosts: cluster_node_manager
