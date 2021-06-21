@@ -69,7 +69,7 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
         pb = f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_become_password={password}, ansible_ssh_pass={password}'" \
              f" {notebook} --tags \"{tags}\""
         print("Running " + pb)
-        run_cmd(pb, path)
+        # run_cmd(pb, path)
 
     return r_
 
@@ -191,7 +191,7 @@ if __name__ == "__main__":
         {
             "name": "file changed",
             "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
-            "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack']
+            "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack']
         },
         {
             "name": "keyspace changed",
