@@ -1,10 +1,15 @@
 import json
 from timeit import default_timer as timer
 
+from cassandra.cluster import Cluster, Session
 from cassandra.cluster import ResultSet
 from cassandra.query import SimpleStatement
-
+import pandas as pd
 from etl import etl_func
+
+
+def pandas_factory(colnames, rows):
+    return pd.DataFrame(rows, columns=colnames)
 
 
 def get_steps(file=None):
@@ -17,7 +22,9 @@ def get_steps(file=None):
     return pushdown
 
 
-def process_steps(udf: dict, ses):
+def process_steps(udf: dict, nodes):
+
+
     dataframes = dict()
 
     for step in udf['steps']:
@@ -32,20 +39,30 @@ def process_steps(udf: dict, ses):
         args = dict()
         sti = step_time_info.copy()
 
+
         for args_key in args_tb.keys():
+
+
             tb_name = args_tb[args_key]
             if tb_name not in dataframes:
                 sti_tb = {"table": tb_name, "time": -1, "rows": -1}
 
                 query = udf['datasets'][tb_name]['query']
-                statement = SimpleStatement(query, fetch_size=2000)
+                statement = SimpleStatement(query, fetch_size=5000)
                 dat_1 = timer()
 
-                ex: ResultSet = ses.execute(statement)
+                cluster = Cluster(nodes)
+                session: Session = cluster.connect()
+                session.row_factory = pandas_factory
+
+                ex: ResultSet = session.execute(statement)
                 df = ex._current_rows
                 while ex.has_more_pages:
                     ex.fetch_next_page()
                     df = df.append(ex._current_rows)
+
+                session.shutdown()
+                cluster.shutdown()
 
                 dat_2 = timer()
 
@@ -55,7 +72,9 @@ def process_steps(udf: dict, ses):
                 print(f"Rows: {len(df.index)} for {tb_name}")
                 sti['data_acquisition_time'].append(sti_tb)
 
+
             args[args_key] = dataframes[tb_name]
+
 
         if 'args' in step:
             args.update(step['args'])

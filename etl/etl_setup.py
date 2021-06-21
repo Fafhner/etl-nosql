@@ -1,21 +1,14 @@
-import modin.pandas as pd
+#import modin.pandas as pd
 
 from etl.pd_process import process_steps, get_steps
-
-
-def pandas_factory(colnames, rows):
-    return pd.DataFrame(rows, columns=colnames)
 
 
 def cassandra_process(nodes, udf_file):
     from cassandra.cluster import Cluster, Session
 
-    cluster = Cluster(nodes)
-    session: Session = cluster.connect()
-    session.row_factory = pandas_factory
-    session.default_fetch_size = None
-    ret = process_steps(udf_file, session)
-    cluster.shutdown()
+
+    ret = process_steps(udf_file, nodes)
+
     return ret
 
 
