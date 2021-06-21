@@ -54,7 +54,7 @@ def process_steps(udf: dict, cluster):
                 session: Session = cluster.connect()
                 session.row_factory = pandas_factory
 
-                ex: ResultSet = session.execute(statement)
+                ex: ResultSet = session.execute(statement, timeout=60)
                 df = ex._current_rows
                 while ex.has_more_pages:
                     ex.fetch_next_page()

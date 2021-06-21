@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
 
     def main():
-        cluster = Cluster([conf["cluster"]["node_manager"]], request_timeout=60)
+        cluster = Cluster([conf["cluster"]["node_manager"]],  connect_timeout=20)
         for udf in udfs:
 
             data = etl_process(cluster, udf)
