@@ -127,7 +127,6 @@
   tasks:
     - name: Create docker network
       ansible.builtin.command: "docker network create -d overlay {{ db['network_name'] }}"
-      when: create_cluster_network
       tags: tag_deploy_stack
 
     - name: Docker stack up

@@ -2,8 +2,6 @@ from typing import Dict
 
 from grid import GridDiff
 
-from run import scenario_diff
-
 
 class Node:
     def __init__(self, name, do_):

@@ -46,13 +46,6 @@ def convert_tables_info(tables, config):
     return tables_info
 
 
-def run_script(script_name, path, acc_error=None):
-    out = subprocess.run(f'bash {script_name};', shell=True, cwd=path, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE, text=True)
-    if out.stderr != '':
-        if acc_error is None or acc_error not in out.stderr:
-            exit(-1)
-
 
 def run_cmd(cmd, path, acc_error=None):
     out = subprocess.run(cmd, shell=True, cwd=path, stdout=subprocess.PIPE,
@@ -68,16 +61,6 @@ def create_docker_compose(dc_json, size):
     return "\n".join(parts)
 
 
-def scenario_diff(prev_scenario, next_scenario):
-    diff = dict()
-    for sparam in next_scenario:
-        if prev_scenario is None or next_scenario[sparam] != prev_scenario[sparam]:
-            diff[sparam] = True
-        else:
-            diff[sparam] = False
-    return diff
-
-
 def create_ansible_cmd(notebook, hosts, user, password, path):
     def r_(env, grid, diff, tags):
         print(f"Running playbook - {notebook}")
@@ -86,7 +69,7 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
         pb = f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_ssh_pass={password}'" \
              f" {notebook} --tags \"{tags}\""
         print("Running " + pb)
-        run_cmd(pb, path)
+       # run_cmd(pb, path)
 
     return r_
 
@@ -161,12 +144,12 @@ if __name__ == "__main__":
         write_to('hosts', hosts_file, ansi_cat)
 
         print("Merge as ansible/group_vars/all.json")
-        conf_all = {**static_env,
+        conf_all = {**conf,
                     **getVals(grid),
                     **db_info,
                     'cluster': {'node_manager': cluster_node_manager, 'node_workers': cluster_node_workers}
                     }
-        conf_all['data_generator']['tables'] = [tb for tb in udf['datasets']]
+        conf_all['data_generator']['tables'] = conf['tables_schema']
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
