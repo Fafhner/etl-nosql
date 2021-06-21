@@ -36,18 +36,14 @@
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
     - name: Delete content & directory
-      ansible.builtin.command: "rm -r ~/etl-nosql/db/cassandra/var/lib/cassandra/*"
+      ansible.builtin.command: "rm -rf ~/etl-nosql/db/cassandra/var/lib/cassandra/{{item}}"
       become_user: root
       become: yes
-
-    - name: Mk dir
-      file:
-        path: "~/etl-nosql/db/cassandra/var/lib/cassandra"
-        state: directory
-        mode: 0777
-        recurse: yes
-      become_user: magisterka
-      become: true
+      loop:
+        - data
+        - commitlog
+        - hints
+        - saved_caches
 
 
 
