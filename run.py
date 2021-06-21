@@ -7,7 +7,7 @@ from datetime import datetime
 from create import create_scenarios
 from etl.etl_setup import select_driver
 import state
-
+from cassandra.cluster import Cluster
 
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
@@ -163,8 +163,9 @@ if __name__ == "__main__":
 
 
     def main(env, grid, diff):
+        cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
         for udf in udfs:
-            data = etl_process([env["cluster"]["node_manager"]],  udf)
+            data = etl_process(cluster, udf)
 
             res = {
                 "udf": udf['name'],
@@ -173,8 +174,10 @@ if __name__ == "__main__":
             }
             print("Result:")
             print(json.dumps(res, indent=4))
-            write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
-                     mode='a')
+            write_to(f"result/run_{datetime.now().strftime('%Y%m%d')}_{udf['name']}.result.json",
+                     json.dumps(res, indent=4), ".", mode='a')
+
+        cluster.shutdown()
 
 
     do_once_nodes = [
