@@ -54,6 +54,7 @@ def run_cmd(cmd, path, acc_error=None):
     if out.stderr != '':
         if acc_error is None or acc_error not in out.stderr:
             exit(-1)
+    return out.stderr
 
 
 def create_docker_compose(dc_json, size):
@@ -69,7 +70,7 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
         pb = f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_become_password={password}, ansible_ssh_pass={password}'" \
              f" {notebook} --tags \"{tags}\""
         print("Running " + pb)
-        run_cmd(pb, path)
+        return run_cmd(pb, path)
 
     return r_
 
@@ -206,6 +207,7 @@ if __name__ == "__main__":
         },
 
     ]
+
 
     sm = state.StateMachine()
     sm.setDoOnlyOnce(do_once_nodes)
