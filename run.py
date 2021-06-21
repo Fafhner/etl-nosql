@@ -171,7 +171,8 @@ if __name__ == "__main__":
             res = {
                 "udf": udf['name'],
                 "steps": data['steps'],
-                "scenario": getVals(grid)
+                "scenario": getVals(grid),
+                "timestamp": str(datetime.now())
             }
             print("Result:")
             print(json.dumps(res, indent=4))
@@ -190,13 +191,8 @@ if __name__ == "__main__":
 
     flow_tree = [
         {
-            "name": "file changed",
-            "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
-            "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack', 'tag_db_update_namespace', 'tag_repair']
-        },
-        {
-            "name": "keyspace changed",
-            "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
+            "name": "file changed or keyspace",
+            "if": lambda _, grid, diff: (diff['db-file'] or diff['db-keyspace']) and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
             "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack', 'tag_db_update_namespace', 'tag_repair']
         },
         {
