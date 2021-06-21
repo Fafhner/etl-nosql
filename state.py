@@ -54,4 +54,4 @@ class StateMachine:
             self.runPreprocess(env_cp, grid_cp, diff)
             self.ansbile_f(env_cp, grid_cp, diff, tags)
 
-            # self.main(env_cp, grid_cp, diff)
+            self.main(env_cp, grid_cp, diff)
