@@ -32,8 +32,8 @@
     - name: Remove data
       ansible.builtin.command: "sudo rm -r ~/etl-nosql/db/cassandra/var/lib/cassandra/*"
       become: true
+      ansible_become_pass: "{{ ansible_ssh_pass }}"
       tags: tag_prepare
-      ignore_errors: true
 
 
 ######################
