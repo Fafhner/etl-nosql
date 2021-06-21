@@ -31,20 +31,6 @@
           "replace": "-Xmx{{java_xms}}M"
         }
       ]
-    },
-    {
-      "file_name": "keyspace",
-      "file_path": "~/etl-nosql/db/cassandra/tables_schema",
-      "params": [
-        {
-          "regex": "__keyspace__",
-          "replace": "{{namespace}}"
-        },
-        {
-          "regex": "__rep_factor__",
-          "replace": "{{rep_factor}}"
-        }
-      ]
     }
   ],
   "namespace": "tpc_ds",

@@ -47,37 +47,28 @@
     "scale": {
       "context": "table_data",
       "priority": 999,
-      "start": 1,
-      "stop": 13,
-      "step": 3
+      "data": [
+        1,
+        5,
+        10,
+        15
+      ]
     },
     "cluster_size": {
       "context": "cluster",
       "priority": 998,
       "data": [
-        3,
         4,
-        5,
         6,
-        7,
         8
       ]
-    },
-    "key_cache_size_in_mb": {
-      "context": "db-file",
-      "priority": 2,
-      "start": 100,
-      "stop": 200,
-      "step": 20
     },
     "rep_factor": {
       "context": "db-keyspace",
       "priority": 2,
       "data": [
         4,
-        5,
         6,
-        7,
         8
       ]
     },
