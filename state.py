@@ -56,4 +56,4 @@ class StateMachine:
             self.runPreprocess(env_cp, grid_cp, diff)
             out = self.ansbile_f(env_cp, grid_cp, diff, tags)
             print("Error: ", out)
-            # self.main(env_cp, grid_cp, diff)
+            self.main(env_cp, grid_cp, diff)
