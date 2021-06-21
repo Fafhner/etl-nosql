@@ -43,15 +43,21 @@
 ######################
 - hosts: cluster_node_manager
   tasks:
+    - name: Manager - remove network
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
+      tags: tag_rm_stack
+      ignore_errors: true
+
     - name: Manager - remove stack
       ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
       tags: tag_rm_stack
       ignore_errors: true
 
-    - name: Manager - remove network
-      ansible.builtin.command: "docker network rm {{db['network_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
+    - name: Wait
+      pause:
+        seconds: 10
+
+
 
 ##########################
 
@@ -141,6 +147,7 @@
     - name: Create docker network
       ansible.builtin.command: "docker network create -d overlay {{ db['network_name'] }}"
       tags: tag_deploy_stack
+      ignore_errors: true
 
     - name: Docker stack up
       ansible.builtin.command: "docker stack deploy -c {{docker_compose_file}} {{db['docker_stack_name']}}"
