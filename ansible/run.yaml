@@ -224,7 +224,7 @@
 ########################
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
-    - name: Create DB namespace
+    - name: Repair
       block:
         - name: Get container ID
           ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
