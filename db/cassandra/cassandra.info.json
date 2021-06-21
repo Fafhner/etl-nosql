@@ -9,16 +9,6 @@
   },
   "configs": [
     {
-      "file_name": "cassandra.yaml",
-      "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
-      "params": [
-        {
-          "regex": "^key_cache_size_in_mb:.*",
-          "replace": "key_cache_size_in_mb: {{key_cache_size_in_mb}}"
-        }
-      ]
-    },
-    {
       "file_name": "jvm.options",
       "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
@@ -29,6 +19,20 @@
         {
           "regex": "#-Xmx4G",
           "replace": "-Xmx{{java_xms}}M"
+        }
+      ]
+    },
+    {
+      "file_name": "keyspace",
+      "file_path": "~/etl-nosql/db/cassandra/tables_schema",
+      "params": [
+        {
+          "regex": "__keyspace__",
+          "replace": "{{namespace}}"
+        },
+        {
+          "regex": "__rep_factor__",
+          "replace": "{{rep_factor}}"
         }
       ]
     }
