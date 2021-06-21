@@ -203,7 +203,6 @@
       tags: tag_prepare
       ignore_errors: true
 
-
 - hosts: cluster_node_workers
   tasks:
     - name: Workers - Leave cluster
