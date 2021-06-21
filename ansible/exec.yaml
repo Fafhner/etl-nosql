@@ -1,0 +1,12 @@
+- hosts: cluster_node_manager
+  tasks:
+    - name: Exec
+      block:
+        - name: Get container ID 4
+          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
+          register: container_id
+
+        - name: Exec
+          ansible.builtin.command: "docker exec {{container_id.stdout}} {{item}}"
+          loop: "{{exec}}"
+      tags: tag_exec_cmd

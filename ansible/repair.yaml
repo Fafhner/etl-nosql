@@ -1,0 +1,11 @@
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Create DB namespace
+      block:
+        - name: Get container ID
+          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
+          register: container_id
+
+        - name: DB repair
+          ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool repair --full"
+      tags: tag_create_namespace

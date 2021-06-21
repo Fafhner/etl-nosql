@@ -1,39 +1,57 @@
-class State:
-    pass
+from typing import Dict
 
+from grid import GridDiff
+
+from run import scenario_diff
+
+
+class Node:
+    def __init__(self, name, do_):
+        self.name = name
+        self.do = do_
 
 class StateMachine:
-    def __init__(self, links):
-        """
+    def __init__(self):
+        self.nodes: Dict[str, Node] = dict()
+        self.only_once = list()
+        self.flows = list()
+        self.main = None
 
-        :param links:
-        {
-         state0: [state1, state2],
-         state1: [state2, state3],
-         state2: [state4]
-         }
-        """
-        self.links = links
-        self.state = None
-        self.prev_state = None
-        self.history = []
+    def addNodes(self, nodes: list):
+        for node in nodes:
+            self.nodes[node.name] = node
 
-    def updateToState(self, next_state):
-        if next_state in self.links[self.state]:
-            if self.prev_state is not None:
-                self.history.append(self.prev_state)
-            self.prev_state = self.state
-            self.state = next_state
-        else:
-            raise Exception(f"Unable to move to state: {next_state} from state: {self.state}")
+    def setDoOnlyOnce(self, oo):
+        self.only_once = oo
+
+    def setMain(self, main):
+        self.main = main
+
+    def setFlowTree(self, flows):
+        self.flows = flows
+
+    def runPreprocess(self, env, grid, diff, flow):
+        for f in flow['then']:
+            n = self.nodes[f]
+            n.do(env, grid, diff)
 
 
+    def loop(self, env, scenarios):
+        for doo in self.only_once:
+            doo.do(env, None, None)
 
-    def saveStateAsDict(self):
-        d = {
-            "links": self.links,
-            "state": self.state,
-            "prev_state": self.prev_state,
-            "history": self.history
-        }
-        return d
+        gDiff = GridDiff()
+        for scenario in scenarios:
+
+            diff = gDiff.nextState(scenario)
+            env_cp = env.copy()
+            grid_cp = scenario.copy()
+            flow = None
+            for f in self.flows:
+                if f['if'](env_cp, grid_cp, diff):
+                    flow = f
+                    break
+
+            self.runPreprocess(env_cp, grid_cp, diff, flow)
+
+            self.main(env_cp, grid_cp, diff)

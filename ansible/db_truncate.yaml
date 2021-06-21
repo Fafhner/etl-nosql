@@ -1,0 +1,13 @@
+- hosts:  cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Truncate tables
+      block:
+        - name: Get container ID 3
+          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
+          register: container_id
+
+        - name: Truncate tables
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'TRUNCATE {{namespace}}.{{item}}'"
+          loop: "{{tables_schema}}"
+          ignore_errors: True
+      tags: tag_load_data

@@ -29,3 +29,4 @@ CREATE TABLE tpc_ds.Catalog_returns (
         cr_net_loss decimal
 );
 
+

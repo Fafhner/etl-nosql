@@ -1,0 +1,20 @@
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Restore files, change parameters
+      block:
+        - name: Restore files
+          ansible.builtin.copy:
+            src: "{{ item.file_path }}/{{ item.file_name }}.backup"
+            dest: "{{ item.file_path }}/{{ item.file_name }}"
+          loop: "{{ configs }}"
+
+        - name: Change params
+          ansible.builtin.replace:
+            path: "{{ item.0.file_path }}/{{ item.0.file_name }}"
+            regexp: "{{ item.1.regex }}"
+            replace: "{{ item.1.replace }}"
+          with_subelements:
+            - "{{ configs }}"
+            - params
+
+      tags: tag_backup_files

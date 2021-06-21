@@ -1,0 +1,14 @@
+- hosts: cluster_node_manager
+  tasks:
+    - name: Generate data
+      block:
+        - name: Create directory for tables' data
+          file:
+            path: "{{ data_generator['tables_dest'] }}/{{ scale }}"
+            state: directory
+
+        - name: Generate data
+          ansible.builtin.command: "{{ data_generator['gen_path']}}/dsdgen -DIR {{data_generator['tables_dest'] }}/{{ scale }} -SCALE {{ scale }} -TERMINATE {{ data_generator['terminate']}} -RNGSEED {{data_generator['rngseed'] }} -FORCE {{data_generator['force'] }} -DISTRIBUTIONS {{data_generator['distr'] }} -TABLE {{ item }}"
+          with_items: "{{ data_generator['tables'] }}"
+      ignore_errors: true
+      tags: tag_create_tables

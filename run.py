@@ -6,6 +6,7 @@ from datetime import datetime
 
 from create import create_scenarios
 from etl.etl_setup import select_driver
+import state
 
 
 def write_to(file_name, data, output_path=None, mode='w'):
@@ -34,14 +35,14 @@ def generate_hosts_file(manager, workers):
 
 def convert_tables_info(tables, config):
     tables_info = list()
+    tb_infos = config['table_infos']
     for tb in tables:
-        for tb_info in config['table_infos']:
-            if tb in tb_info['tables']:
-                tables_info.append(tb_info['load'].format(
-                    namespace=config['namespace'],
-                    table=tb,
-                    path=config['db']['db_tables_path'] + "/" + str(config['scale']),
-                    file=tb_info['table']))
+        tb_info = tb_infos[tb]
+        tables_info.append(tb_info['load'].format(
+            namespace=config['namespace'],
+            table=tb,
+            path=config['db']['db_tables_path'] + "/" + str(config['scale']),
+            file=tb_info['table']))
     return tables_info
 
 
@@ -77,6 +78,22 @@ def scenario_diff(prev_scenario, next_scenario):
     return diff
 
 
+def create_ansible_cmd(notebook, hosts, user, password, path):
+    def r_(env, grid, diff):
+        print(f"Running playbook - {notebook}")
+        print(f"Grid: {grid}")
+        print(f"Diff: {diff}")
+        print(f"ansible-playbook -i {hosts} -u {user} --extra-vars 'ansible_ssh_pass={password}' {notebook}", path)
+
+    return r_
+
+
+def getVals(params):
+    p = dict()
+    for param in params:
+        p[param] = params[param].val
+    return p
+
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
 rootLogger.setLevel(logging.DEBUG)
@@ -86,12 +103,10 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-
 if __name__ == "__main__":
     fileHandler = logging.FileHandler(f"run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
     fileHandler.setFormatter(logFormatter)
     rootLogger.addHandler(fileHandler)
-
 
     if len(sys.argv) == 1:
         print("No arguments given.")
@@ -104,107 +119,124 @@ if __name__ == "__main__":
         user = sys.argv[2]
         password = sys.argv[3]
 
-    env = load_from(file)
-    static_env = env['static']
-    dynamic_env = env['dynamic']
+    env_ = load_from(file)
+    static_env = env_['static']
+    dynamic_env = env_['dynamic']
 
     db_info = load_from(static_env['database_info_file'], static_env['database_info_path'])
+
+    conf = {**static_env,
+            **db_info}
+
+    udfs = [load_from(udf, static_env['udf_path']) for udf in static_env['udfs']]
+    tables_schema = list()
+    for udf in udfs:
+        for tb in udf['datasets']:
+            if udf['datasets'][tb]['table_schema'] not in tables_schema:
+                tables_schema.append(udf['datasets'][tb]['table_schema'])
+
+    conf['tables_schema'] = tables_schema
+
     etl_process = select_driver(db_info['db']['etl_driver'])
     dc_json = load_from('docker-compose.yaml.json', 'db/cassandra')
-    print("-" * 20)
 
-    tags = {
-        "create_tables": True,
-        "create_cluster": True,
-        "leave_cluster": True,
-        "restore_files": True,
-        "create_cluster_network": True,
-        "backup_files": True,
-        "docker_stack_deploy": True,
-        "create_namespace": True,
-        "create_table_schema": True,
-        "load_data": True,
-        "exec_cmd": True
-    }
-    
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
-    prev_scenario = None
-    for scenario_key in scenarios.keys():
-        scenario = scenarios[scenario_key]
-        diff = scenario_diff(prev_scenario, scenario)
-        udf = load_from(scenario['udf'], static_env['udf_path'])
-
-        # tags['create_cluster'] = diff['cluster_size'] and diff['scale']
-        # tags['create_cluster_network'] = diff['cluster_size'] and diff['scale']
-        # tags['docker_stack_deploy'] = diff['cluster_size'] and diff['scale']
-        # tags['create_cluster'] = diff['cluster_size'] and diff['scale']
-        # tags['create_namespace'] = diff['cluster_size'] and diff['scale']
-        # tags['create_table_schema'] = diff['cluster_size'] and diff['scale']
-        # tags['load_data'] = diff['cluster_size'] and diff['scale']
-        # tags['leave_cluster'] = diff['cluster_size'] and diff['scale']
-
-        
-        print("Clear cluster")
-        # run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' clear.yaml", ansi_cat)
 
 
-        # 1 ########################
+    def create_files(conf, grid, diff):
         print("Generating hosts file")
-        cluster_node_manager: str = static_env['cluster']['node_manager']
-        cluster_node_workers: list = static_env['cluster']['node_workers']
+        print(f"Grid: {grid}")
+        print(f"Diff: {diff}")
+        cluster_node_manager: str = conf['cluster']['node_manager']
+        cluster_node_workers: list = conf['cluster']['node_workers']
         if cluster_node_manager in cluster_node_workers:
             cluster_node_workers.remove(cluster_node_manager)
-        cluster_node_workers = cluster_node_workers[0:scenario['cluster_size'] - 1]
-        hosts_file = generate_hosts_file(cluster_node_manager, cluster_node_workers)
+        cluster_node_workers = cluster_node_workers[0:grid['cluster_size'].val - 1]
 
+        hosts_file = generate_hosts_file(cluster_node_manager, cluster_node_workers)
         write_to('hosts', hosts_file, ansi_cat)
 
-        # 2 ########################
         print("Merge as ansible/group_vars/all.json")
         conf_all = {**static_env,
-                    **scenario,
+                    **getVals(grid),
                     **db_info,
-                    **tags,
                     'cluster': {'node_manager': cluster_node_manager, 'node_workers': cluster_node_workers}
                     }
-
         conf_all['data_generator']['tables'] = [tb for tb in udf['datasets']]
-        conf_all['tables_schema'] = [udf['datasets'][tb]['table_schema'] for tb in udf['datasets']]
+
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
-        print("Prepare dirs")
-        #run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_become_pass={password}' copy.yaml",
-        #        ansi_cat)
-
-        print("Prepare db data load")
-        load_file_data = convert_tables_info(conf_all['tables_schema'], conf_all)
+        print("Create tables_schema/load file")
+        load_file_data = convert_tables_info(conf['tables_schema'], conf_all)
         write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
 
         print("Create docker-compose")
-        dc = create_docker_compose(dc_json, scenario['cluster_size'])
+        dc = create_docker_compose(dc_json, grid['cluster_size'].val)
         write_to('docker-compose.yaml', dc, 'db/cassandra')
 
-        # 3 ########################
-        print("Running ansible")
-        #run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' run.yaml", ansi_cat)
 
-        print("Running experiments")
-        for udf in conf_all['udf']:
-            data = etl_process([conf_all["cluster"]["node_manager"]],
-                                f"{conf_all['udf_path']}/{udf}")
+    def main(env, grid, diff):
+        for udf in udfs:
+            data = etl_process([env["cluster"]["node_manager"]],  udf)
 
             res = {
-                "udf": udf,
+                "udf": udf['name'],
                 "steps": data['steps'],
-                "scenario": scenario
+                "scenario": grid
             }
             print("Result:")
             print(json.dumps(res, indent=4))
             write_to(f"run_{datetime.now().strftime('%Y%m%d')}.result.json", json.dumps(res, indent=4), ".",
                      mode='a')
-        
-    
-    print("Clear all")
-    #run_cmd(f"ansible-playbook -i hosts -u {user} --extra-vars 'ansible_ssh_pass={password}' --tags all clear.yaml",
-    #        ansi_cat)
+
+
+    do_once_nodes = [
+        state.Node('Prepare', create_ansible_cmd('prepare.yaml', 'hosts_all', user, password, ansi_cat))
+    ]
+    preprocess_nodes = [
+        state.Node('create_files', create_files),
+        state.Node('create_table_data', create_ansible_cmd('create_table_data.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('rm_stack', create_ansible_cmd('rm_stack.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('init_swarm', create_ansible_cmd('init_swarm.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('files', create_ansible_cmd('files.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('deploy_stack', create_ansible_cmd('deploy_stack.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('db_create_namespace', create_ansible_cmd('db_create_namespace.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('db_update_namespace', create_ansible_cmd('db_update_namespace.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('db_fill_tables', create_ansible_cmd('db_fill_tables.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('exec', create_ansible_cmd('exec.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('prepare', create_ansible_cmd('prepare.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('repair', create_ansible_cmd('repair.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('truncate', create_ansible_cmd('db_truncate.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('db_create_schema', create_ansible_cmd('db_create_schema.yaml', 'hosts', user, password, ansi_cat)),
+        state.Node('db_drop_tables', create_ansible_cmd('db_drop_tables.yaml', 'hosts', user, password, ansi_cat))
+    ]
+
+    flow_tree = [
+        {
+            "name": "file changed",
+            "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
+            "then": ['rm_stack', 'create_files', 'files', 'init_swarm', 'deploy_stack']
+        },
+        {
+            "name": "keyspace changed",
+            "if": lambda _, grid, diff: diff['db-file'] and not diff['cluster_size'] and not diff['db-keyspace'] and not diff['scale'],
+            "then": ['create_files', 'files', 'db_update_namespace', 'repair']
+        },
+        {
+            "name": 'all',
+            "if": lambda _, grid, diff: diff['cluster_size'] or diff['scale'],
+            "then": ['prepare', 'create_files', 'create_table_data', 'files', 'init_swarm',
+                     'deploy_stack', 'db_create_namespace', 'db_create_schema', 'db_fill_tables', 'exec']
+        },
+
+    ]
+
+    sm = state.StateMachine()
+    sm.setDoOnlyOnce(do_once_nodes)
+    sm.addNodes(preprocess_nodes)
+    sm.setFlowTree(flow_tree)
+    sm.setMain(main)
+
+    sm.loop(conf, scenarios)
+
