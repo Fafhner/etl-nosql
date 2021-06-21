@@ -164,6 +164,9 @@
           ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
           register: container_id
 
+       - name: DB create namespace
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP KEYSPACE IF EXISTS {{namespace}};'"
+          
         - name: DB create namespace
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
       tags: tag_db_create_namespace
