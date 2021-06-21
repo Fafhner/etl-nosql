@@ -203,7 +203,7 @@ if __name__ == "__main__":
             "name": 'all',
             "if": lambda _, grid, diff: diff['cluster_size'] or diff['scale'],
             "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm',
-                     'tag_deploy_stack', 'tag_db_create_namespace', 'tag_db_update_namespace', 'tag_repair', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+                     'tag_deploy_stack', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
         },
 
     ]
