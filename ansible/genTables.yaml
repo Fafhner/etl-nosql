@@ -1,6 +1,6 @@
 ---
 
-- hosts: cluster_node_manager:cluster_node_workers
+- hosts: cluster_node_manager
   tasks:
     - name: Make directories
       ansible.builtin.command: "mkdir -p {{ data_generator.tables_dest }}/{{ item }}"
