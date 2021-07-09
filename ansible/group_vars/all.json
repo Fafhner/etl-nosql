@@ -15,11 +15,11 @@
     },
     "data_generator": {
         "tables_dest": "$HOME/etl-nosql/db/table_data",
-        "gen_path": "$HOME/etl-nosql/tpc-ds-tool/v3.0.0/tools",
+        "gen_path": "$HOME/etl-nosql/tools/tpc-ds-tool/tools",
         "terminate": "N",
         "rngseed": 100,
         "force": "N",
-        "distr": "~/etl-nosql/tpc-ds-tool/v3.0.0/tools/tpcds.idx",
+        "distr": "~/etl-nosql/tools/tpc-ds-tool/tools/tpcds.idx",
         "tables": [
             "date_dim",
             "store_sales",
@@ -27,7 +27,8 @@
             "web_sales",
             "warehouse",
             "customer"
-        ]
+        ],
+        "sizes": [1, 5, 10, 15, 35, 50]
     },
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
