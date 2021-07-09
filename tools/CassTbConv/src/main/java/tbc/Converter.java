@@ -10,6 +10,8 @@ import java.text.ParseException;
 import java.util.Scanner;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.cassandra.dht.Murmur3Partitioner;
 import org.apache.cassandra.exceptions.InvalidRequestException;
@@ -38,13 +40,23 @@ public class Converter {
                 .withPartitioner(new Murmur3Partitioner());
         CQLSSTableWriter writer = builder.build();
 
-        CSVReader reader = new CSVReader(new FileReader(dataPath));
+        CSVReader reader = new CSVReaderBuilder(new FileReader(dataPath))
+                .withCSVParser(new CSVParserBuilder().withSeparator('|').build()).build();
+
+
         String [] nextLine;
-        while ((nextLine = reader.readNext()) != null) {
-            writer.addRow(table.convert(nextLine));
+        try {
+            while ((nextLine = reader.readNext()) != null) {
+                writer.addRow("table.convert(nextLine)");
+            }
+        }
+        catch(Exception e) {
+            writer.close();
+            throw e;
         }
 
-        writer.close();
+
+
     }
 
     public static void main(String[] args) throws IOException, CsvValidationException, InvalidRequestException {

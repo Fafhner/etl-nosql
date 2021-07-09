@@ -13,7 +13,7 @@
     - name: Generate data
       block:
         - name: Generate data
-          ansible.builtin.command: "{{ data_generator['gen_path']}}/dsdgen -DIR {{data_generator['tables_dest'] }}/{{ item.1 }} -SCALE {{ item.1 }} -TERMINATE {{ data_generator['terminate']}} -RNGSEED {{data_generator['rngseed'] }} -FORCE {{data_generator['force'] }} -DISTRIBUTIONS {{data_generator['distr'] }} -TABLE {{ item.0 }} -DELIMITER ,"
+          ansible.builtin.command: "{{ data_generator['gen_path']}}/dsdgen -DIR {{data_generator['tables_dest'] }}/{{ item.1 }} -SCALE {{ item.1 }} -TERMINATE {{ data_generator['terminate']}} -RNGSEED {{data_generator['rngseed'] }} -FORCE {{data_generator['force'] }} -DISTRIBUTIONS {{data_generator['distr'] }} -TABLE {{ item.0 }}"
           with_nested:
             - "{{ data_generator['tables'] }}"
             - "{{ data_generator['sizes'] }}"
