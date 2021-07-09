@@ -1,0 +1,10 @@
+{
+  "infos": [
+    {
+      "outputDir": ".",
+      "outputDirName": "Catalog_Returns",
+      "dataSrcPath": "C:\\Users\\Konto\\Desktop\\workspace-intellij\\CassTbConv\\src\\main\\resources\\data.txt",
+      "tableName": "Catalog_Returns"
+    }
+  ]
+}

@@ -9,6 +9,7 @@ from etl.etl_setup import select_driver
 import state
 from cassandra.cluster import Cluster
 
+
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
         file_name = f"{output_path}/{file_name}"
@@ -107,6 +108,7 @@ if __name__ == "__main__":
         password = sys.argv[3]
 
     pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
+    main_only = int(sys.argv[5]) if len(sys.argv) >= 6 else None
     env_ = load_from(file)
     static_env = env_['static']
     dynamic_env = env_['dynamic']
@@ -223,6 +225,6 @@ if __name__ == "__main__":
     sm.setMain(main)
     sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
 
-    sm.loop(conf, scenarios, pos)
+    sm.loop(conf, scenarios, pos, main_only)
 
     do_once_nodes[0].do(conf, None, None, 'all')

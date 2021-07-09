@@ -5,7 +5,12 @@
         "node_manager": "192.168.55.11",
         "node_workers": [
             "192.168.55.12",
-            "192.168.55.13"
+            "192.168.55.13",
+            "192.168.55.14",
+            "192.168.55.15",
+            "192.168.55.16",
+            "192.168.55.17",
+            "192.168.55.18"
         ]
     },
     "data_generator": {
@@ -55,16 +60,6 @@
     },
     "configs": [
         {
-            "file_name": "cassandra.yaml",
-            "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
-            "params": [
-                {
-                    "regex": "^key_cache_size_in_mb:.*",
-                    "replace": "key_cache_size_in_mb: {{key_cache_size_in_mb}}"
-                }
-            ]
-        },
-        {
             "file_name": "jvm.options",
             "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
             "params": [
@@ -80,6 +75,20 @@
         },
         {
             "file_name": "keyspace",
+            "file_path": "~/etl-nosql/db/cassandra/tables_schema",
+            "params": [
+                {
+                    "regex": "__keyspace__",
+                    "replace": "{{namespace}}"
+                },
+                {
+                    "regex": "__rep_factor__",
+                    "replace": "{{rep_factor}}"
+                }
+            ]
+        },
+        {
+            "file_name": "keyspace_update",
             "file_path": "~/etl-nosql/db/cassandra/tables_schema",
             "params": [
                 {
@@ -136,9 +145,8 @@
             "drop": "DROP TABLE {namespace}.{table}"
         }
     },
-    "key_cache_size_in_mb": 100,
-    "rep_factor": 3,
-    "java_xms": 2000,
-    "cluster_size": 3,
-    "scale": 1
+    "rep_factor": 8,
+    "java_xms": 4000,
+    "cluster_size": 8,
+    "scale": 60
 }

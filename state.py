@@ -36,7 +36,7 @@ class StateMachine:
             self.preprocess_nodes[pk].do(env, grid, diff)
 
 
-    def loop(self, env, scenarios, pos):
+    def loop(self, env, scenarios, pos, ml):
         for doo in self.only_once:
             doo.do(env, None, None, 'all')
 
@@ -58,7 +58,10 @@ class StateMachine:
                 tags = '%s' % ', '.join(map(str, self.flows[-1]['then']))
             self.logger.info(f"--- ACTIVE POS - {cnt}")
 
-            self.runPreprocess(env_cp, grid_cp, diff)
+            if ml is None or ml == 0:
+                self.runPreprocess(env_cp, grid_cp, diff)
             out = self.ansbile_f(env_cp, grid_cp, diff, tags)
             self.main(env_cp, grid_cp, diff)
+            if ml is not None and ml == 1:
+                break
             cnt += 1
