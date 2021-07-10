@@ -48,7 +48,7 @@ public class Converter {
         String [] nextLine;
         try {
             while ((nextLine = reader.readNext()) != null) {
-                writer.addRow("table.convert(nextLine)");
+                writer.addRow(table.convert(nextLine));
             }
         }
         catch(Exception e) {
