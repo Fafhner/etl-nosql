@@ -3,7 +3,7 @@ package tbc.tables;
 import java.math.BigDecimal;
 
 public class Customer implements Table {
-    public String tableName = "Customer";
+    public String tableName = "customer";
     public String schema = "" +
             "CREATE TABLE tpc_ds.Customer   (\n" +
             "        c_customer_sk bigint PRIMARY KEY,\n" +

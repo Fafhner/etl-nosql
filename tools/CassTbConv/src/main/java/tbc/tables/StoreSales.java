@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 
 public class StoreSales  implements Table{
-    public String tableName = "Store_sales";
+    public String tableName = "store_sales";
     public  String schema = "" +
             "CREATE TABLE tpc_ds.Store_sales (\n" +
             "        ss_sold_date_sk bigint,\n" +

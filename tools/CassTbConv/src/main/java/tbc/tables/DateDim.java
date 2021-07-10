@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateDim implements Table {
-    public String tableName = "Date_dim";
+    public String tableName = "date_dim";
     public String schema = "" +
             "CREATE TABLE tpc_ds.Date_dim    (\n" +
             "    d_date_sk bigint PRIMARY KEY,\n" +

@@ -33,7 +33,8 @@ public class Converter {
 
     public static void createSSTable(String dataPath, String outDir, Table table) throws IOException, CsvValidationException, ParseException {
         CQLSSTableWriter.Builder builder = CQLSSTableWriter.builder();
-
+        System.out.println("Generating sstable in path " + dataPath + "for table " +
+                table.getTableName() + " output: " + outDir);
         builder.inDirectory(outDir)
                 .forTable(table.getSchema())
                 .using(table.getStmt())

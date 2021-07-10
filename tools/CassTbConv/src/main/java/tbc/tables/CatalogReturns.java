@@ -3,7 +3,7 @@ package tbc.tables;
 import java.math.BigDecimal;
 
 public class CatalogReturns implements Table {
-    public String tableName = "Catalog_Returns";
+    public String tableName = "catalog_returns";
     public String schema = "" +
             "CREATE TABLE tpc_ds.Catalog_returns (\n" +
             "        cr_returned_date_sk bigint,\n" +
