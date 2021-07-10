@@ -75,7 +75,7 @@ public class Converter {
                 createSSTable(info.dataSrcPath, path.toString(), tables.tables.get(info.tableName));
             }
             catch (ParseException e) {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(path.toString()));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("error.log"));
                 writer.write(e.getMessage());
                 writer.close();
                 return;
@@ -83,6 +83,5 @@ public class Converter {
 
         }
 
-        return;
     }
 }

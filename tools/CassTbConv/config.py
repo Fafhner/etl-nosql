@@ -11,7 +11,7 @@ if __name__ == '__main__':
         for t in tables:
             x = {
                 "outputDir": "../../db/table_data/sstables",
-                "outputDirName": f"{s}/{t}",
+                "outputDirName": f"{s}/{t}.dat",
                 "dataSrcPath": f"{tables_dest}/{s}/{t}.dat",
                 "tableName": t
             }
