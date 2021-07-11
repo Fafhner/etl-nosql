@@ -22,14 +22,14 @@
     {
       "etl_func": "filter",
       "args_tb": {
-        "tb": "catalog_sales"
+        "tb": "store_sales"
       },
       "args": {
         "col": "ss_net_profit",
         "sign": ">",
         "val": 0
       },
-      "output": "catalog_sales"
+      "output": "store_sales"
     },
     {
       "etl_func": "filter",
