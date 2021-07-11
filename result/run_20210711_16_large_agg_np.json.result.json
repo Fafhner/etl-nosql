@@ -50,4 +50,56 @@
         }
     ],
     "scenario": ""
+}{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "group_by",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "cols": [
+                    "cs_order_number"
+                ]
+            },
+            "output": "CS",
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 120.28965769999999,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 0.20367009999999652,
+                "overall_time": 120.4933838
+            }
+        },
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [],
+                "etl_processing_time": 9.532522799999995,
+                "overall_time": 9.532530800000004
+            }
+        }
+    ],
+    "scenario": ""
 }

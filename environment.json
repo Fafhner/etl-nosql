@@ -33,7 +33,7 @@
     "scale": {
       "context": "table_data",
       "priority": 999,
-      "data": [1, 5, 10, 15, 35, 50]
+      "data": [50, 35, 10, 1, 5, 15]
     },
     "cluster_size": {
       "context": "cluster",
