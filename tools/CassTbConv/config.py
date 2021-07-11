@@ -4,14 +4,14 @@ if __name__ == '__main__':
     tables_dest = "../../db/table_data"
 
     tables = ["catalog_returns", "date_dim", "store_sales", "catalog_sales", "web_sales", "warehouse", "customer"]
-    sizes = [1, 5, 10, 15, 35, 50]
+    sizes = [1, 3, 5, 6, 7, 9, 11]
 
     infos = []
     for s in sizes:
         for t in tables:
             x = {
                 "outputDir": "../../db/table_data/sstables",
-                "outputDirName": f"{s}/tpc_ds/{t}.dat",
+                "outputDirName": f"{s}/tpc_ds/{t}",
                 "dataSrcPath": f"{tables_dest}/{s}/{t}.dat",
                 "tableName": t
             }
