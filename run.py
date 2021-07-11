@@ -153,7 +153,7 @@ if __name__ == "__main__":
                     **db_info,
                     'cluster': {'node_manager': cluster_node_manager, 'node_workers': cluster_node_workers}
                     }
-        conf_all['data_generator']['tables'] = conf['tables_schema']
+        
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
