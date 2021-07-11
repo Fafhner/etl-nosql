@@ -4,7 +4,6 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
-      "index": "d_date_sk",
       "query": "SELECT * FROM tpc_ds.web_sales;"
     },
     "warehouse": {
@@ -13,10 +12,22 @@
     },
     "date_dim": {
       "table_schema": "date_dim",
-      "query": "SELECT * FROM tpc_ds.date_dim WHERE d_year=2000 ALLOW FILTERING;"
+      "query": "SELECT * FROM tpc_ds.date_dim;"
     }
   },
   "steps": [
+    {
+      "etl_func": "filter",
+      "args_tb": {
+        "tb": "web_sales"
+      },
+      "args": {
+        "col": "ws_net_profit",
+        "sign": ">",
+        "val": 0
+      },
+      "output": "web_sales"
+    },
     {
       "etl_func": "filter",
       "args_tb": {
