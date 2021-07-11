@@ -2,219 +2,39 @@
     "infos": [
         {
             "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "1/date_dim",
-            "dataSrcPath": "../../db/table_data/1/date_dim.dat",
-            "tableName": "date_dim"
+            "outputDirName": "1/catalog_returns.dat",
+            "dataSrcPath": "../../db/table_data/1/catalog_returns.dat",
+            "tableName": "catalog_returns"
         },
         {
             "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "1/store_sales",
-            "dataSrcPath": "../../db/table_data/1/store_sales.dat",
-            "tableName": "store_sales"
+            "outputDirName": "5/catalog_returns.dat",
+            "dataSrcPath": "../../db/table_data/5/catalog_returns.dat",
+            "tableName": "catalog_returns"
         },
         {
             "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "1/catalog_sales",
-            "dataSrcPath": "../../db/table_data/1/catalog_sales.dat",
-            "tableName": "catalog_sales"
+            "outputDirName": "10/catalog_returns.dat",
+            "dataSrcPath": "../../db/table_data/10/catalog_returns.dat",
+            "tableName": "catalog_returns"
         },
         {
             "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "1/web_sales",
-            "dataSrcPath": "../../db/table_data/1/web_sales.dat",
-            "tableName": "web_sales"
+            "outputDirName": "15/catalog_returns.dat",
+            "dataSrcPath": "../../db/table_data/15/catalog_returns.dat",
+            "tableName": "catalog_returns"
         },
         {
             "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "1/warehouse",
-            "dataSrcPath": "../../db/table_data/1/warehouse.dat",
-            "tableName": "warehouse"
+            "outputDirName": "35/catalog_returns.dat",
+            "dataSrcPath": "../../db/table_data/35/catalog_returns.dat",
+            "tableName": "catalog_returns"
         },
         {
             "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "1/customer",
-            "dataSrcPath": "../../db/table_data/1/customer.dat",
-            "tableName": "customer"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "5/date_dim",
-            "dataSrcPath": "../../db/table_data/5/date_dim.dat",
-            "tableName": "date_dim"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "5/store_sales",
-            "dataSrcPath": "../../db/table_data/5/store_sales.dat",
-            "tableName": "store_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "5/catalog_sales",
-            "dataSrcPath": "../../db/table_data/5/catalog_sales.dat",
-            "tableName": "catalog_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "5/web_sales",
-            "dataSrcPath": "../../db/table_data/5/web_sales.dat",
-            "tableName": "web_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "5/warehouse",
-            "dataSrcPath": "../../db/table_data/5/warehouse.dat",
-            "tableName": "warehouse"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "5/customer",
-            "dataSrcPath": "../../db/table_data/5/customer.dat",
-            "tableName": "customer"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "10/date_dim",
-            "dataSrcPath": "../../db/table_data/10/date_dim.dat",
-            "tableName": "date_dim"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "10/store_sales",
-            "dataSrcPath": "../../db/table_data/10/store_sales.dat",
-            "tableName": "store_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "10/catalog_sales",
-            "dataSrcPath": "../../db/table_data/10/catalog_sales.dat",
-            "tableName": "catalog_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "10/web_sales",
-            "dataSrcPath": "../../db/table_data/10/web_sales.dat",
-            "tableName": "web_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "10/warehouse",
-            "dataSrcPath": "../../db/table_data/10/warehouse.dat",
-            "tableName": "warehouse"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "10/customer",
-            "dataSrcPath": "../../db/table_data/10/customer.dat",
-            "tableName": "customer"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "15/date_dim",
-            "dataSrcPath": "../../db/table_data/15/date_dim.dat",
-            "tableName": "date_dim"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "15/store_sales",
-            "dataSrcPath": "../../db/table_data/15/store_sales.dat",
-            "tableName": "store_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "15/catalog_sales",
-            "dataSrcPath": "../../db/table_data/15/catalog_sales.dat",
-            "tableName": "catalog_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "15/web_sales",
-            "dataSrcPath": "../../db/table_data/15/web_sales.dat",
-            "tableName": "web_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "15/warehouse",
-            "dataSrcPath": "../../db/table_data/15/warehouse.dat",
-            "tableName": "warehouse"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "15/customer",
-            "dataSrcPath": "../../db/table_data/15/customer.dat",
-            "tableName": "customer"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "35/date_dim",
-            "dataSrcPath": "../../db/table_data/35/date_dim.dat",
-            "tableName": "date_dim"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "35/store_sales",
-            "dataSrcPath": "../../db/table_data/35/store_sales.dat",
-            "tableName": "store_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "35/catalog_sales",
-            "dataSrcPath": "../../db/table_data/35/catalog_sales.dat",
-            "tableName": "catalog_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "35/web_sales",
-            "dataSrcPath": "../../db/table_data/35/web_sales.dat",
-            "tableName": "web_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "35/warehouse",
-            "dataSrcPath": "../../db/table_data/35/warehouse.dat",
-            "tableName": "warehouse"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "35/customer",
-            "dataSrcPath": "../../db/table_data/35/customer.dat",
-            "tableName": "customer"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "50/date_dim",
-            "dataSrcPath": "../../db/table_data/50/date_dim.dat",
-            "tableName": "date_dim"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "50/store_sales",
-            "dataSrcPath": "../../db/table_data/50/store_sales.dat",
-            "tableName": "store_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "50/catalog_sales",
-            "dataSrcPath": "../../db/table_data/50/catalog_sales.dat",
-            "tableName": "catalog_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "50/web_sales",
-            "dataSrcPath": "../../db/table_data/50/web_sales.dat",
-            "tableName": "web_sales"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "50/warehouse",
-            "dataSrcPath": "../../db/table_data/50/warehouse.dat",
-            "tableName": "warehouse"
-        },
-        {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "50/customer",
-            "dataSrcPath": "../../db/table_data/50/customer.dat",
-            "tableName": "customer"
+            "outputDirName": "50/catalog_returns.dat",
+            "dataSrcPath": "../../db/table_data/50/catalog_returns.dat",
+            "tableName": "catalog_returns"
         }
     ]
 }

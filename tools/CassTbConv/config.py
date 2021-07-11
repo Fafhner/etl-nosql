@@ -3,7 +3,7 @@ import json
 if __name__ == '__main__':
     tables_dest = "../../db/table_data"
 
-    tables = ["date_dim", "store_sales", "catalog_sales", "web_sales", "warehouse", "customer"]
+    tables = ["catalog_returns"]
     sizes = [1, 5, 10, 15, 35, 50]
 
     infos = []
