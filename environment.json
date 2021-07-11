@@ -5,28 +5,14 @@
     "copy_files": [
     ],
     "cluster": {
-      "node_manager": "192.168.55.11",
+      "node_manager": "192.168.55.20",
       "node_workers": [
-        "192.168.55.11",
-        "192.168.55.12",
-        "192.168.55.13",
-        "192.168.55.14",
-        "192.168.55.15",
         "192.168.55.16",
         "192.168.55.17",
         "192.168.55.18",
         "192.168.55.19",
         "192.168.55.20"
       ]
-    },
-    "data_generator": {
-      "tables_dest": "$HOME/etl-nosql/db/table_data",
-      "gen_path": "$HOME/etl-nosql/tpc-ds-tool/v3.0.0/tools",
-      "terminate": "N",
-      "rngseed": 100,
-      "force": "N",
-      "distr": "~/etl-nosql/tpc-ds-tool/v3.0.0/tools/tpcds.idx",
-      "tables": []
     },
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
@@ -47,21 +33,12 @@
     "scale": {
       "context": "table_data",
       "priority": 999,
-      "data": [
-        10,
-        15,
-        40,
-        60
-      ]
+      "data": [1, 5, 10, 15, 35, 50]
     },
     "cluster_size": {
       "context": "cluster",
       "priority": 998,
-      "data": [
-        4,
-        6,
-        8
-      ]
+      "data": [2, 3, 4, 5]
     },
     "rep_factor": {
       "context": "db-keyspace",

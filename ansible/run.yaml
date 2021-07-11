@@ -61,23 +61,6 @@
 
 
 
-##########################
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Generate data
-      block:
-        - name: Create directory for tables' data
-          file:
-            path: "{{ data_generator['tables_dest'] }}/{{ scale }}"
-            state: directory
-
-        - name: Generate data
-          ansible.builtin.command: "{{ data_generator['gen_path']}}/dsdgen -DIR {{data_generator['tables_dest'] }}/{{ scale }} -SCALE {{ scale }} -TERMINATE {{ data_generator['terminate']}} -RNGSEED {{data_generator['rngseed'] }} -FORCE {{data_generator['force'] }} -DISTRIBUTIONS {{data_generator['distr'] }} -TABLE {{ item }}"
-          with_items: "{{ data_generator['tables'] }}"
-      ignore_errors: true
-      tags: tag_create_table_data
-
 ###############################
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
@@ -285,8 +268,14 @@
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
+        - name: Get container IP
+          ansible.builtin.command: "docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
+          register: container_ip
+
         - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/load"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -d {{container_ip}} {{namespace}}.{{item}}"
+          loop: "{{tables_schema}}"
+
 
       tags: tag_db_fill_tables
 

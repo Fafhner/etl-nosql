@@ -1,10 +1,10 @@
 import json
 from timeit import default_timer as timer
 
-from cassandra.cluster import Cluster, Session
+from cassandra.cluster import Session
 from cassandra.cluster import ResultSet
 from cassandra.query import SimpleStatement
-import pandas as pd
+import modin.pandas as pd
 from etl import etl_func
 
 
