@@ -24,9 +24,9 @@
     "udfs": [
       "10_intersect_np.json",
       "10_intersect_pp.json",
-      "16_large_agg_pp.json",
+      "18_merge_join_np.json",
       "18_merge_join_pp.json",
-      "34_sort_fp.json"
+      "16_large_agg_pp.json"
     ]
   },
   "dynamic": {
