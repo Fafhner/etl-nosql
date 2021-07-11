@@ -10,18 +10,34 @@
   },
   "steps": [
     {
+      "etl_func": "group_by",
+      "args_tb": {
+        "tb": "catalog_sales"
+      },
+      "args": {
+        "cols": [
+          "cs_order_number"
+        ]
+      },
+      "output": "CS"
+    },
+    {
       "etl_func": "agg",
       "args_tb": {
         "tb": "catalog_sales"
       },
       "args": {
         "funcs": [
-          "min", "max", "mean", "sum", "count"
+          "min",
+          "max",
+          "mean",
+          "sum",
+          "count"
         ]
       },
       "output": "CS",
       "remove": [
-        "catalog_sales"
+        "CS"
       ]
     }
   ]

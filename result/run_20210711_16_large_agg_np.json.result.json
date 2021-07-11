@@ -1,0 +1,53 @@
+{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "group_by",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "cols": [
+                    "cs_order_number"
+                ]
+            },
+            "output": "CS",
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 123.1673969,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 0.1865322999999961,
+                "overall_time": 123.3539836
+            }
+        },
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [],
+                "etl_processing_time": 9.624982499999987,
+                "overall_time": 9.624991500000007
+            }
+        }
+    ],
+    "scenario": ""
+}
