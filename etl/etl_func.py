@@ -56,6 +56,10 @@ def filter_between(tb, col, sign, val1, val2):
     return tb[sel_filter_between_sign(sign)(tb, col, val1, val2)]
 
 
+def group_by(tb, argc):
+    return tb.groupby(cols)
+
+
 def nop(tb, *argc, **argv):
     return tb
 
@@ -69,5 +73,6 @@ func_map = {
     "intersect": intersect,
     "filter": filter,
     "filter_between": filter_between,
-    "nop": nop
+    "nop": nop,
+    "group_by": group_by
 }
