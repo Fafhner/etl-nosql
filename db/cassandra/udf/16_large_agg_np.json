@@ -1,0 +1,28 @@
+{
+  "name": "16_large_agg_np.json",
+  "type": "no-pushdown",
+  "datasets": {
+    "catalog_sales": {
+      "table_schema": "catalog_sales",
+      "index": "",
+      "query": "SELECT * FROM tpc_ds.catalog_sales;"
+    }
+  },
+  "steps": [
+    {
+      "etl_func": "agg",
+      "args_tb": {
+        "tb": "catalog_sales"
+      },
+      "args": {
+        "funcs": [
+          "min", "max", "mean", "sum", "count"
+        ]
+      },
+      "output": "CS",
+      "remove": [
+        "catalog_sales"
+      ]
+    }
+  ]
+}

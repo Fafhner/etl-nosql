@@ -56,8 +56,12 @@ def filter_between(tb, col, sign, val1, val2):
     return tb[sel_filter_between_sign(sign)(tb, col, val1, val2)]
 
 
-def group_by(tb, argc):
+def group_by(tb, cols):
     return tb.groupby(cols)
+
+
+def agg(tb, funcs):
+    return tb.agg(funcs)
 
 
 def nop(tb, *argc, **argv):
@@ -74,5 +78,6 @@ func_map = {
     "filter": filter,
     "filter_between": filter_between,
     "nop": nop,
-    "group_by": group_by
+    "group_by": group_by,
+    "agg": agg
 }
