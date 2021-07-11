@@ -176,15 +176,6 @@
           ignore_errors: true
       tags: tag_db_create_namespace
 
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Delete content & directory
-      shell: "/bin/rm -rf /home/magisterka/etl-nosql/db/cassandra/var/lib/cassandra/data/{{namespace}}"
-      become_user: root
-      become: yes
-      tags: tag_db_create_namespace
-      ignore_errors: true
-
 
 - hosts: cluster_node_manager
   tasks:
@@ -199,32 +190,7 @@
           ignore_errors: true
       tags: tag_db_create_namespace
 
-###############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
 
-        - name: DB update namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace_update"
-      tags: tag_db_update_namespace
-
-
-########################
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Repair
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB repair
-          ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool repair --full"
-      tags: tag_repair
 
 ###############################
 
@@ -267,13 +233,13 @@
         - name: Get container ID 3
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
-
-        - name: Get container IP
-          ansible.builtin.command: "docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
-          register: container_ip
+#
+#        - name: Get container IP
+#          ansible.builtin.command: "docker inspect --format={{ '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' }} {{container_id}}"
+#          register: container_ip
 
         - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -d {{container_ip}} {{namespace}}.{{item}}"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -v -d localhost /table_data/sstables/{{scale}}tpc_ds/{{item}}"
           loop: "{{tables_schema}}"
 
 

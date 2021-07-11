@@ -179,7 +179,7 @@ if __name__ == "__main__":
             }
             print("Result:")
             print(json.dumps(res, indent=4))
-            write_to(f"result/run_{datetime.now().strftime('%Y%m%d')}_{udf['name']}.result.json",
+            write_to(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.json",
                      json.dumps(res, indent=4), ".", mode='a')
 
         cluster.shutdown()
@@ -193,28 +193,12 @@ if __name__ == "__main__":
     ]
 
     flow_tree = [
-        # {
-        #     "name": "keyspace",
-        #     "if": lambda _, grid, diff: diff['db-keyspace'] and not diff['db-file'] and not diff['cluster_size'] and not diff['scale'],
-        #     "then": ['tag_create_files', 'tag_files', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
-        # },
-        # {
-        #     "name": "file changed",
-        #     "if": lambda _, grid, diff: diff['db-file'] and not diff['db-keyspace'] and not diff['cluster_size'] and not diff['scale'],
-        #     "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack']
-        # },
-        # {
-        #     "name": "file changed nad keyspace",
-        #     "if": lambda _, grid, diff: diff['db-file'] and diff['db-keyspace'] and not diff['cluster_size'] and not diff['scale'],
-        #     "then": ['tag_rm_stack', 'tag_create_files', 'tag_files', 'tag_deploy_stack', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
-        # },
         {
             "name": 'all',
-            "if": lambda _, grid, diff: diff['cluster_size'] or diff['scale'],
-            "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm',
-                     'tag_deploy_stack', 'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+            "if": lambda _, grid, diff: True,
+            "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack',
+                     'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
         },
-
     ]
 
 
