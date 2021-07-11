@@ -33,6 +33,7 @@
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
     "database_info_file": "cassandra.info.json",
+    "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
     "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
     "ansible_catalog": "ansible",
     "generate_scripts_only": false,
