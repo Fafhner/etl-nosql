@@ -43,11 +43,7 @@
     "rep_factor": {
       "context": "db-keyspace",
       "priority": 2,
-      "data": [
-        4,
-        6,
-        8
-      ]
+      "data": [2, 3, 4, 5]
     },
     "java_xms": {
       "context": "db-file",

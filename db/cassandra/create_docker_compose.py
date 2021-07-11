@@ -19,7 +19,8 @@ def load_from(file_name, path=None):
 
 if __name__ == '__main__':
     size = int(sys.argv[1])
-    dc_json = load_from('docker-compose.yaml.json')
+    path = sys.argv[2]
+    dc_json = load_from('docker-compose.yaml.json', path)
     parts = dc_json['parts'][0:size] + [dc_json['end']]
     write_to('docker-compose.yaml', "\n".join(parts))
 
