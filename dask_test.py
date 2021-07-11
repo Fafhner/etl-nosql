@@ -1,3 +1,4 @@
+import pandas
 from distributed import Client, SSHCluster
 import sys
 
@@ -7,10 +8,19 @@ cluster = SSHCluster(
     scheduler_options={"port": 0, "dashboard_address": ":8797"}
 )
 
+
 client = Client(cluster)
 
 import modin.pandas as pd
 
-df = pd.read_csv("data.csv")
-df2 = df.sort_values(by=['CRIM'])
-print(df.head(100))
+csvdata = pandas.read_csv("data2.csv")
+
+
+def _r(xl: list):
+    return pandas.DataFrame(xl, columns=csvdata.columns.values.tolist()).sort_values(by=['CRIM']).values.tolist()
+
+
+data = client.scatter([csvdata.values.tolist()])
+res = client.submit(_r, data).result()
+
+print(res)
