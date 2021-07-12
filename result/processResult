@@ -25,7 +25,7 @@ if __name__ == '__main__':
         aq_time, ov_time = sum_time(udf_r['steps'])
 
 
-        d = [udf_r['udf']] + list(udf_r['scenario'].values()) +[aq_time, ov_time]
+        d = [udf_r['udf']] + list(udf_r['scenario'].values()) +['{0:.2f}'.format(aq_time), '{0:.2f}'.format(ov_time)]
 
 
         print(", ".join([str(_) for _ in d]))
