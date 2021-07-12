@@ -23,7 +23,7 @@
     "tables_schema": [],
     "udfs": [
       "16_large_agg_np.json",
-      "16_large_agg_pp.json"
+      "16_large_agg_fp.json"
     ]
   },
   "dynamic": {
