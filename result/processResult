@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     l_udf_r = json.loads(dstr)['data']
     k = ['udf'] + list(l_udf_r[0]['scenario'].keys()) + ['aq_time, ov_time']
-    print(k)
+    print(", ".join(k))
     for udf_r in l_udf_r:
         aq_time, ov_time = sum_time(udf_r['steps'])
 
