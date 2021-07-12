@@ -1,0 +1,31 @@
+import json
+
+
+def sum_time(steps):
+    aq_time = 0
+    ov_time = 0
+
+    for step in steps:
+        aq_time += sum([dat['time'] for dat in step['time_info']['data_acquisition_time'] ])
+        ov_time += step['time_info']['overall_time']
+
+    return aq_time, ov_time
+
+
+if __name__ == '__main__':
+
+
+    with open('data.txt') as of:
+        dstr = f'{{ "data": [ {of.read()} ] }}'
+
+    l_udf_r = json.loads(dstr)['data']
+    k = ['udf'] + list(l_udf_r[0]['scenario'].keys()) + ['aq_time, ov_time']
+    print(k)
+    for udf_r in l_udf_r:
+        aq_time, ov_time = sum_time(udf_r['steps'])
+
+
+        d = [udf_r['udf']] + list(udf_r['scenario'].values()) +[aq_time, ov_time]
+
+
+        print(", ".join([str(_) for _ in d]))

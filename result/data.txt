@@ -49,7 +49,12 @@
             }
         }
     ],
-    "scenario": ""
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 5,
+        "scale": 1
+    }
 },{
     "udf": "16_large_agg_np.json",
     "steps": [
@@ -101,5 +106,10 @@
             }
         }
     ],
-    "scenario": ""
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 5,
+        "scale": 1
+    }
 }

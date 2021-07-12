@@ -4,7 +4,7 @@ if __name__ == '__main__':
     tables_dest = "../../db/table_data"
 
     tables = ["catalog_returns", "date_dim", "store_sales", "catalog_sales", "web_sales", "warehouse", "customer"]
-    sizes = [1, 3, 5, 6, 7, 9, 11]
+    sizes = [2]
 
     infos = []
     for s in sizes:
