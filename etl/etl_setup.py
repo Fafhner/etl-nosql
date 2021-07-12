@@ -1,6 +1,3 @@
-from distributed import Client
-client = Client(memory_limit='5GB')
-
 import modin.pandas as pd
 
 from etl.pd_process import process_steps, get_steps
