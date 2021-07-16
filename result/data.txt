@@ -14110,4 +14110,992 @@
         "scale": 1
     },
     "timestamp": "2021-07-12 12:56:54.517107"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.97622817568481,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 7.226374808698893,
+                "overall_time": 48.20267296396196
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:23:55.515329"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 20.03152272477746,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 3.157183527946472e-06,
+                "overall_time": 20.031582351773977
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:24:15.594701"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.84445257112384,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.562970716506243,
+                "overall_time": 47.407468032091856
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 2000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:27:44.621383"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 20.07337488234043,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 3.3043324947357178e-06,
+                "overall_time": 20.073439786210656
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 2000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:28:04.695626"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.76951405405998,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.969059485942125,
+                "overall_time": 47.73862570337951
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:31:23.902477"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 20.031521322205663,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.2459233403205872e-05,
+                "overall_time": 20.031588627025485
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:31:43.944615"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.642617313191295,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.941205330193043,
+                "overall_time": 47.58389093540609
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 5000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:35:23.136953"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 20.044361801818013,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 9.123235940933228e-06,
+                "overall_time": 20.04442278854549
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 5000,
+        "cluster_size": 2,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:35:43.202238"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.36755856871605,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 7.36952012963593,
+                "overall_time": 47.7371372114867
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:40:16.072395"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 35.82768579572439,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.0339543223381042e-05,
+                "overall_time": 35.8277529142797
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:40:51.915205"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 41.00943153351545,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 7.1509184911847115,
+                "overall_time": 48.16040698438883
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 2000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:45:29.580058"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.5699224062264,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.2034550309181213e-05,
+                "overall_time": 40.56997559405863
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 2000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:46:10.159704"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 21.054230604320765,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.8699604738503695,
+                "overall_time": 27.92424577102065
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:50:20.745988"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 38.54500514827669,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 9.996816515922546e-06,
+                "overall_time": 38.54505170322955
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:50:59.307726"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 41.18782230839133,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.989976605400443,
+                "overall_time": 48.17785378172994
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 5000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:54:33.605990"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 40.787130393087864,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.132674515247345e-05,
+                "overall_time": 40.78719188645482
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 5000,
+        "cluster_size": 3,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 14:55:14.408733"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 60.02846562303603,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.93230701610446,
+                "overall_time": 66.96082300879061
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:00:07.303255"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 55.47322464175522,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.2112781405448914e-05,
+                "overall_time": 55.473287995904684
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:01:02.786512"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 61.77580713108182,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 7.14718147367239,
+                "overall_time": 68.92304604314268
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 2000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:08:40.874607"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 33.32531095482409,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.035258173942566e-05,
+                "overall_time": 33.32537533342838
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 2000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:09:14.227632"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 59.77941674552858,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 7.191772481426597,
+                "overall_time": 66.97123943455517
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:16:25.233323"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 35.403186520561576,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 9.659677743911743e-06,
+                "overall_time": 35.40325256437063
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 5000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:17:00.637858"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 61.52115754596889,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 7.107812829315662,
+                "overall_time": 68.62902398779988
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 5000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:23:33.056023"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 59.943699937313795,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.742132008075714e-05,
+                "overall_time": 59.9437599927187
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 3,
+        "java_xms": 5000,
+        "cluster_size": 4,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:24:33.029824"
+},{
+    "udf": "16_large_agg_np.json",
+    "steps": [
+        {
+            "etl_func": "agg",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "funcs": [
+                    "min",
+                    "max",
+                    "mean",
+                    "sum",
+                    "count"
+                ]
+            },
+            "output": "CS",
+            "remove": [
+                "CS"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 59.27618827112019,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 6.960242692381144,
+                "overall_time": 66.23648290149868
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 5,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:30:44.781979"
+},{
+    "udf": "16_large_agg_fp.json",
+    "steps": [
+        {
+            "etl_func": "nop",
+            "args_tb": {
+                "tb": "catalog_sales"
+            },
+            "args": {
+                "nop": ""
+            },
+            "output": "catalog_sales",
+            "remove": [
+                "catalog_sales"
+            ],
+            "time_info": {
+                "data_acquisition_time": [
+                    {
+                        "table": "catalog_sales",
+                        "time": 79.3262458499521,
+                        "rows": -1
+                    }
+                ],
+                "etl_processing_time": 1.1835247278213501e-05,
+                "overall_time": 79.32629708759487
+            }
+        }
+    ],
+    "scenario": {
+        "rep_factor": 2,
+        "java_xms": 2000,
+        "cluster_size": 5,
+        "scale": 1
+    },
+    "timestamp": "2021-07-12 15:32:04.109030"
 }

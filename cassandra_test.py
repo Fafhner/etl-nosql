@@ -9,6 +9,8 @@ from create import create_scenarios
 from etl.etl_setup import select_driver
 import state
 
+
+
 import logging
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()

@@ -1,5 +1,6 @@
 import json
 
+import pandas as pd
 
 def sum_time(steps):
     aq_time = 0
@@ -19,13 +20,17 @@ if __name__ == '__main__':
         dstr = f'{{ "data": [ {of.read()} ] }}'
 
     l_udf_r = json.loads(dstr)['data']
-    k = ['udf'] + list(l_udf_r[0]['scenario'].keys()) + ['aq_time, ov_time']
-    print(", ".join(k))
+    k = ['udf'] + list(l_udf_r[0]['scenario'].keys()) + ['aq_time', 'ov_time']
+     # print(", ".join(k))
+    x = []
     for udf_r in l_udf_r:
         aq_time, ov_time = sum_time(udf_r['steps'])
 
 
         d = [udf_r['udf']] + list(udf_r['scenario'].values()) +['{0:.2f}'.format(aq_time), '{0:.2f}'.format(ov_time)]
+        x.append(d)
 
+       #print(", ".join([str(_) for _ in d]))
 
-        print(", ".join([str(_) for _ in d]))
+    df = pd.DataFrame(x, columns=k)
+    print(df.sort_values(by=['udf', 'rep_factor', 'java_xms']))
