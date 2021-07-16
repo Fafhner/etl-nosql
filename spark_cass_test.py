@@ -32,7 +32,6 @@ if __name__ == "__main__":
     statement = f"SELECT * FROM tpc_ds.{cat};"
     ex = session.execute(statement, timeout=120)
     df: pd.DataFrame = ex._current_rows
-    df['d_date'] = df['d_date'].astype('string')
     i = 1
     df.to_parquet(f"./tmp/{cat}{i}.parquet")
     sum_rows = df.count()
@@ -41,22 +40,15 @@ if __name__ == "__main__":
         i += 1
         ex.fetch_next_page()
         df: pd.DataFrame = ex._current_rows
-        df['d_date'] = df['d_date'].astype('string')
         df.to_parquet(f"./tmp/{cat}{i}.parquet")
         sum_rows += df.count()
 
 
-    # df = spark.read.format("org.apache.spark.sql.cassandra").options(table="catalog_sales", keyspace="tpc_ds").load()
-    # x = spark.sql("SELECT count(*) FROM tpc_ds.warehouse")
-
-
-
-
-    print("Sum rows:", sum_rows)
-    mergedDF = spark.read.option("mergeSchema", "true").parquet(f"tmp/{cat}*")
-    mergedDF.createOrReplaceTempView(f"{cat}")
-    sqlDF = spark.sql("SELECT count(*), sum('ss_net_profit') FROM people")
-    sqlDF.show()
+    # print("Sum rows:", sum_rows)
+    # mergedDF = spark.read.option("mergeSchema", "true").parquet(f"tmp/{cat}*")
+    # mergedDF.createOrReplaceTempView(f"{cat}")
+    # sqlDF = spark.sql("SELECT count(*), sum('ss_net_profit') FROM people")
+    # sqlDF.show()
 
     shutil.rmtree("./tmp", ignore_errors=True)
 
