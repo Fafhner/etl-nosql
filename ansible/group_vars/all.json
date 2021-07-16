@@ -1,14 +1,22 @@
 {
-    "make_dirs": [],
-    "copy_files": [],
+    "make_dirs": [
+    ],
+    "copy_files": [
+    ],
     "cluster": {
-        "node_manager": "192.168.55.16",
-        "node_workers": [ "192.168.55.16"
-        ]
+      "node_manager": "192.168.55.20",
+      "node_workers": [
+        "192.168.55.16",
+        "192.168.55.17",
+        "192.168.55.18",
+        "192.168.55.19",
+        "192.168.55.20"
+      ]
     },
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
     "database_info_file": "cassandra.info.json",
+    "docker_compose_path": "~/etl-nosql/db/cassandra",
     "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
     "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
     "ansible_catalog": "ansible",
