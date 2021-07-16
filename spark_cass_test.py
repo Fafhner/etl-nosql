@@ -29,18 +29,18 @@ if __name__ == "__main__":
     session: Session = cluster.connect()
     session.row_factory = pandas_factory
 
-    statement = f"SELECT * FROM tpc_ds.{cat};"
+    statement = f"SELECT * FROM tpc_ds.store_sales;"
     ex = session.execute(statement, timeout=120)
     df: pd.DataFrame = ex._current_rows
     i = 1
-    df.to_parquet(f"./tmp/{cat}{i}.parquet")
+    df.to_parquet(f"./tmp/store_sales{i}.parquet")
     sum_rows = df.count()
 
     while ex.has_more_pages:
         i += 1
         ex.fetch_next_page()
         df: pd.DataFrame = ex._current_rows
-        df.to_parquet(f"./tmp/{cat}{i}.parquet")
+        df.to_parquet(f"./tmp/store_sales{i}.parquet")
         sum_rows += df.count()
 
 
