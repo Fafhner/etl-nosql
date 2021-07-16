@@ -6,7 +6,7 @@
     "cluster": {
       "node_manager": "192.168.55.16",
       "node_workers": [
-        "192.168.55.16",
+        "192.168.55.16"
       ]
     },
     "database_info_path": "db/cassandra",
