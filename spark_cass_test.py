@@ -1,3 +1,5 @@
+import os
+
 import cassandra as cass
 
 
@@ -9,7 +11,8 @@ from pyspark.sql.functions import split
 import pyspark
 
 
-
+os.environ['PYSPARK_SUBMIT_ARGS'] = '--conf spark.cassandra.connection.host=anyip --conf spark.executor.cores=2      ' \
+                                    '--packages com.datastax.spark:spark-cassandra-connector_2.11:2.4.2 '
 
 if __name__ == "__main__":
     spark = SparkSession \
@@ -19,7 +22,7 @@ if __name__ == "__main__":
         .getOrCreate()
 
     sc = spark.sparkContext
-    df = spark.read.format("org.apache.spark.sql.cassandra").options(table="warehouse", keyspace="tpc_ds").load()
+    df = spark.read.format("org.apache.spark.sql.cassandra").options(table="catalog_sales", keyspace="tpc_ds").load()
     x = spark.sql("SELECT * FROM tpc_ds.warehouse")
     print(x)
 
