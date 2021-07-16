@@ -2,8 +2,8 @@ import os
 
 import cassandra as cass
 
-
-
+from cassandra.cluster import Cluster, Session
+import pandas as pd
 from pyspark.sql import SparkSession
 from pyspark import SparkContext
 from pyspark.sql.functions import explode
@@ -11,20 +11,37 @@ from pyspark.sql.functions import split
 import pyspark
 
 
-os.environ['PYSPARK_SUBMIT_ARGS'] = '--conf spark.cassandra.connection.host=anyip --conf spark.executor.cores=2      ' \
-                                    '--packages com.datastax.spark:spark-cassandra-connector_2.11:2.4.2 '
+def pandas_factory(colnames, rows):
+    return  pd.DataFrame(rows, columns=colnames)
+
+
 
 if __name__ == "__main__":
-    spark = SparkSession \
-        .builder \
-        .appName("CassTest") \
-        .config("spark.cassandra.connection.host", "192.168.55.20") \
-        .getOrCreate()
+    os.makedirs("/tmp/warehouse")
+    # spark = SparkSession \
+    #     .builder \
+    #     .appName("CassTest") \
+    #     .getOrCreate()
 
-    sc = spark.sparkContext
-    df = spark.read.format("org.apache.spark.sql.cassandra").options(table="catalog_sales", keyspace="tpc_ds").load()
-    x = spark.sql("SELECT * FROM tpc_ds.warehouse")
-    print(x)
+    cluster = Cluster("192.168.55.16", connect_timeout=60)
+    session: Session = cluster.connect()
+    session.row_factory = pandas_factory
+
+    statement = "SELECT * FROM tpc_ds.warehouse;"
+    ex = session.execute(statement, timeout=120)
+    df = ex._current_rows
+    i = 0
+    while ex.has_more_pages:
+        ex.fetch_next_page()
+        df.append(ex._current_rows).to_parquet(f"/tmp/warehouse{i}.parquet")
+        i += 1
+
+    # df = spark.read.format("org.apache.spark.sql.cassandra").options(table="catalog_sales", keyspace="tpc_ds").load()
+    # x = spark.sql("SELECT count(*) FROM tpc_ds.warehouse")
+
+
+    # os.rmdir(".tmp")
+
 
 
 

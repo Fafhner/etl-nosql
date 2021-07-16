@@ -2,26 +2,9 @@
     "make_dirs": [],
     "copy_files": [],
     "cluster": {
-        "node_manager": "192.168.55.11",
-        "node_workers": [
-            "192.168.55.12",
-            "192.168.55.13",
-            "192.168.55.14",
-            "192.168.55.15",
-            "192.168.55.16",
-            "192.168.55.17",
-            "192.168.55.18"
+        "node_manager": "192.168.55.16",
+        "node_workers": [ "192.168.55.16"
         ]
-    },
-    "data_generator": {
-        "tables_dest": "$HOME/etl-nosql/db/table_data",
-        "gen_path": "$HOME/etl-nosql/tools/tpc-ds-tool/tools",
-        "terminate": "N",
-        "rngseed": 100,
-        "force": "N",
-        "distr": "~/etl-nosql/tools/tpc-ds-tool/tools/tpcds.idx",
-        "tables": ["catalog_returns", "date_dim", "store_sales", "catalog_sales", "web_sales", "warehouse", "customer"],
-        "sizes": [2]
     },
     "database_info_path": "db/cassandra",
     "udf_path": "db/cassandra/udf",
@@ -140,8 +123,8 @@
             "drop": "DROP TABLE {namespace}.{table}"
         }
     },
-    "rep_factor": 8,
+    "rep_factor": 3,
     "java_xms": 4000,
-    "cluster_size": 8,
-    "scale": 60
+    "cluster_size": 1,
+    "scale": 2
 }
