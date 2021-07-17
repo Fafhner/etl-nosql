@@ -7,8 +7,8 @@ def pandas_factory(colnames, rows):
     return pd.DataFrame(rows, columns=colnames)
 
 
-def cassandra_process(cluster, udf_file):
-    ret = process_steps(udf_file, cluster)
+def cassandra_process(cluster, udf_file, spark, tries):
+    ret = process_steps(cluster, udf_file, spark, tries)
     return ret
 
 

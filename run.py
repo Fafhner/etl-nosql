@@ -1,13 +1,16 @@
+import io
 import json
 import logging
 import subprocess
 import sys
 from datetime import datetime
 
-from create import create_scenarios
+from grid import create_scenarios
 from etl.etl_setup import select_driver
 import state
 from cassandra.cluster import Cluster
+from pyspark.sql import SparkSession
+import yaml
 
 
 def write_to(file_name, data, output_path=None, mode='w'):
@@ -17,12 +20,24 @@ def write_to(file_name, data, output_path=None, mode='w'):
         cmd_file.write(data)
 
 
-def load_from(file_name, path=None):
+def write_to_yaml(file_name, data, output_path=None, mode='a'):
+    if output_path is not None:
+        file_name = f"{output_path}/{file_name}"
+    with io.open(file_name, mode, encoding='utf8') as outfile:
+        yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
+
+
+def load_from_json(file_name, path=None):
     if path is not None:
         file_name = f"{path}/{file_name}"
     with open(file_name) as of:
         jfile = json.load(of)
     return jfile
+
+
+
+
+
 
 
 def generate_hosts_file(manager, workers):
@@ -75,7 +90,6 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
 
     return r_
 
-
 def getVals(params):
     p = dict()
     for param in params:
@@ -113,16 +127,16 @@ if __name__ == "__main__":
 
     pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
     main_only = int(sys.argv[5]) if len(sys.argv) >= 6 else None
-    env_ = load_from(file)
+    env_ = load_from_json(file)
     static_env = env_['static']
     dynamic_env = env_['dynamic']
 
-    db_info = load_from(static_env['database_info_file'], static_env['database_info_path'])
+    db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
 
     conf = {**static_env,
             **db_info}
 
-    udfs = [load_from(udf, static_env['udf_path']) for udf in static_env['udfs']]
+    udfs = [load_from_json(udf, static_env['udf_path']) for udf in static_env['udfs']]
     tables_schema = list()
     for udf in udfs:
         for tb in udf['datasets']:
@@ -132,7 +146,7 @@ if __name__ == "__main__":
     conf['tables_schema'] = tables_schema
 
     etl_process = select_driver(db_info['db']['etl_driver'])
-    dc_json = load_from('docker-compose.yaml.json', 'db/cassandra')
+    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
@@ -171,20 +185,26 @@ if __name__ == "__main__":
 
 
     def main(env, grid, diff):
-        cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
-        for udf in udfs:
-            data = etl_process(cluster, udf)
+        spark = SparkSession \
+            .builder \
+            .config("spark.dynamicAllocation.enabled", "false") \
+            .master("yarn") \
+            .appName(f"Run {str(datetime.now())}") \
+            .getOrCreate()
 
-            res = {
+        cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
+        tries = 12
+        for udf in udfs:
+            data = etl_process(cluster, udf, spark, tries)
+
+            res = [{
                 "udf": udf['name'],
-                "steps": data['steps'],
+                "tries": data['tries'],
                 "scenario": getVals(grid),
                 "timestamp": str(datetime.now())
-            }
-            print("Result:")
-            print(json.dumps(res, indent=4))
-            write_to(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.json",
-                     json.dumps(res, indent=4), ".", mode='a')
+            }]
+
+            write_to_yaml(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
         cluster.shutdown()
 

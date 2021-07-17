@@ -1,14 +1,14 @@
-
+import io
 from datetime import  datetime
-from cassandra.cluster import Cluster, Session
-import pandas as pd
-from etl.etl_setup import cassandra_process
+
+import yaml
+from cassandra.cluster import Cluster
 import json
 
-from create import create_scenarios
-from etl.etl_setup import select_driver
-import state
+from pyspark.sql import SparkSession
 
+from grid import create_scenarios
+from etl.etl_setup import select_driver
 
 
 import logging
@@ -25,6 +25,7 @@ fileHandler = logging.FileHandler(f"run_{datetime.now().strftime('%Y%m%d')}.resu
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
 
+
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
         file_name = f"{output_path}/{file_name}"
@@ -32,7 +33,14 @@ def write_to(file_name, data, output_path=None, mode='w'):
         cmd_file.write(data)
 
 
-def load_from(file_name, path=None):
+def write_to_yaml(file_name, data, output_path=None, mode='a'):
+    if output_path is not None:
+        file_name = f"{output_path}/{file_name}"
+    with io.open(file_name, mode, encoding='utf8') as outfile:
+        yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
+
+
+def load_from_json(file_name, path=None):
     if path is not None:
         file_name = f"{path}/{file_name}"
     with open(file_name) as of:
@@ -40,18 +48,25 @@ def load_from(file_name, path=None):
     return jfile
 
 
+def getVals(params):
+    p = dict()
+    for param in params:
+        p[param] = params[param].val
+    return p
+
+
 if __name__ == "__main__":
     file = 'environment.json'
-    env_ = load_from(file)
+    env_ = load_from_json(file)
     static_env = env_['static']
     dynamic_env = env_['dynamic']
 
-    db_info = load_from(static_env['database_info_file'], static_env['database_info_path'])
+    db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
 
     conf = {**static_env,
             **db_info}
 
-    udfs = [load_from(udf, static_env['udf_path']) for udf in static_env['udfs']]
+    udfs = [load_from_json("10_intersect_np.json", static_env['udf_path'])]
     tables_schema = list()
     for udf in udfs:
         for tb in udf['datasets']:
@@ -61,27 +76,34 @@ if __name__ == "__main__":
     conf['tables_schema'] = tables_schema
 
     etl_process = select_driver(db_info['db']['etl_driver'])
-    dc_json = load_from('docker-compose.yaml.json', 'db/cassandra')
+    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
 
 
     def main():
-        cluster = Cluster([conf["cluster"]["node_manager"]],  connect_timeout=20)
+        spark = SparkSession \
+            .builder \
+            .config("spark.dynamicAllocation.enabled", "false") \
+            .master("yarn") \
+            .appName(f"Run {str(datetime.now())}") \
+            .getOrCreate()
+
+        cluster = Cluster(["192.168.55.16"], connect_timeout=20)
+        tries = 12
         for udf in udfs:
+            data = etl_process(cluster, udf, spark, tries)
 
-            data = etl_process(cluster, udf)
-
-            res = {
+            res = [{
                 "udf": udf['name'],
-                "steps": data['steps'],
-                "scenario": ""
-            }
-            print("Result:")
-            print(json.dumps(res, indent=4))
-            write_to(f"result/run_{datetime.now().strftime('%Y%m%d')}_{udf['name']}.result.json",
-                     json.dumps(res, indent=4), ".", mode='a')
+                "tries": data['tries'],
+                "timestamp": str(datetime.now())
+            }]
+
+            write_to_yaml(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
         cluster.shutdown()
+
     main()
+

@@ -16,48 +16,5 @@
       "query": "SELECT * FROM tpc_ds.date_dim WHERE d_year=2000 ALLOW FILTERING;"
     }
   },
-  "steps": [
-    {
-      "etl_func": "inner_join",
-      "args_tb": {
-        "left_tb": "web_sales",
-        "right_tb": "date_dim"
-      },
-      "args": {
-        "left_idx": "ws_sold_date_sk",
-        "right_idx": "d_date_sk"
-      },
-      "output": "WS_DD",
-      "remove": [
-        "web_sales",
-        "date_dim"
-      ]
-    },
-    {
-      "etl_func": "inner_join",
-      "args_tb": {
-        "left_tb": "WS_DD",
-        "right_tb": "warehouse"
-      },
-      "args": {
-        "left_idx": "ws_warehouse_sk",
-        "right_idx": "w_warehouse_sk"
-      },
-      "output": "WS_DD_W",
-      "remove": [
-        "WS_DD",
-        "warehouse"
-      ]
-    },
-    {
-      "etl_func": "count",
-      "args_tb": {
-        "tb": "WS_DD_W"
-      },
-      "output": "SS_CS_DD_count",
-      "remove": [
-        "SS_CS_DD"
-      ]
-    }
-  ]
+  "spark_sql": ""
 }

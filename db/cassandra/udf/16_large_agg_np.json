@@ -8,25 +8,5 @@
       "query": "SELECT * FROM tpc_ds.catalog_sales;"
     }
   },
-  "steps": [
-    {
-      "etl_func": "agg",
-      "args_tb": {
-        "tb": "catalog_sales"
-      },
-      "args": {
-        "funcs": [
-          "min",
-          "max",
-          "mean",
-          "sum",
-          "count"
-        ]
-      },
-      "output": "CS",
-      "remove": [
-        "CS"
-      ]
-    }
-  ]
+  "spark_sql": ""
 }

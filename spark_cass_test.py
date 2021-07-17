@@ -2,27 +2,26 @@ import os
 
 import timeit
 import shutil
-import pandas as pd
-
-import shutil
 from cassandra.cluster import Cluster, Session
 import pandas as pd
 from pyspark.sql import SparkSession
 
 
 def pandas_factory(colnames, rows):
-    return  pd.DataFrame(rows, columns=colnames)
-
+    return pd.DataFrame(rows, columns=colnames)
 
 
 if __name__ == "__main__":
+    start = timeit.timeit()
     cat = 'store_sales'
 
     os.makedirs("tmp/", exist_ok=True)
     spark = SparkSession \
-        .builder\
-        .master("spark://192.168.55.11:7077") \
-        .appName("CassTest")\
+        .builder \
+        .config("spark.dynamicAllocation.enabled", "false") \
+        .config("spark.executor.memory", "4000m") \
+        .master("yarn") \
+        .appName("CassTest") \
         .getOrCreate()
 
     cluster = Cluster(["192.168.55.16"], connect_timeout=20)
@@ -37,15 +36,13 @@ if __name__ == "__main__":
     x.write.parquet(f"./tmp/{cat}_{i}.parquet", mode='overwrite')
 
     while ex.has_more_pages:
-        i += 1
         ex.fetch_next_page()
         df: pd.DataFrame = ex._current_rows
         if df.shape[0] != 0:
+            i += 1
             x = spark.createDataFrame(df, verifySchema=False)
             x.write.parquet(f"./tmp/{cat}_{i}.parquet", mode='overwrite')
 
-
-    start = timeit.timeit()
     # print("Sum rows:", sum_rows)
     mergedDF = spark.read.option("mergeSchema", "true").parquet(f"tmp/{cat}*")
     mergedDF.createOrReplaceTempView(f"{cat}")
@@ -57,6 +54,3 @@ if __name__ == "__main__":
     print(f"Czas {end - start}")
 
     shutil.rmtree("./tmp", ignore_errors=True)
-
-
-

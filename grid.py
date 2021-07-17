@@ -98,3 +98,9 @@ class GridDiff:
 
         return diff
 
+
+def create_scenarios(grid_params):
+    grid_params = [GridParam(pk, **grid_params[pk]) for pk in grid_params]
+    grid = Grid()
+    grid.params = grid_params
+    return grid.generate_scenarios()
