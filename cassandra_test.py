@@ -85,9 +85,8 @@ if __name__ == "__main__":
     def main():
         spark = SparkSession \
             .builder \
-            .config("spark.dynamicAllocation.enabled", "false") \
-            .master("yarn") \
-            .appName(f"Run {str(datetime.now())}") \
+            .master("local") \
+            .appName(f"Run") \
             .getOrCreate()
 
         cluster = Cluster(["192.168.55.16"], connect_timeout=20)

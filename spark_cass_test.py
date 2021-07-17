@@ -1,10 +1,9 @@
+from pyspark.sql import SparkSession
 import os
-
 import timeit
 import shutil
 from cassandra.cluster import Cluster, Session
 import pandas as pd
-from pyspark.sql import SparkSession
 
 
 def pandas_factory(colnames, rows):
@@ -18,8 +17,6 @@ if __name__ == "__main__":
     os.makedirs("tmp/", exist_ok=True)
     spark = SparkSession \
         .builder \
-        .config("spark.dynamicAllocation.enabled", "false") \
-        .master("yarn") \
         .appName("CassTest") \
         .getOrCreate()
 

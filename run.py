@@ -151,6 +151,12 @@ if __name__ == "__main__":
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
 
+    spark = SparkSession \
+        .builder \
+        .config("spark.dynamicAllocation.enabled", "false") \
+        .master("yarn") \
+        .appName(f"Run {str(datetime.now())}") \
+        .getOrCreate()
 
     def create_files(conf, grid, diff):
         print("Generating hosts file")
@@ -185,13 +191,6 @@ if __name__ == "__main__":
 
 
     def main(env, grid, diff):
-        spark = SparkSession \
-            .builder \
-            .config("spark.dynamicAllocation.enabled", "false") \
-            .master("yarn") \
-            .appName(f"Run {str(datetime.now())}") \
-            .getOrCreate()
-
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
         tries = 12
         for udf in udfs:

@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 
 from cassandra.cluster import Session
 from cassandra.query import SimpleStatement
-import modin.pandas as pd
+import pandas as pd
 
 
 def delete_path(spark, path):
@@ -49,6 +49,7 @@ def process_steps(cluster, udf: dict, spark, tries: int):
             file_inc = 0
             files = f"./tmp/{df_val['table_schema']}_{file_inc}.parquet"
             dataframes[f"{df_val['table_schema']}"] = files
+            
             session: Session = cluster.connect()
             session.row_factory = pandas_factory
             statement = SimpleStatement(df_val['query'], fetch_size=5000)
@@ -64,6 +65,8 @@ def process_steps(cluster, udf: dict, spark, tries: int):
                 df: pd.DataFrame = ex._current_rows
                 if df.shape[0] != 0:
                     file_inc += 1
+                    files = f"./tmp/{df_val['table_schema']}_{file_inc}.parquet"
+                    dataframes[f"{df_val['table_schema']}"] = files
                     sdf = spark.createDataFrame(df, verifySchema=False)
                     sdf.write.parquet(files, mode='overwrite')
         dat_aq_end = timer()
