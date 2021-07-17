@@ -54,10 +54,9 @@ def process_steps(cluster, udf: dict, spark, tries: int):
             statement = SimpleStatement(df_val['query'], fetch_size=5000)
 
             ex = session.execute(statement, timeout=120)
-            df: pd.DataFrame = ex._current_rows
-
-
-            sdf = spark.createDataFrame(df)
+            pdf: pd.DataFrame = ex._current_rows
+            print(pdf.dtypes)
+            sdf = spark.createDataFrame(pdf)
             sdf.write.parquet(files, mode='overwrite')
 
             while ex.has_more_pages:

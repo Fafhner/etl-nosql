@@ -19,7 +19,6 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .config("spark.dynamicAllocation.enabled", "false") \
-        .config("spark.executor.memory", "4000m") \
         .master("yarn") \
         .appName("CassTest") \
         .getOrCreate()
