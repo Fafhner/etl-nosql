@@ -4,17 +4,14 @@
   "datasets": {
     "date_dim": {
       "table_schema": "date_dim",
-      "index": "d_date_sk",
       "query": "SELECT * FROM tpc_ds.date_dim;"
     },
     "store_sales": {
       "table_schema": "store_sales",
-      "index": "ss_sold_date_sk",
       "query": "SELECT * FROM tpc_ds.store_sales;"
     },
     "catalog_sales": {
       "table_schema": "catalog_sales",
-      "index": "cs_sold_date_sk",
       "query": "SELECT * FROM tpc_ds.catalog_sales;"
     }
   },

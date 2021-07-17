@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
             res = [{
                 "udf": udf['name'],
-                "tries": data['tries'],
+                "tries": data,
                 "timestamp": str(datetime.now())
             }]
 

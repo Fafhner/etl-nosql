@@ -49,4 +49,4 @@ if __name__ == "__main__":
     end = timeit.timeit()
     print(f"Czas {end - start}")
 
-    shutil.rmtree("./tmp", ignore_errors=True)
+    shutil.rmtree("tmp", ignore_errors=True)

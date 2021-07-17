@@ -22,31 +22,32 @@
     "generate_scripts_only": false,
     "tables_schema": [],
     "udfs": [
-      "16_large_agg_np.json",
-      "16_large_agg_fp.json"
+      "10_intersect_np.json",
+      "10_intersect_pp.json"
     ]
   },
   "dynamic": {
     "scale": {
       "context": "table_data",
       "priority": 999,
-      "data": [1]
+      "data": [1, 2]
     },
     "cluster_size": {
       "context": "cluster",
       "priority": 998,
-      "data": [2, 3, 4, 5]
+      "data": [3, 4, 5]
     },
     "rep_factor": {
       "context": "db-keyspace",
       "priority": 2,
-      "data": [2, 3]
+      "data": [3]
     },
     "java_xms": {
       "context": "db-file",
       "priority": 2,
       "data": [
         2000,
+        4000,
         5000
       ]
     }

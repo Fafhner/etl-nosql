@@ -47,9 +47,9 @@ def process_steps(cluster, udf: dict, spark, tries: int):
         for df_val in udf['datasets'].values():
 
             file_inc = 0
-            files = f"./tmp/{df_val['table_schema']}_{file_inc}.parquet"
-            dataframes[f"{df_val['table_schema']}"] = files
-            
+            files = f"./tmp/{udf['name']}_{df_val['table_schema']}_{file_inc}.parquet"
+            dataframes[f"{df_val['table_schema']}"] = f"./tmp/{udf['name']}_{df_val['table_schema']}*"
+
             session: Session = cluster.connect()
             session.row_factory = pandas_factory
             statement = SimpleStatement(df_val['query'], fetch_size=5000)
@@ -87,9 +87,12 @@ def process_steps(cluster, udf: dict, spark, tries: int):
         step_time_info['etl_processing_time'] = etl_proc_end - etl_proc_start
         step_time_info['overall_time'] = ov_time_end - ov_time_start
 
-        completed_tries[try_] = udf
+        completed_tries[try_] = step_time_info
 
+        with open("temp_pd_process.temp.json", 'a') as cmd_file:
+            cmd_file.write(json.dumps(udf, indent=4))
 
-        delete_path(spark, "/tmp")
+        for df_k in dataframes.keys():
+            delete_path(spark, dataframes[df_k])
 
     return completed_tries

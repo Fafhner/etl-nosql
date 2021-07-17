@@ -121,10 +121,6 @@ if __name__ == "__main__":
         user = sys.argv[2]
         password = sys.argv[3]
 
-    from distributed import Client
-
-    client = Client(memory_limit='5GB')
-
     pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
     main_only = int(sys.argv[5]) if len(sys.argv) >= 6 else None
     env_ = load_from_json(file)
@@ -153,9 +149,8 @@ if __name__ == "__main__":
 
     spark = SparkSession \
         .builder \
-        .config("spark.dynamicAllocation.enabled", "false") \
         .master("yarn") \
-        .appName(f"Run {str(datetime.now())}") \
+        .appName(f"Run_experiments_{datetime.now().strftime('%Y%m%d')}") \
         .getOrCreate()
 
     def create_files(conf, grid, diff):
@@ -192,13 +187,13 @@ if __name__ == "__main__":
 
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
-        tries = 12
+        tries = 5
         for udf in udfs:
             data = etl_process(cluster, udf, spark, tries)
 
             res = [{
                 "udf": udf['name'],
-                "tries": data['tries'],
+                "tries": data,
                 "scenario": getVals(grid),
                 "timestamp": str(datetime.now())
             }]
@@ -235,3 +230,4 @@ if __name__ == "__main__":
     sm.loop(conf, scenarios, pos, main_only)
 
     do_once_nodes[0].do(conf, None, None, 'all')
+    create_ansible_cmd('hadoop-stop.yaml', 'hosts', user, password, ansi_cat)(None, None, None, 'all')
