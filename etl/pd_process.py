@@ -65,7 +65,7 @@ def process_steps(cluster, udf: dict, spark, tries: int):
                 df: pd.DataFrame = ex._current_rows
                 if df.shape[0] != 0:
                     file_inc += 1
-                    files = f"./tmp/{df_val['table_schema']}_{file_inc}.parquet"
+                    files = f"./tmp/{udf['name']}_{df_val['table_schema']}_{file_inc}.parquet"
                     dataframes[f"{df_val['table_schema']}"] = files
                     sdf = spark.createDataFrame(df, verifySchema=False)
                     sdf.write.parquet(files, mode='overwrite')
@@ -90,7 +90,7 @@ def process_steps(cluster, udf: dict, spark, tries: int):
         completed_tries[try_] = step_time_info
 
         with open("temp_pd_process.temp.json", 'a') as cmd_file:
-            cmd_file.write(json.dumps(udf, indent=4))
+            cmd_file.write(json.dumps(step_time_info, indent=4))
 
         for df_k in dataframes.keys():
             delete_path(spark, dataframes[df_k])
