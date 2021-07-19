@@ -11,7 +11,7 @@ import state
 from cassandra.cluster import Cluster
 from pyspark.sql import SparkSession
 import yaml
-
+from pyarrow import fs
 
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
@@ -98,7 +98,7 @@ def getVals(params):
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
-rootLogger.setLevel(logging.DEBUG)
+rootLogger.setLevel(logging.INFO)
 print = rootLogger.info
 
 consoleHandler = logging.StreamHandler()
@@ -188,12 +188,17 @@ if __name__ == "__main__":
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
         tries = 5
+        data_tries = dict()
         for udf in udfs:
-            data = etl_process(cluster, udf, spark, tries)
-
+            for try_ in range(tries):
+                data = etl_process(cluster, udf, spark)
+                data_tries['try_'] = data
+                fs.HadoopFileSystem("hdfs://hdfs-master:9000")
+                fs.delete_dir_contents("./tmp", recursive=True)
+                
             res = [{
                 "udf": udf['name'],
-                "tries": data,
+                "tries": data_tries,
                 "scenario": getVals(grid),
                 "timestamp": str(datetime.now())
             }]

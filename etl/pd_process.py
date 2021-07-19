@@ -4,10 +4,13 @@ from timeit import default_timer as timer
 from cassandra.cluster import Session
 from cassandra.query import SimpleStatement
 import pandas as pd
+from pyspark.sql import SparkSession
 
 
-def delete_path(spark, path):
+
+def delete_path(spark: SparkSession, path):
     sc = spark.sparkContext
+    hc = sc.hadoopConfiguration
     fs = (sc._jvm.org
           .apache.hadoop
           .fs.FileSystem
@@ -31,68 +34,59 @@ def get_steps(file=None):
     return pushdown
 
 
-def process_steps(cluster, udf: dict, spark, tries: int):
-    completed_tries = dict()
+def process_steps(cluster, udf: dict, spark):
     udf = udf.copy()
-    for try_ in range(tries):
-        dataframes = dict()
-        step_time_info = {
-            "data_acquisition_time": -1,
-            "etl_processing_time": -1.,
-            "overall_time": -1.
-        }
-        ov_time_start = timer()
-        dat_aq_start = ov_time_start
 
-        for df_val in udf['datasets'].values():
+    dataframes = dict()
+    step_time_info = {
+        "data_acquisition_time": -1,
+        "etl_processing_time": -1.,
+        "overall_time": -1.
+    }
+    ov_time_start = timer()
+    dat_aq_start = ov_time_start
 
-            file_inc = 0
-            files = f"./tmp/{udf['name']}_{df_val['table_schema']}_{file_inc}.parquet"
-            dataframes[f"{df_val['table_schema']}"] = f"./tmp/{udf['name']}_{df_val['table_schema']}*"
+    for df_val in udf['datasets'].values():
 
-            session: Session = cluster.connect()
-            session.row_factory = pandas_factory
-            statement = SimpleStatement(df_val['query'], fetch_size=5000)
+        file_inc = 0
+        files = f"./tmp/{udf['name']}_{df_val['table_schema']}_{file_inc}.parquet"
+        dataframes[f"{df_val['table_schema']}"] = f"./tmp/{udf['name']}_{df_val['table_schema']}*"
 
-            ex = session.execute(statement, timeout=120)
-            pdf: pd.DataFrame = ex._current_rows
-            print(pdf.dtypes)
-            sdf = spark.createDataFrame(pdf)
-            sdf.write.parquet(files, mode='overwrite')
+        session: Session = cluster.connect()
+        session.row_factory = pandas_factory
+        statement = SimpleStatement(df_val['query'], fetch_size=10000)
 
-            while ex.has_more_pages:
-                ex.fetch_next_page()
-                df: pd.DataFrame = ex._current_rows
-                if df.shape[0] != 0:
-                    file_inc += 1
-                    files = f"./tmp/{udf['name']}_{df_val['table_schema']}_{file_inc}.parquet"
-                    dataframes[f"{df_val['table_schema']}"] = files
-                    sdf = spark.createDataFrame(df, verifySchema=False)
-                    sdf.write.parquet(files, mode='overwrite')
-        dat_aq_end = timer()
+        ex = session.execute(statement, timeout=120)
+        pdf: pd.DataFrame = ex._current_rows
+        print(pdf.dtypes)
+        sdf = spark.createDataFrame(pdf)
+        sdf.write.parquet(files, mode='overwrite')
 
-        for df_k in dataframes.keys():
-            _ = spark.read.option("mergeSchema", "true").parquet(dataframes[df_k])
-            _.createOrReplaceTempView(f"{df_k}")
+        while ex.has_more_pages:
+            ex.fetch_next_page()
+            df: pd.DataFrame = ex._current_rows
+            if df.shape[0] != 0:
+                file_inc += 1
+                files = f"./tmp/{udf['name']}_{df_val['table_schema']}_{file_inc}.parquet"
+                dataframes[f"{df_val['table_schema']}"] = files
+                sdf = spark.createDataFrame(df, verifySchema=False)
+                sdf.write.parquet(files, mode='overwrite')
+    dat_aq_end = timer()
 
-        etl_proc_start = timer()
+    for df_k in dataframes.keys():
+        _ = spark.read.option("mergeSchema", "true").parquet(dataframes[df_k])
+        _.createOrReplaceTempView(f"{df_k}")
 
-        sqlDF = spark.sql(udf['spark_sql'])
-        sqlDF.show()
-        etl_proc_end = timer()
+    etl_proc_start = timer()
 
-        ov_time_end = etl_proc_end
+    sqlDF = spark.sql(udf['spark_sql'])
+    sqlDF.show()
+    etl_proc_end = timer()
 
-        step_time_info['data_acquisition_time'] = dat_aq_end - dat_aq_start
-        step_time_info['etl_processing_time'] = etl_proc_end - etl_proc_start
-        step_time_info['overall_time'] = ov_time_end - ov_time_start
+    ov_time_end = etl_proc_end
 
-        completed_tries[try_] = step_time_info
+    step_time_info['data_acquisition_time'] = dat_aq_end - dat_aq_start
+    step_time_info['etl_processing_time'] = etl_proc_end - etl_proc_start
+    step_time_info['overall_time'] = ov_time_end - ov_time_start
 
-        with open("temp_pd_process.temp.json", 'a') as cmd_file:
-            cmd_file.write(json.dumps(step_time_info, indent=4))
-
-        for df_k in dataframes.keys():
-            delete_path(spark, dataframes[df_k])
-
-    return completed_tries
+    return step_time_info
