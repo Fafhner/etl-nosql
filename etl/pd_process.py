@@ -4,19 +4,6 @@ from timeit import default_timer as timer
 from cassandra.cluster import Session
 from cassandra.query import SimpleStatement
 import pandas as pd
-from pyspark.sql import SparkSession
-
-
-
-def delete_path(spark: SparkSession, path):
-    sc = spark.sparkContext
-    hc = sc.hadoopConfiguration
-    fs = (sc._jvm.org
-          .apache.hadoop
-          .fs.FileSystem
-          .get(sc._jsc.hadoopConfiguration())
-          )
-    fs.delete(sc._jvm.org.apache.hadoop.fs.Path(path), True)
 
 
 

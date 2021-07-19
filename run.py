@@ -187,7 +187,7 @@ if __name__ == "__main__":
 
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
-        tries = 5
+        tries = 12
         data_tries = dict()
         for udf in udfs:
             for try_ in range(tries):
