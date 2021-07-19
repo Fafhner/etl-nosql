@@ -1,6 +1,8 @@
 import json
+import logging
 from timeit import default_timer as timer
 
+import cassandra
 from cassandra.cluster import Session
 from cassandra.query import SimpleStatement
 import pandas as pd
@@ -41,11 +43,17 @@ def process_steps(cluster, udf: dict, spark):
 
         session: Session = cluster.connect()
         session.row_factory = pandas_factory
+
         statement = SimpleStatement(df_val['query'], fetch_size=10000)
 
-        ex = session.execute(statement, timeout=120)
+        try:
+            ex = session.execute(statement, timeout=120)
+        except cassandra.ReadFailure as err:
+            logging.info(err.__str__())
+            return None
+
         pdf: pd.DataFrame = ex._current_rows
-        print(pdf.dtypes)
+
         sdf = spark.createDataFrame(pdf)
         sdf.write.parquet(files, mode='overwrite')
 

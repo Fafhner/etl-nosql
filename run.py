@@ -13,6 +13,7 @@ from pyspark.sql import SparkSession
 import yaml
 from pyarrow import fs
 
+
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
         file_name = f"{output_path}/{file_name}"
@@ -35,11 +36,6 @@ def load_from_json(file_name, path=None):
     return jfile
 
 
-
-
-
-
-
 def generate_hosts_file(manager, workers):
     hosts = """[cluster_node_manager]\n{manager}\n[cluster_node_workers]\n{workers}"""
     hosts = hosts.format(
@@ -60,7 +56,6 @@ def convert_tables_info(tables, config):
             path=config['db']['db_tables_path'] + "/" + str(config['scale']),
             file=tb_info['table']))
     return tables_info
-
 
 
 def run_cmd(cmd, path, acc_error=None):
@@ -90,11 +85,13 @@ def create_ansible_cmd(notebook, hosts, user, password, path):
 
     return r_
 
+
 def getVals(params):
     p = dict()
     for param in params:
         p[param] = params[param].val
     return p
+
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
@@ -153,6 +150,7 @@ if __name__ == "__main__":
         .appName(f"Run_experiments_{datetime.now().strftime('%Y%m%d')}") \
         .getOrCreate()
 
+
     def create_files(conf, grid, diff):
         print("Generating hosts file")
         print(f"Grid: {grid}")
@@ -172,7 +170,6 @@ if __name__ == "__main__":
                     **db_info,
                     'cluster': {'node_manager': cluster_node_manager, 'node_workers': cluster_node_workers}
                     }
-        
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
@@ -188,14 +185,31 @@ if __name__ == "__main__":
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
         tries = 12
+        idx = 0
+        err_try = 0
+        err_try_max = 4
+
         data_tries = dict()
         for udf in udfs:
-            for try_ in range(tries):
+            while idx < tries:
                 data = etl_process(cluster, udf, spark)
+
+                if data is None:
+                    err_try += 1
+                    if err_try >= err_try_max:
+                        raise RuntimeError("Too many errors.")
+                    continue
+
                 data_tries['try_'] = data
-                fs.HadoopFileSystem("hdfs://hdfs-master:9000")
-                fs.delete_dir_contents("./tmp", recursive=True)
-                
+                idx += 1
+                with open("pd_process.temp.json", 'a') as cmd_file:
+                    cmd_file.write(json.dumps({
+                        "udf": udf['name'],
+                        "tries": data_tries,
+                        "scenario": getVals(grid),
+                        "timestamp": str(datetime.now())
+                    }, indent=4))
+
             res = [{
                 "udf": udf['name'],
                 "tries": data_tries,
@@ -223,7 +237,6 @@ if __name__ == "__main__":
                      'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
         },
     ]
-
 
     sm = state.StateMachine(rootLogger)
     sm.setDoOnlyOnce(do_once_nodes)
