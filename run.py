@@ -200,7 +200,7 @@ if __name__ == "__main__":
                         raise RuntimeError("Too many errors.")
                     continue
 
-                data_tries['try_'] = data
+                data_tries[idx] = data
                 idx += 1
                 with open("pd_process.temp.json", 'a') as cmd_file:
                     cmd_file.write(json.dumps({
