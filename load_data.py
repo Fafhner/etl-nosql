@@ -130,7 +130,7 @@ if __name__ == "__main__":
         "docker_compose_path": "~/etl-nosql/db/cassandra",
         "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
         "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
-        "ansible_catalog": "~/etl-nosql/tools/CassFillDb/ansible",
+        "ansible_catalog": "~/etl-nosql/ansible-load",
         "generate_scripts_only": False,
         "tables_schema": [
             "date_dim",
