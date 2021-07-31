@@ -24,5 +24,5 @@ if __name__ == '__main__':
 
     dc_json = load_from('docker-compose.yaml.json', path)
     parts = dc_json['parts'][0:cluster_size] + [dc_json['end']]
-    write_to('docker-compose.yaml', ("\n".join(parts)).format(data_size=data_size))
+    write_to('docker-compose.yaml', ("\n".join(parts)).format(data_size=data_size, cluster_size=cluster_size))
 
