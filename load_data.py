@@ -124,13 +124,13 @@ if __name__ == "__main__":
                 "192.168.55.20"
             ]
         },
-        "database_info_path": "~/etl-nosql/db/cassandra",
-        "udf_path": "~/etl-nosql/db/cassandra/udf",
+        "database_info_path": "/home/magisterka/etl-nosql/db/cassandra",
+        "udf_path": "/home/magisterka/etl-nosql/db/cassandra/udf",
         "database_info_file": "cassandra.info.json",
-        "docker_compose_path": "~/etl-nosql/db/cassandra",
-        "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
-        "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
-        "ansible_catalog": "~/etl-nosql/ansible-load",
+        "docker_compose_path": "/home/magisterka/etl-nosql/db/cassandra",
+        "docker_compose_file_gen": "/home/magisterka/etl-nosql/db/cassandra/",
+        "docker_compose_file": "/home/magisterka/etl-nosql/db/cassandra/docker-compose.yaml",
+        "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
         "generate_scripts_only": False,
         "tables_schema": [
             "date_dim",
