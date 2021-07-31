@@ -147,7 +147,7 @@ if __name__ == "__main__":
         "scale": {
             "context": "table_data",
             "priority": 999,
-            "data": [1, 3, 5, 10, 15, 25]
+            "data": [1, 3, 5, 10, 15, 35]
         },
         "cluster_size": {
             "context": "cluster",
