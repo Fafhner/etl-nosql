@@ -110,13 +110,9 @@ if __name__ == "__main__":
         password = ""
         exit(-1)
     else:
-        file = sys.argv[1]
-        user = sys.argv[2]
-        password = sys.argv[3]
+        user = sys.argv[1]
+        password = sys.argv[2]
 
-    pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
-    main_only = int(sys.argv[5]) if len(sys.argv) >= 6 else None
-    env_ = load_from_json(file)
     static_env = {
         "cluster": {
             "node_manager": "192.168.55.20",
