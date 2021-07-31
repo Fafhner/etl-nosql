@@ -13,9 +13,6 @@ services:
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/cassandra/var/lib/cassandra/3/1:/var/lib/cassandra"
       - type: bind
-        source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
-        target: "/etc/cassandra/cassandra.yaml"
-      - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
     ports:
@@ -37,9 +34,6 @@ services:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/cassandra/var/lib/cassandra/3/1:/var/lib/cassandra"
-      - type: bind
-        source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
-        target: "/etc/cassandra/cassandra.yaml"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
@@ -63,9 +57,6 @@ services:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/cassandra/var/lib/cassandra/3/1:/var/lib/cassandra"
-      - type: bind
-        source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
-        target: "/etc/cassandra/cassandra.yaml"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"

@@ -64,11 +64,6 @@ def run_cmd(cmd, path, acc_error=None):
     return out.stderr
 
 
-def create_docker_compose(dc_json, size):
-    parts = dc_json['parts'][0:size] + [dc_json['end']]
-    return "\n".join(parts)
-
-
 def create_ansible_cmd(notebook, hosts, user, password, path):
     def r_(env, grid, diff, tags):
         print(f"Running playbook - {notebook}")
