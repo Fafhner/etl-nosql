@@ -1,0 +1,51 @@
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - remove stack
+      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
+      tags: tag_workers_leave_cluster
+      ignore_errors: true
+
+    - name: Manager - remove network
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
+      tags: tag_workers_leave_cluster
+      ignore_errors: true
+
+
+- hosts: cluster_node_workers
+  tasks:
+    - name: Workers - Leave cluster
+      ansible.builtin.command: "docker swarm leave"
+      tags: tag_workers_leave_cluster
+      ignore_errors: true
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - Leave cluster
+      ansible.builtin.command: "docker swarm leave --force"
+      tags: tag_manager_leave_cluster
+      ignore_errors: true
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - Leave cluster
+      ansible.builtin.command: "docker swarm leave --force"
+      tags: tag_manager_leave_cluster
+      ignore_errors: true
+
+
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Delete content & directory
+      shell: "/bin/rm -rf /home/magisterka/etl-nosql/db/cassandra/var/lib/cassandra/*"
+      become_user: root
+      become: yes
+      tags: tag_manager_leave_cluster
+      ignore_errors: true
+
+    - file: path=~/etl-nosql/db/cassandra/var/lib/cassandra/
+      ignore_errors: true
+      tags: tag_manager_leave_cluster
+
+
+

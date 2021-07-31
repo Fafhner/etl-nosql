@@ -170,13 +170,11 @@ if __name__ == "__main__":
     }
 
     db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
+    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     conf = {**static_env,
             **db_info}
 
-    udfs = [load_from_json(udf, static_env['udf_path']) for udf in static_env['udfs']]
-
-    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
@@ -212,7 +210,6 @@ if __name__ == "__main__":
 
 
     do_once_nodes = [
-        state.Node('Prepare', create_ansible_cmd('prepare.yaml', 'hosts_all', user, password, ansi_cat))
     ]
     preprocess_nodes = [
         state.Node('create_files', create_files)
