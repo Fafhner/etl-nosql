@@ -130,7 +130,7 @@ if __name__ == "__main__":
         "docker_compose_path": "~/etl-nosql/db/cassandra",
         "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
         "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
-        "ansible_catalog": "ansible",
+        "ansible_catalog": "~/etl-nosql/tools/CassFillDb/ansible",
         "generate_scripts_only": False,
         "tables_schema": [
             "date_dim",
@@ -208,7 +208,7 @@ if __name__ == "__main__":
         print("Create docker-compose")
         dc = create_docker_compose(dc_json, grid['cluster_size'].val)
         dc = dc.format(cluster_size=grid['cluster_size'].val, data_size=grid['scale'].val)
-        write_to('docker-compose.yaml', dc, 'db/cassandra')
+        write_to('docker-compose.yaml', dc, '~/etl-nosql/db/cassandra')
 
 
     do_once_nodes = [
@@ -240,6 +240,6 @@ if __name__ == "__main__":
     sm.setMain(_main_)
     sm.ansbile_f = create_ansible_cmd('load_data.yaml', 'hosts', user, password, ansi_cat)
 
-    sm.loop(conf, scenarios, pos, main_only)
+    sm.loop(conf, scenarios)
 
     do_once_nodes[0].do(conf, None, None, 'all')

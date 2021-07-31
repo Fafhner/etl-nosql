@@ -36,7 +36,7 @@ class StateMachine:
             self.preprocess_nodes[pk].do(env, grid, diff)
 
 
-    def loop(self, env, scenarios, pos, ml):
+    def loop(self, env, scenarios, pos=0, ml=0):
         for doo in self.only_once:
             doo.do(env, None, None, 'all')
 
