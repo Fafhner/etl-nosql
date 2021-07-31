@@ -134,7 +134,7 @@ if __name__ == "__main__":
         "docker_compose_path": "~/etl-nosql/db/cassandra",
         "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
         "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
-        "ansible_catalog": "~/etl-nosql/ansible",
+        "ansible_catalog": "ansible",
         "generate_scripts_only": False,
         "tables_schema": [
             "date_dim",
@@ -247,4 +247,3 @@ if __name__ == "__main__":
     sm.loop(conf, scenarios, pos, main_only)
 
     do_once_nodes[0].do(conf, None, None, 'all')
-    create_ansible_cmd('hadoop-stop.yaml', 'hosts', user, password, ansi_cat)(None, None, None, 'all')
