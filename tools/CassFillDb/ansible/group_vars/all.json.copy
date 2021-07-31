@@ -1,0 +1,48 @@
+{
+  "tables_dest": "$HOME/etl-nosql/db/tables",
+  "gen_path": "$HOME/etl-nosql/tpc-ds-tool/v3.0.0/tools",
+  "terminate": "N",
+  "rngseed": 100,
+  "force": "N",
+  "distr": "~/etl-nosql/tpc-ds-tool/v3.0.0/tools/tpcds.idx",
+
+  "tables": [
+    "date_dim",
+    "web_sales",
+    "store_sales",
+    "warehouse",
+    "catalog_sales"
+  ],
+
+  "grid_params": {
+    "scale": 1,
+    "cluster_size": 1,
+    "row_cache_size_in_mb": 12
+  },
+
+  "cluster_manager": "192.168.55.11",
+
+  "change_files": [
+    {
+      "file_name": "cassandra.yaml",
+      "file_path": "~/etl-nosql/db/volumes/etc/cassandra",
+      "params": [
+        {
+          "regex": "^row_cache_size_in_mb:.*",
+          "replace": "row_cache_size_in_mb: 12"
+        }
+      ]
+    }
+  ],
+
+  "network_name": "cassandraNet",
+
+
+  "create_tables": true,
+  "create_cluster": true,
+  "leave_cluster": true,
+  "restore_files": true,
+  "create_cluster_network": true
+
+
+}

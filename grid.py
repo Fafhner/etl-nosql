@@ -34,6 +34,7 @@ class GridStaticParam:
     def simplify(self):
         return self.name, self.val
 
+
 class Grid:
     def __init__(self):
         self.params: List[GridParam] = []

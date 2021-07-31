@@ -11,6 +11,7 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/size/3:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
         target: "/etc/cassandra/cassandra.yaml"
@@ -35,6 +36,7 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/size/3:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
         target: "/etc/cassandra/cassandra.yaml"
@@ -60,6 +62,61 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/size/3:/var/lib/cassandra"
+      - type: bind
+        source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
+        target: "/etc/cassandra/cassandra.yaml"
+      - type: bind
+        source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
+        target: "/etc/cassandra/jvm.options"
+    depends_on:
+      - "cassandra-1"
+    ports:
+      - 7000
+      - 9042
+    networks:
+      - cassandra
+
+  cassandra-4:
+    image: cassandra:latest
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n4
+    environment:
+      CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-4
+      CASSANDRA_SEEDS: "tasks.cassandra-1, tasks.cassandra-2, tasks.cassandra-3"
+    volumes:
+      - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
+      - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/size/3:/var/lib/cassandra"
+      - type: bind
+        source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
+        target: "/etc/cassandra/cassandra.yaml"
+      - type: bind
+        source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
+        target: "/etc/cassandra/jvm.options"
+    depends_on:
+      - "cassandra-1"
+    ports:
+      - 7000
+      - 9042
+    networks:
+      - cassandra
+
+  cassandra-5:
+    image: cassandra:latest
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n5
+    environment:
+      CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-5
+      CASSANDRA_SEEDS: "tasks.cassandra-1, tasks.cassandra-2, tasks.cassandra-3, tasks.cassandra-4"
+    volumes:
+      - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
+      - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/size/3:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/cassandra.yaml"
         target: "/etc/cassandra/cassandra.yaml"

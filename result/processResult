@@ -1,36 +1,39 @@
 import json
 
 import pandas as pd
+import yaml
+import numpy as np
 
-def sum_time(steps):
-    aq_time = 0
-    ov_time = 0
 
-    for step in steps:
-        aq_time += sum([dat['time'] for dat in step['time_info']['data_acquisition_time'] ])
-        ov_time += step['time_info']['overall_time']
+def sum_time(tries):
+    ov_time = [try_['overall_time'] for try_ in tries.values()]
+    etl_time = [try_['etl_processing_time'] for try_ in tries.values()]
+    ov_time = np.sort(ov_time)[1:-1]
+    etl_time = np.sort(etl_time)[1:-1]
 
-    return aq_time, ov_time
+    return np.average(etl_time), np.std(etl_time), np.average(ov_time), np.std(ov_time)
 
 
 if __name__ == '__main__':
 
-
     with open('data.txt') as of:
-        dstr = f'{{ "data": [ {of.read()} ] }}'
+        lines = of.readlines()
 
-    l_udf_r = json.loads(dstr)['data']
-    k = ['udf'] + list(l_udf_r[0]['scenario'].keys()) + ['aq_time', 'ov_time']
-     # print(", ".join(k))
+    dstr = "data:\n"
+    dstr += "".join(["  " + line for line in lines])
+    dct = yaml.safe_load(dstr)
+
+    l_udf_r = dct['data']
+    k = ['udf'] + list(l_udf_r[0]['scenario'].keys()) + ['etl', 'etl_std', 'ov_time', 'std']
+    print(", ".join(k))
     x = []
     for udf_r in l_udf_r:
-        aq_time, ov_time = sum_time(udf_r['steps'])
+        etl_time, etl_std, aq_time, ov_time = sum_time(udf_r['tries'])
 
+        d = [udf_r['udf']] + list(udf_r['scenario'].values()) + ['{0:.2f}'.format(etl_time), '{0:.2f}'.format(etl_std), '{0:.2f}'.format(aq_time), '{0:.2f}'.format(ov_time)]
+        x.append(", ".join([str(_) for _ in d]))
 
-        d = [udf_r['udf']] + list(udf_r['scenario'].values()) +['{0:.2f}'.format(aq_time), '{0:.2f}'.format(ov_time)]
-        x.append(d)
+    print("\n".join(x))
 
-       #print(", ".join([str(_) for _ in d]))
-
-    df = pd.DataFrame(x, columns=k)
-    print(df.sort_values(by=['udf', 'rep_factor', 'java_xms']))
+    # df = pd.DataFrame(x, columns=k)
+    # print(df.sort_values(by=['udf', 'rep_factor', 'java_xms']))

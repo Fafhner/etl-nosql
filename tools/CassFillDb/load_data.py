@@ -6,12 +6,8 @@ import sys
 from datetime import datetime
 
 from grid import create_scenarios
-from etl.etl_setup import select_driver
 import state
-from cassandra.cluster import Cluster
-from pyspark.sql import SparkSession
 import yaml
-from pyarrow import fs
 
 
 def write_to(file_name, data, output_path=None, mode='w'):
@@ -121,8 +117,61 @@ if __name__ == "__main__":
     pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
     main_only = int(sys.argv[5]) if len(sys.argv) >= 6 else None
     env_ = load_from_json(file)
-    static_env = env_['static']
-    dynamic_env = env_['dynamic']
+    static_env = {
+        "cluster": {
+            "node_manager": "192.168.55.20",
+            "node_workers": [
+                "192.168.55.16",
+                "192.168.55.17",
+                "192.168.55.18",
+                "192.168.55.19",
+                "192.168.55.20"
+            ]
+        },
+        "database_info_path": "~/etl-nosql/db/cassandra",
+        "udf_path": "~/etl-nosql/db/cassandra/udf",
+        "database_info_file": "cassandra.info.json",
+        "docker_compose_path": "~/etl-nosql/db/cassandra",
+        "docker_compose_file_gen": "~/etl-nosql/db/cassandra/",
+        "docker_compose_file": "~/etl-nosql/db/cassandra/docker-compose.yaml",
+        "ansible_catalog": "~/etl-nosql/ansible",
+        "generate_scripts_only": False,
+        "tables_schema": [
+            "date_dim",
+            "store_sales",
+            "catalog_sales",
+            "web_sales",
+            "warehouse",
+            "customer"
+        ]
+
+    }
+
+    dynamic_env = {
+        "scale": {
+            "context": "table_data",
+            "priority": 999,
+            "data": [1, 3, 5, 10, 15, 25]
+        },
+        "cluster_size": {
+            "context": "cluster",
+            "priority": 998,
+            "data": [3, 4, 5]
+        },
+        "rep_factor": {
+            "context": "db-keyspace",
+            "priority": 2,
+            "data": [3]
+        },
+        "java_xms": {
+            "context": "db-file",
+            "priority": 2,
+            "data": [
+                5000
+            ]
+        }
+
+    }
 
     db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
 
@@ -130,25 +179,11 @@ if __name__ == "__main__":
             **db_info}
 
     udfs = [load_from_json(udf, static_env['udf_path']) for udf in static_env['udfs']]
-    tables_schema = list()
-    for udf in udfs:
-        for tb in udf['datasets']:
-            if udf['datasets'][tb]['table_schema'] not in tables_schema:
-                tables_schema.append(udf['datasets'][tb]['table_schema'])
 
-    conf['tables_schema'] = tables_schema
-
-    etl_process = select_driver(db_info['db']['etl_driver'])
     dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
-
-    spark = SparkSession \
-        .builder \
-        .master("yarn") \
-        .appName(f"Run_experiments_{datetime.now().strftime('%Y%m%d')}") \
-        .getOrCreate()
 
 
     def create_files(conf, grid, diff):
@@ -165,6 +200,7 @@ if __name__ == "__main__":
         write_to('hosts', hosts_file, ansi_cat)
 
         print("Merge as ansible/group_vars/all.json")
+
         conf_all = {**conf,
                     **getVals(grid),
                     **db_info,
@@ -173,56 +209,10 @@ if __name__ == "__main__":
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
-        print("Create tables_schema/load file")
-        load_file_data = convert_tables_info(conf['tables_schema'], conf_all)
-        write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
-
         print("Create docker-compose")
         dc = create_docker_compose(dc_json, grid['cluster_size'].val)
+        dc = dc.format(cluster_size=grid['cluster_size'].val, data_size=grid['scale'].val)
         write_to('docker-compose.yaml', dc, 'db/cassandra')
-
-
-    def main(env, grid, diff):
-        cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
-        tries = 12
-        err_try_max = 4
-
-        for udf in udfs:
-            data_tries = dict()
-            idx = 0
-            err_try = 0
-
-            while idx < tries:
-                data = etl_process(cluster, udf, spark)
-                hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-                hdfs.delete_dir('./tmp')
-
-                if data is None:
-                    err_try += 1
-                    if err_try >= err_try_max:
-                        raise RuntimeError("Too many errors.")
-                    continue
-
-                data_tries[idx] = data
-                idx += 1
-                with open("pd_process.temp.json", 'a') as cmd_file:
-                    cmd_file.write(json.dumps({
-                        "udf": udf['name'],
-                        "tries": data_tries,
-                        "scenario": getVals(grid),
-                        "timestamp": str(datetime.now())
-                    }, indent=4))
-
-            res = [{
-                "udf": udf['name'],
-                "tries": data_tries,
-                "scenario": getVals(grid),
-                "timestamp": str(datetime.now())
-            }]
-
-            write_to_yaml(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
-
-        cluster.shutdown()
 
 
     do_once_nodes = [
@@ -236,8 +226,7 @@ if __name__ == "__main__":
         {
             "name": 'all',
             "if": lambda _, grid, diff: True,
-            "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack',
-                     'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+            "then": ['all']
         },
     ]
 
@@ -245,7 +234,14 @@ if __name__ == "__main__":
     sm.setDoOnlyOnce(do_once_nodes)
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
-    sm.setMain(main)
+
+
+    def _main_(_, __, ___):
+        print("\n\n\nLoading ended...\n\n\n")
+        return None
+
+
+    sm.setMain(_main_)
     sm.ansbile_f = create_ansible_cmd('load_data.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios, pos, main_only)

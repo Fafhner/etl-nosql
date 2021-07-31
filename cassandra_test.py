@@ -66,7 +66,7 @@ if __name__ == "__main__":
     conf = {**static_env,
             **db_info}
 
-    udfs = [load_from_json("10_intersect_np.json", static_env['udf_path'])]
+    udfs = [load_from_json("10_intersect_np.json", static_env['udf_path']), load_from_json("10_intersect_pp.json", static_env['udf_path'])]
     tables_schema = list()
     for udf in udfs:
         for tb in udf['datasets']:
@@ -83,26 +83,46 @@ if __name__ == "__main__":
 
 
     def main():
-        spark = SparkSession \
-            .builder \
-            .master("local") \
-            .appName(f"Run") \
-            .getOrCreate()
+        tries = 2
+        err_try_max = 4
 
-        cluster = Cluster(["192.168.55.16"], connect_timeout=20)
-        tries = 12
         for udf in udfs:
-            data = etl_process(cluster, udf, spark, tries)
+            data_tries = dict()
+            idx = 0
+            err_try = 0
+
+            while idx < tries:
+                data = {
+                    "data_acquisition_time": -1,
+                    "etl_processing_time": -1.,
+                    "overall_time": -1.
+                }
+                #
+
+                if data is None:
+                    err_try += 1
+                    if err_try >= err_try_max:
+                        raise RuntimeError("Too many errors.")
+                    continue
+
+                data_tries[idx] = data
+                idx += 1
+                with open("pd_process.temp.json", 'a') as cmd_file:
+                    cmd_file.write(json.dumps({
+                        "udf": udf['name'],
+                        "tries": data_tries,
+                        "scenario": "",
+                        "timestamp": str(datetime.now())
+                    }, indent=4))
 
             res = [{
                 "udf": udf['name'],
-                "tries": data,
+                "tries": data_tries,
+                "scenario": "",
                 "timestamp": str(datetime.now())
             }]
 
-            write_to_yaml(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
-
-        cluster.shutdown()
+            write_to_yaml(f"run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
     main()
 
