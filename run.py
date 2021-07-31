@@ -177,10 +177,6 @@ if __name__ == "__main__":
         load_file_data = convert_tables_info(conf['tables_schema'], conf_all)
         write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
 
-        print("Create docker-compose")
-        dc = create_docker_compose(dc_json, grid['cluster_size'].val)
-        write_to('docker-compose.yaml', dc, 'db/cassandra')
-
 
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)

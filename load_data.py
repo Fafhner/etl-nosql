@@ -203,11 +203,6 @@ if __name__ == "__main__":
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
-        print("Create docker-compose")
-        dc = create_docker_compose(dc_json, grid['cluster_size'].val)
-        dc = dc.format(cluster_size=grid['cluster_size'].val, data_size=grid['scale'].val)
-        write_to('docker-compose.yaml', dc, '/home/magisterka/etl-nosql/db/cassandra')
-
 
     do_once_nodes = [
     ]
