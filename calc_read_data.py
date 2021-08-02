@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
     conf['tables_schema'] = tables_schema
 
-    etl_process = select_driver(db_info['db']['etl_driver'])
+    etl_process = select_driver(db_info['db']['etl_driver']+"-hdfs")
     dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     ansi_cat = static_env['ansible_catalog']
