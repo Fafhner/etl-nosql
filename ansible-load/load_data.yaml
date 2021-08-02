@@ -31,7 +31,7 @@
   tasks:
     - name: Create Folder
       file:
-        path: "~/etl-nosql/db/cassandra/var/lib/cassandra/{{cluster_size}}/{{scale}}"
+        path: "/home/magisterka/etl-nosql/db/cassandra/var/lib/cassandra/{{cluster_size}}/{{scale}}"
         state: directory
 
 
