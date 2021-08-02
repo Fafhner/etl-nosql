@@ -172,10 +172,6 @@ if __name__ == "__main__":
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
-        print("Create tables_schema/load file")
-        load_file_data = convert_tables_info(conf['tables_schema'], conf_all)
-        write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
-
 
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
