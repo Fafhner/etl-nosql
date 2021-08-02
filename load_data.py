@@ -187,8 +187,6 @@ if __name__ == "__main__":
 
         hosts_file = generate_hosts_file(cluster_node_manager, cluster_node_workers)
         write_to('hosts', hosts_file, ansi_cat)
-        print(hosts_file)
-        print(ansi_cat)
 
         print("Merge as ansible/group_vars/all.json")
 
