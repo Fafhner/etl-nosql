@@ -5,16 +5,16 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
-      "query": "SELECT * FROM tpc_ds.web_sales WHERE ws_net_profit>0 ALLOW FILTERING;"
+      "query": "SELECT ws_sold_date_sk FROM tpc_ds.web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
-      "query": "SELECT * FROM tpc_ds.warehouse;"
+      "query": "SELECT ws_warehouse_sk FROM tpc_ds.warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
-      "query": "SELECT * FROM tpc_ds.date_dim WHERE d_year=2000 ALLOW FILTERING;"
+      "query": "SELECT d_date_sk FROM tpc_ds.date_dim WHERE d_year=2000 ALLOW FILTERING;"
     }
   },
-  "spark_sql": ""
+  "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (cast(c1.ws_warehouse_sk as FLOAT)=cast(c2.w_warehouse_sk as FLOAT));"
 }

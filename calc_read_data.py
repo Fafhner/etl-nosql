@@ -11,7 +11,6 @@ import state
 from cassandra.cluster import Cluster
 from pyspark.sql import SparkSession
 import yaml
-from pyarrow import fs
 
 
 def write_to(file_name, data, output_path=None, mode='w'):
@@ -177,10 +176,6 @@ if __name__ == "__main__":
         load_file_data = convert_tables_info(conf['tables_schema'], conf_all)
         write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
 
-        print("Create docker-compose")
-        dc = create_docker_compose(dc_json, grid['cluster_size'].val)
-        write_to('docker-compose.yaml', dc, 'db/cassandra')
-
 
     def main(env, grid, diff):
         cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
@@ -193,9 +188,7 @@ if __name__ == "__main__":
             err_try = 0
 
             while idx < tries:
-                data = etl_process(cluster, udf, spark)
-                hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-                hdfs.delete_dir('./tmp')
+                data = etl_process(cluster, udf, spark, grid['cluster_size'].val, grid['scale'].val)
 
                 if data is None:
                     err_try += 1
@@ -205,13 +198,6 @@ if __name__ == "__main__":
 
                 data_tries[idx] = data
                 idx += 1
-                with open("pd_process.temp.json", 'a') as cmd_file:
-                    cmd_file.write(json.dumps({
-                        "udf": udf['name'],
-                        "tries": data_tries,
-                        "scenario": getVals(grid),
-                        "timestamp": str(datetime.now())
-                    }, indent=4))
 
             res = [{
                 "udf": udf['name'],
@@ -220,7 +206,7 @@ if __name__ == "__main__":
                 "timestamp": str(datetime.now())
             }]
 
-            write_to_yaml(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
+            write_to_yaml(f"result/data_read_results_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
         cluster.shutdown()
 
@@ -236,8 +222,7 @@ if __name__ == "__main__":
         {
             "name": 'all',
             "if": lambda _, grid, diff: True,
-            "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack',
-                     'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+            "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack']
         },
     ]
 
@@ -246,7 +231,7 @@ if __name__ == "__main__":
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
     sm.setMain(main)
-    sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
+    sm.ansbile_f = create_ansible_cmd('load_data.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios, pos, main_only)
 

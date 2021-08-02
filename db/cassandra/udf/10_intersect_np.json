@@ -1,5 +1,5 @@
 {
-  "name": "10_intersect_np.json",
+  "name": "10_intersect_np",
   "type": "no-pushdown",
   "datasets": {
     "date_dim": {
