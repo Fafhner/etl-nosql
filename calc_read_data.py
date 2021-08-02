@@ -227,7 +227,7 @@ if __name__ == "__main__":
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
     sm.setMain(main)
-    sm.ansbile_f = create_ansible_cmd('load_data.yaml', 'hosts', user, password, ansi_cat)
+    sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios, pos, main_only)
 
