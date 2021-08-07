@@ -17,21 +17,21 @@ def line_to_json(line: str, schema):
 
 
 if __name__ == '__main__':
-    schema_path = '$HOME/etl-nosql/db/table_schema'
+    schema_path = '$HOME/etl-nosql/db/tables_schema'
     tables = ['catalog_returns', 'catalog_sales', 'customer', 'date_dim', 'store_sales', 'warehouse', 'web_sales']
     data_sizes = [1, 2, 3, 5]
     data_path = '$HOME/etl-nosql/db/table_data'
     json_write_path = '$HOME/etl-nosql/db/table_data/json'
     json_size = 1000
 
-    os.makedirs(json_write_path)
+    os.makedirs(json_write_path, exist_ok=True)
 
     for table in tables:
         with open(f"{schema_path}/{table}.json") as schema_json:
             schema = json.load(schema_json)
 
         for data_size in data_sizes:
-            os.makedirs(f"{json_write_path}/{data_size}/{table}")
+            os.makedirs(f"{json_write_path}/{data_size}/{table}", exist_ok=True)
             with open(f"{data_path}/{data_size}/{table}.dat") as data_file:
                 line = data_file.readline()
                 lines = []
