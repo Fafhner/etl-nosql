@@ -14,6 +14,7 @@ def line_to_json(line: str, schema):
                 line_json[col['col_name']] = f'"{split}"'
             else:
                 line_json[col['col_name']] = f'{split}'
+    return line_json
 
 
 if __name__ == '__main__':
@@ -41,8 +42,10 @@ if __name__ == '__main__':
                         lines.append(line_to_json(line, schema))
                         line = data_file.readline()
                     else:
-                        with open(f"{json_write_path}/{data_size}/{table}/{table}_{chunk_id}.json", 'w') as data_json_file:
+                        p = f"{json_write_path}/{data_size}/{table}/{table}_{chunk_id}.json"
+                        with open(p, 'w') as data_json_file:
                             json.dump({"data": lines}, data_json_file)
+                            print(f"Created {p}")
                         chunk_id += 1
                         lines = []
                 with open(f"{json_write_path}/{data_size}/{table}.info.json", 'w') as data_json_file:
