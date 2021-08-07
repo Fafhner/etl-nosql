@@ -29,7 +29,7 @@ if __name__ == '__main__':
     data_sizes = [1, 2, 3, 5]
     data_path = '../../db/table_data'
     json_write_path = '../../db/table_data/json'
-    json_size = 1000
+    json_size = 2000
 
     os.makedirs(json_write_path, exist_ok=True)
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                 lines = []
                 chunk_id = 0
 
-                while line or len(lines) > 0:
+                while line or len(lines) > json_size:
                     if line is not None and len(lines) < json_size:
                         lines.append(line_to_json(line, schema))
                         line = data_file.readline()
