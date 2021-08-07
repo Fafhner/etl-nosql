@@ -31,7 +31,7 @@ if __name__ == '__main__':
             schema = json.load(schema_json)
 
         for data_size in data_sizes:
-            os.makedirs(f"{json_write_path}/{data_size}")
+            os.makedirs(f"{json_write_path}/{data_size}/{table}")
             with open(f"{data_path}/{data_size}/{table}.dat") as data_file:
                 line = data_file.readline()
                 lines = []
@@ -41,7 +41,7 @@ if __name__ == '__main__':
                         lines.append(line_to_json(line, schema))
                         line = data_file.readline()
                     else:
-                        with open(f"{json_write_path}/{data_size}/{table}_{chunk_id}.json", 'w') as data_json_file:
+                        with open(f"{json_write_path}/{data_size}/{table}/{table}_{chunk_id}.json", 'w') as data_json_file:
                             json.dump({"data": lines}, data_json_file)
                         chunk_id += 1
                         lines = []
