@@ -27,12 +27,12 @@ if __name__ == '__main__':
     os.makedirs(json_write_path, exist_ok=True)
 
     for table in tables:
-        with open(f"{schema_path}/{table}.json") as schema_json:
+        with open(f"{schema_path}/{table}.json", 'r') as schema_json:
             schema = json.load(schema_json)
 
         for data_size in data_sizes:
             os.makedirs(f"{json_write_path}/{data_size}/{table}", exist_ok=True)
-            with open(f"{data_path}/{data_size}/{table}.dat") as data_file:
+            with open(f"{data_path}/{data_size}/{table}.dat", 'r') as data_file:
                 line = data_file.readline()
                 lines = []
                 chunk_id = 0
