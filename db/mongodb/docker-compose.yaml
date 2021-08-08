@@ -9,6 +9,8 @@ services:
           - node.labels.node==n1
     image: mongo:4.4
     command: mongod --configsvr --replSet rs-config-server --port 27017 --dbpath /data/db --bind_ip_all
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
     ports:
       - 27017
       - 27018
@@ -23,7 +25,7 @@ services:
       placement:
         constraints:
           - node.labels.node==n1
-    command: mongos --port 27017 --configdb rs-config-server/configsvr:27017--bind_ip_all
+    command: mongos --port 27017 --configdb rs-config-server/configsvr:27017 --bind_ip_all
     volumes:
       - "~/etl-nosql/db/mongodb/scripts:/scripts"
     ports:
