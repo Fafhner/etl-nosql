@@ -1,0 +1,94 @@
+version: '3'
+
+services:
+  ## Config server
+  configsvr:
+    container_name: configsvr
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n1
+    image: mongo
+    command: mongod --configsvr --replSet rs-config-server --port 27017 --dbpath /data/db --bind_ip_all
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  ## Router
+  router:
+    image: mongo
+    container_name: router
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n1
+    command: mongos --port 27017 --configdb rs-config-server/configsvr:27017--bind_ip_all
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+    ports:
+      - 27017:27017
+      - 27018:27018
+      - 27019:27019
+    networks:
+      - mongonet
+
+  ## Shards
+  shard01:
+    image: mongo
+    container_name: shard01
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n2
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard02:
+    image: mongo
+    container_name: shard02
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n3
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard03:
+    image: mongo
+    container_name: shard03
+    deploy:
+      placement:
+        constraints:
+          - node.labels.node==n4
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+networks:
+  mongonet:
+    external:
+      name: mongoNet
+

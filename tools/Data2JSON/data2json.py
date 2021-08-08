@@ -20,7 +20,7 @@ def line_to_json(line: str, schema):
 
 def dump_data(path, data):
     with open(path, 'w') as data_json_file:
-        data_json_file.write(f'"data": [{data}]')
+        data_json_file.write("{" + f'"data": [{data}]' + "}")
         print(f"Created {p}")
 
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
                         line = data_file.readline()
                     else:
                         p = f"{json_write_path}/{data_size}/{table}/{table}_{chunk_id}.json"
-                        dump_data(p, "\n".join(lines))
+                        dump_data(p, ",\n".join(lines))
                         chunk_id += 1
                         lines = []
 
