@@ -3,12 +3,11 @@ version: '3'
 services:
   ## Config server
   configsvr:
-    container_name: configsvr
     deploy:
       placement:
         constraints:
           - node.labels.node==n1
-    image: mongo
+    image: mongo:4.4
     command: mongod --configsvr --replSet rs-config-server --port 27017 --dbpath /data/db --bind_ip_all
     ports:
       - 27017
@@ -19,8 +18,7 @@ services:
 
   ## Router
   router:
-    image: mongo
-    container_name: router
+    image: mongo:4.4
     deploy:
       placement:
         constraints:
@@ -37,8 +35,7 @@ services:
 
   ## Shards
   shard01:
-    image: mongo
-    container_name: shard01
+    image: mongo:4.4
     deploy:
       placement:
         constraints:
@@ -54,8 +51,7 @@ services:
       - mongonet
 
   shard02:
-    image: mongo
-    container_name: shard02
+    image: mongo:4.4
     deploy:
       placement:
         constraints:
@@ -71,8 +67,7 @@ services:
       - mongonet
 
   shard03:
-    image: mongo
-    container_name: shard03
+    image: mongo:4.4
     deploy:
       placement:
         constraints:
