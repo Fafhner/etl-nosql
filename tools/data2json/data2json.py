@@ -25,19 +25,17 @@ if __name__ == '__main__':
     data_path = '../../db/table_data'
     json_write_path = '../../db/table_data/json'
 
-    os.makedirs(json_write_path, exist_ok=True)
-
     for data_size in data_sizes:
         for table in tables:
             with open(f"{schema_path}/{table}.json", 'r') as schema_json:
                 schema = json.load(schema_json)
 
-            os.makedirs(f"{json_write_path}/{data_size}/{table}", exist_ok=True)
+            os.makedirs(f"{json_write_path}/{data_size}", exist_ok=True)
             with open(f"{data_path}/{data_size}/{table}.dat", 'r', encoding="ISO-8859-1") as data_file:
                 p = f"{json_write_path}/{data_size}/{table}.json"
                 with open(p, 'w') as data_json_file:
                     line = data_file.readline()
-                    while line or len(lines) > json_size:
+                    while line:
                         data_json_file.write(line_to_json(line, schema))
                         line = data_file.readline()
                 print(f"Created {p}")
