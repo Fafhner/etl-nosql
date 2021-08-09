@@ -1,4 +1,3 @@
-import pymongo as pm
 import yaml
 import io
 import json

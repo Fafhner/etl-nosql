@@ -27,18 +27,6 @@
       tags: tag_prepare
       ignore_errors: true
 
-- hosts: cluster_node_manager
-  tasks:
-    - name: Manager - remove network
-      ansible.builtin.command: "docker network rm {{db['network_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
-
-    - name: Manager - remove stack
-      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
-
 ###############################
 
 - hosts: cluster_node_manager:cluster_node_workers
@@ -120,11 +108,8 @@
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
     - name: Get shards container id
-      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_router* "
+      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_shard* "
       register: shard_id
-      until: shard_id.stdout != ""
-      retries: 20
-      delay: 5
       tags: tag_deploy_stack
 
     - name: Init shards
@@ -137,9 +122,6 @@
     - name: Get config server container id
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_config* "
       register: config_id
-      until: config_id.stdout != ""
-      retries: 20
-      delay: 5
       tags: tag_deploy_stack
 
     - name: Init config server
@@ -151,7 +133,7 @@
         seconds: 5
       tags: tag_deploy_stack
 
-    - name: Get config server container id
+    - name: Get router container id
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_router* "
       register: router_id
       until: router_id.stdout != ""
@@ -159,7 +141,7 @@
       delay: 5
       tags: tag_deploy_stack
 
-    - name: Init config server
+    - name: Init router
       ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
       tags: tag_deploy_stack
 
@@ -168,9 +150,9 @@
       tags: tag_deploy_stack
 
     - name: Load data
-        ansible.builtin.command: "docker exec {{container_id.stdout}} mongoimport --db=db --collection={{tables_schema}} --file=/importdata/{{table_schema}}.json"
-        loop: "{{tables_schema}}"
-
+      ansible.builtin.command: "docker exec {{router_id.stdout}} mongoimport --db=db --collection={{item}} --file=/importdata/{{item}}.json"
+      loop: "{{tables_schema}}"
+      tags: tag_load_data
 
 
 
