@@ -1,0 +1,12 @@
+{
+  "name": "16_large_agg_np",
+  "type": "no-pushdown",
+  "datasets": {
+    "catalog_sales": {
+      "table_schema": "catalog_sales",
+      "index": "",
+      "query": "SELECT * FROM tpc_ds.catalog_sales;"
+    }
+  },
+  "spark_sql": "SELECT \n  MIN(cs_wholesale_cost), MAX(cs_wholesale_cost), AVG(cs_wholesale_cost), SUM(cs_wholesale_cost), COUNT(cs_wholesale_cost),\n  MIN(cs_list_price), MAX(cs_list_price), AVG(cs_list_price), SUM(cs_list_price), COUNT(cs_list_price),\n  MIN(cs_sales_price), MAX(cs_sales_price), AVG(cs_sales_price), SUM(cs_sales_price), COUNT(cs_sales_price),\n  MIN(cs_ext_discount_amt), MAX(cs_ext_discount_amt), AVG(cs_ext_discount_amt), SUM(cs_ext_discount_amt), COUNT(cs_ext_discount_amt),\n  MIN(cs_ext_sales_price), MAX(cs_ext_sales_price), AVG(cs_ext_sales_price), SUM(cs_ext_sales_price), COUNT(cs_ext_sales_price),\n  MIN(cs_ext_wholesale_cost), MAX(cs_ext_wholesale_cost), AVG(cs_ext_wholesale_cost), SUM(cs_ext_wholesale_cost), COUNT(cs_ext_wholesale_cost),\n  MIN(cs_ext_list_price), MAX(cs_ext_list_price), AVG(cs_ext_list_price), SUM(cs_ext_list_price), COUNT(cs_ext_list_price),\n  MIN(cs_ext_tax), MAX(cs_ext_tax), AVG(cs_ext_tax), SUM(cs_ext_tax), COUNT(cs_ext_tax),\n  MIN(cs_coupon_amt), MAX(cs_coupon_amt), AVG(cs_coupon_amt), SUM(cs_coupon_amt), COUNT(cs_coupon_amt),\n  MIN(cs_ext_ship_cost), MAX(cs_ext_ship_cost), AVG(cs_ext_ship_cost), SUM(cs_ext_ship_cost), COUNT(cs_ext_ship_cost),\n  MIN(cs_net_paid), MAX(cs_net_paid), AVG(cs_net_paid), SUM(cs_net_paid), COUNT(cs_net_paid),\n  MIN(cs_net_paid_inc_tax), MAX(cs_net_paid_inc_tax), AVG(cs_net_paid_inc_tax), SUM(cs_net_paid_inc_tax), COUNT(cs_net_paid_inc_tax),\n  MIN(cs_net_paid_inc_ship), MAX(cs_net_paid_inc_ship), AVG(cs_net_paid_inc_ship), SUM(cs_net_paid_inc_ship), COUNT(cs_net_paid_inc_ship),\n  MIN(cs_net_paid_inc_ship_tax), MAX(cs_net_paid_inc_ship_tax), AVG(cs_net_paid_inc_ship_tax), SUM(cs_net_paid_inc_ship_tax), COUNT(cs_net_paid_inc_ship_tax),\n  MIN(cs_net_profit), MAX(cs_net_profit), AVG(cs_net_profit), SUM(cs_net_profit), COUNT(cs_net_profit)\nFROM catalog_sales;"
+}

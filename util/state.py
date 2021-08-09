@@ -1,6 +1,6 @@
 from typing import Dict
 
-from grid import GridDiff
+from util.grid import GridDiff
 
 
 class Node:

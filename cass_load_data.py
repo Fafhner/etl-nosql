@@ -5,8 +5,8 @@ import subprocess
 import sys
 from datetime import datetime
 
-from grid import create_scenarios
-import state
+from util.grid import create_scenarios
+from util import state
 import yaml
 
 

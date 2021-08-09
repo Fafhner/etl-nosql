@@ -5,9 +5,9 @@ import subprocess
 import sys
 from datetime import datetime
 
-from grid import create_scenarios
+from util.grid import create_scenarios
 from etl.etl_setup import select_driver
-import state
+from util import state
 from cassandra.cluster import Cluster
 from pyspark.sql import SparkSession
 import yaml
