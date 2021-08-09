@@ -1,0 +1,13 @@
+{
+  "db": {
+    "service_name": "mongodb",
+    "etl_driver": "mongodb",
+    "docker_stack_name": "ETL",
+    "db_tables_path": "/table_data",
+    "db_tables_schema": "/tables_schema",
+    "network_name": "mongoNet"
+  },
+  "configs": [
+  ],
+  "namespace": "tpc_ds"
+}

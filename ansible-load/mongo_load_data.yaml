@@ -163,51 +163,13 @@
       ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
       tags: tag_deploy_stack
 
-
-    - name: Wait for first container and get container ID
-      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_router* "
-      register: container_id
-      until: container_id.stdout != ""
-      retries: 20
-      delay: 5
+    - name: Init db and collection
+      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-coll'"
       tags: tag_deploy_stack
 
-###############################
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create schema
-      block:
-        - name: Get container ID 3
-          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-          register: container_id
-
-
-        - name: Create schema
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}"
-          loop: "{{tables_schema}}"
-      tags: tag_db_create_schema
-
-
-###############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Load data to DB
-      block:
-        - name: Get container ID 3
-          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-          register: container_id
-#
-#        - name: Get container IP
-#          ansible.builtin.command: "docker inspect --format={{ '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' }} {{container_id}}"
-#          register: container_ip
-
-        - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -v -d localhost /table_data/sstables/{{scale}}/tpc_ds/{{item}}"
-          loop: "{{tables_schema}}"
-
-
-      tags: tag_db_fill_tables
+    - name: Load data
+        ansible.builtin.command: "docker exec {{container_id.stdout}} mongoimport --db=db --collection={{tables_schema}} --file=/importdata/{{table_schema}}.json"
+        loop: "{{tables_schema}}"
 
 
 

@@ -143,7 +143,7 @@ if __name__ == "__main__":
         "scale": {
             "context": "table_data",
             "priority": 999,
-            "data": [1, 3, 5, 10, 15, 35]
+            "data": [1, 2, 3, 5]
         },
         "cluster_size": {
             "context": "cluster",
@@ -207,16 +207,12 @@ if __name__ == "__main__":
 
 
     def _main_(_, __, ___):
-        client = pm.MongoClient("192.168.55.20", 27017)
-        db = client['db']
-        client.admin.command('shardCollection', 'dbname.collectionname', key={'shardkey': 1})
-
         print("\n\n\nLoading ended...\n\n\n")
         return None
 
 
     sm.setMain(_main_)
-    sm.ansbile_f = create_ansible_cmd('load_data.yaml', 'hosts', user, password, ansi_cat)
+    sm.ansbile_f = create_ansible_cmd('mongo_load_data.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios)
 

@@ -1,1 +1,9 @@
 sh.enableSharding("db")
+
+sh.shardCollection("db.catalog_returns", {cr_order_number: 1})
+sh.shardCollection("db.catalog_sales", {cs_order_number: 1})
+sh.shardCollection("db.customer", {c_customer_sk: 1})
+sh.shardCollection("db.date_dim", {d_date_sk: 1})
+sh.shardCollection("db.store_sales", {ss_ticket_number: 1})
+sh.shardCollection("db.warehouse", {w_warehouse_sk: 1})
+sh.shardCollection("db.web_sales", {ws_order_number: 1})
