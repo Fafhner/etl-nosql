@@ -142,7 +142,8 @@
       ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
       register: result
       until: result.stdout.find("Connection refused") != -1
-      retries:
+      retries: 5
+      delay: 10
       tags: tag_deploy_stack
 
     - name: Init db and collection
