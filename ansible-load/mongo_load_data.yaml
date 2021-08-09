@@ -130,19 +130,19 @@
 
     - name: Wait for config server init
       pause:
-        seconds: 5
+        seconds: 15
       tags: tag_deploy_stack
 
     - name: Get router container id
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_router* "
       register: router_id
-      until: router_id.stdout != ""
-      retries: 20
-      delay: 5
       tags: tag_deploy_stack
 
     - name: Init router
       ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
+      register: result
+      until: result.stdout.find("Connection refused") != -1
+      retries:
       tags: tag_deploy_stack
 
     - name: Init db and collection
