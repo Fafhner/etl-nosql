@@ -110,11 +110,11 @@
     - name: Get shards container id
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_shard* "
       register: shard_id
-      tags: tag_deploy_stack
+      tags: tag_deploy_stack, tag_init_shard
 
     - name: Init shards
       ansible.builtin.command: "docker exec {{shard_id.stdout}} sh -c 'mongo < /scripts/init-shard'"
-      tags: tag_deploy_stack
+      tags: tag_deploy_stack, tag_init_shard
 
 
 - hosts: cluster_node_manager
@@ -122,11 +122,11 @@
     - name: Get config server container id
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_config* "
       register: config_id
-      tags: tag_deploy_stack
+      tags: tag_deploy_stack, tag_init_config
 
     - name: Init config server
       ansible.builtin.command: "docker exec {{config_id.stdout}} sh -c 'mongo < /scripts/init-config'"
-      tags: tag_deploy_stack
+      tags: tag_deploy_stack, tag_init_config
 
     - name: Wait for config server init
       pause:

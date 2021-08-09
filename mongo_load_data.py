@@ -131,6 +131,7 @@ if __name__ == "__main__":
             "date_dim",
             "store_sales",
             "catalog_sales",
+            "catalog_returns",
             "web_sales",
             "warehouse",
             "customer"
@@ -214,5 +215,3 @@ if __name__ == "__main__":
     sm.ansbile_f = create_ansible_cmd('mongo_load_data.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios)
-
-    do_once_nodes[0].do(conf, None, None, 'all')
