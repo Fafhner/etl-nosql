@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 
 import pymongo as pm
 from pyspark.sql import SparkSession, Row
-BATCH_SIZE = 100000
+BATCH_SIZE = 400000
 
 
 def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
@@ -34,7 +34,7 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
             d_start = BATCH_SIZE*count_iter
             d_stop = BATCH_SIZE*(count_iter+1)
             docs = collection.find(udf_val['filter'], udf_val['projection'], batch_size=BATCH_SIZE)[d_start:d_stop]
-            df = sc.parallelize(list(docs)).map(lambda x: Row(**x)).toDF()
+            df = spark.createDataFrame([Row(**i) for i in docs])
             files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
             dataframes[f"{udf_val['table_schema']}"] = files
             df.write.parquet(files, mode='overwrite')
