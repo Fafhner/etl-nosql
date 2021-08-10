@@ -5,6 +5,8 @@ import subprocess
 import sys
 from datetime import datetime
 
+from pyspark import SparkConf
+
 from util.grid import create_scenarios
 import db.mongodb.etl.etl_process as etl
 from util import state
@@ -146,6 +148,7 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .master("yarn") \
+        .config(conf=SparkConf().set("spark.driver.memory", "3g")) \
         .appName(f"Run_experiments_{datetime.now().strftime('%Y%m%d')}") \
         .getOrCreate()
 
