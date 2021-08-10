@@ -4,21 +4,21 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
-            "filter": { },
-      "projection": null,
-      "query": "SELECT * FROM tpc_ds.web_sales;"
+      "filter": {  },
+      "projection": {"ws_warehouse_sk": 1, "ws_sold_date_sk": 1},
+      "query": "SELECT ws_warehouse_sk, ws_sold_date_sk FROM tpc_ds.web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
-            "filter": { },
-      "projection": null,
-      "query": "SELECT * FROM tpc_ds.warehouse;"
+      "filter": {  },
+      "projection": {"w_warehouse_sk": 1},
+      "query": "SELECT w_warehouse_sk FROM tpc_ds.warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
-            "filter": { },
-      "projection": null,
-      "query": "SELECT * FROM tpc_ds.date_dim  WHERE d_year >= 2000 AND d_year <= 2001 ALLOW FILTERING;"
+      "filter": { "d_year":  { "$gte": 2000, "$lte": 2001 } },
+      "projection": {"d_date_sk": 1},
+      "query": "SELECT d_date_sk FROM tpc_ds.date_dim  WHERE d_year >= 2000 AND d_year <= 2001 ALLOW FILTERING;"
     }
   },
   "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (c1.ws_warehouse_sk>=c2.w_warehouse_sk)\nWHERE d_year>= 2000 AND d_year<=2001;"

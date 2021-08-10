@@ -123,10 +123,7 @@ if __name__ == "__main__":
         "udf_path": "/home/magisterka/etl-nosql/db/cassandra/udf",
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
-        "docker_compose_file_gen": "/home/magisterka/etl-nosql/db/mongodb/",
-        "docker_compose_file": "/home/magisterka/etl-nosql/db/mongodb/docker-compose.yaml",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
-        "generate_scripts_only": False,
         "tables_schema": [
             "date_dim",
             "store_sales",
@@ -153,7 +150,7 @@ if __name__ == "__main__":
     }
 
     db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
-    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
+    dc_json = load_from_json('docker-compose.yaml.json', static_env['docker_compose_path'])
 
     conf = {**static_env,
             **db_info}

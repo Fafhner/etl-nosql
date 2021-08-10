@@ -19,7 +19,6 @@
     "database_info_file": "cassandra.info.json",
     "docker_compose_path": "~/etl-nosql/db/cassandra",
     "ansible_catalog": "ansible",
-    "generate_scripts_only": false,
     "tables_schema": [],
     "udfs": [
       "18_merge_join_np.json",

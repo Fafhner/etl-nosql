@@ -1,0 +1,48 @@
+{
+  "static": {
+    "cluster": {
+      "node_manager": "192.168.55.20",
+      "node_workers": [
+        "192.168.55.20",
+        "192.168.55.19",
+        "192.168.55.18"
+      ],
+      "port": 27017
+    },
+    "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
+    "udf_path": "/home/magisterka/etl-nosql/db/mongodb/udf",
+    "database_info_file": "mongodb.info.json",
+    "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
+    "ansible_catalog": "/home/magisterka/etl-nosql/db/mongodb/ansible",
+    "tables_schema": [],
+    "udfs": [
+      "10_intersect_np.json",
+      "10_intersect_pp.json",
+      "17_left_join.np.json",
+      "17_left_join.pp.json",
+      "18_merge_join_np.json",
+      "18_merge_join_pp.json",
+      "20_nested_loops.np.json",
+      "20_nested_loops.pp.json"
+    ]
+  },
+  "dynamic": {
+    "scale": {
+      "context": "table_data",
+      "priority": 999,
+      "data": [
+        1,
+        2,
+        3,
+        5
+      ]
+    },
+    "cluster_size": {
+      "context": "cluster",
+      "priority": 998,
+      "data": [
+        3
+      ]
+    }
+  }
+}

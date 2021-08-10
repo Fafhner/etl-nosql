@@ -28,45 +28,7 @@
       ignore_errors: true
 
 
-######################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Manager - remove network
-      ansible.builtin.command: "docker network rm {{db['network_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
-
-    - name: Manager - remove stack
-      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
-      tags: tag_rm_stack
-      ignore_errors: true
-
-    - name: Wait
-      pause:
-        seconds: 10
-
-
-
 ###############################
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Restore files, change parameters
-      block:
-        - name: Restore files
-          ansible.builtin.copy:
-            src: "{{ item.file_path }}/{{ item.file_name }}.backup"
-            dest: "{{ item.file_path }}/{{ item.file_name }}"
-          loop: "{{ configs }}"
-
-        - name: Change params
-          ansible.builtin.replace:
-            path: "{{ item.0.file_path }}/{{ item.0.file_name }}"
-            regexp: "{{ item.1.regex }}"
-            replace: "{{ item.1.replace }}"
-          with_subelements:
-            - "{{ configs }}"
-            - params
-      tags: tag_files
 
 - hosts: cluster_node_manager
   tasks:
@@ -80,6 +42,7 @@
       tags: tag_files
 
 ###############################
+
 - hosts: cluster_node_manager
   tasks:
     - name: Init docker swarm node manager
@@ -101,29 +64,8 @@
           ansible.builtin.command:  "docker swarm join --token {{ hostvars[cluster['node_manager']]['cluster_token'].stdout }} {{cluster['node_manager']}}:2377"
       tags: tag_init_swarm
 
-- hosts: cluster_node_manager
-  tasks:
-    - name: Get nodes id, add labels
-      block:
-        - name: Get manager id
-          ansible.builtin.command:  "docker node ls -q -f 'role=manager'"
-          register: cluster_manager_id
-
-        - name: Get worker id
-          ansible.builtin.command:  "docker node ls -q -f 'role=worker'"
-          register: cluster_worker_id
-
-        - name: Add manager label
-          ansible.builtin.command: "docker node update --label-add node=n1 {{ cluster_manager_id.stdout }}"
-
-        - name: Add node labels
-          ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+2 }} {{ item }}"
-          loop: "{{ cluster_worker_id.stdout_lines }}"
-          loop_control:
-            index_var: node_idx
-      tags: tag_init_swarm
-
 ###############################
+
 - hosts: cluster_node_manager
   tasks:
     - name: Create docker network
@@ -135,115 +77,31 @@
       ansible.builtin.command: "docker stack deploy -c {{docker_compose_path}}/docker-compose.yaml {{db['docker_stack_name']}}"
       tags: tag_deploy_stack
 
-    - name: Wait for first container and get container ID
-      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-      register: container_id
-      until: container_id.stdout != ""
-      retries: 20
-      delay: 5
+    - name: Wait for containers
+      pause:
+        seconds: 15
       tags: tag_deploy_stack
 
-    - name: Wait for first container
-      pause:
-        seconds: 30
 
-    - name: Wait for all nodes in cluster
-      ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
-      register: cmd_res_wait
-      until: "cmd_res_wait.stdout_lines | length == cluster_size + 5"
-      retries: 10
-      delay: 60
+- hosts: cluster_node_manager
+  tasks:
+    - name: Wait for config server init
+      pause:
+        seconds: 15
       tags: tag_deploy_stack
 
-    - name: Wait
-      pause:
-        seconds: 10
+    - name: Get router container id
+      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_router* "
+      register: router_id
+      tags: tag_deploy_stack
 
-###############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'DROP KEYSPACE {{namespace}};'"
-          ignore_errors: true
-      tags: tag_db_create_namespace
-
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
-          ignore_errors: true
-      tags: tag_db_create_namespace
-
-
-
-###############################
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create schema
-      block:
-        - name: Get container ID 3
-          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-          register: container_id
-
-
-        - name: Create schema
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}"
-          loop: "{{tables_schema}}"
-      tags: tag_db_create_schema
-
-###############################
-
-- hosts:  cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Truncate tables
-      block:
-        - name: Get container ID 3
-          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-          register: container_id
-
-        - name: Truncate tables
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -e 'TRUNCATE {{namespace}}.{{item}};'"
-          loop: "{{tables_schema}}"
-          ignore_errors: True
-      tags: tag_truncate_tables
-
-
-###############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Load data to DB
-      block:
-        - name: Get container ID 3
-          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-          register: container_id
-#
-#        - name: Get container IP
-#          ansible.builtin.command: "docker inspect --format={{ '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' }} {{container_id}}"
-#          register: container_ip
-
-        - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -v -d localhost /table_data/sstables/{{scale}}/tpc_ds/{{item}}"
-          loop: "{{tables_schema}}"
-
-
-      tags: tag_db_fill_tables
-
-
-
+    - name: Init router
+      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
+      register: result
+      until: result.stdout.find("failed") == -1
+      retries: 5
+      delay: 10
+      tags: tag_deploy_stack
 
 
 

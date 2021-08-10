@@ -1,28 +1,13 @@
-import json
+from math import ceil
 from timeit import default_timer as timer
 
 import pymongo as pm
-import pandas as pd
+from pyspark.sql import Row
 
 BATCH_SIZE = 10000
 
 
-
-def pandas_factory(colnames, rows):
-    return pd.DataFrame(rows, columns=colnames)
-
-
-def get_steps(file=None):
-    if file is None:
-        print("File is None")
-        exit(-1)
-    with open(file) as f:
-        pushdown = json.load(f)
-
-    return pushdown
-
-
-def process_steps(client: pm.MongoClient, udf: dict, spark):
+def process(client: pm.MongoClient, udf: dict, spark):
     udf = udf.copy()
 
     dataframes = dict()
@@ -37,32 +22,23 @@ def process_steps(client: pm.MongoClient, udf: dict, spark):
     mongo_db = client['db']
 
     for udf_val in udf['datasets'].values():
-
-        file_inc = 0
-        files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf['name']}_{udf_val['table_schema']}*"
+        file_inc = 0
+        count_iter = 0
 
         collection = mongo_db[udf_val['table_schema']]
         count_docs = collection.count_documents(udf_val['filter'])
+        iter_ = ceil(count_docs/BATCH_SIZE)
         documents = collection.find(udf_val['filter'], udf_val['projection'], batch_size=BATCH_SIZE)
 
-        documents.
-
-
-        pdf: pd.DataFrame = ex._current_rows
-
-        sdf = spark.createDataFrame(pdf)
-        sdf.write.parquet(files, mode='overwrite')
-
-        while ex.has_more_pages:
-            ex.fetch_next_page()
-            df: pd.DataFrame = ex._current_rows
+        while count_iter < iter_:
+            df = spark.createDataFrame([Row(**i) for i in list(documents[BATCH_SIZE*count_iter:BATCH_SIZE*count_iter+1])])
+            files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
             if df.shape[0] != 0:
-                file_inc += 1
-                files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
                 dataframes[f"{udf_val['table_schema']}"] = files
-                sdf = spark.createDataFrame(df, verifySchema=False)
-                sdf.write.parquet(files, mode='overwrite')
+                df.write.parquet(files, mode='overwrite')
+                file_inc += 1
+
     dat_aq_end = timer()
 
     for df_k in dataframes.keys():

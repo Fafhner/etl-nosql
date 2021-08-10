@@ -141,7 +141,7 @@
     - name: Init router
       ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
       register: result
-      until: result.stderr == ''
+      until: result.stdout.find("failed") == -1
       retries: 5
       delay: 10
       tags: tag_deploy_stack

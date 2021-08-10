@@ -6,9 +6,9 @@ import sys
 from datetime import datetime
 
 from util.grid import create_scenarios
-from etl.etl_setup import select_driver
+import db.mongodb.etl.etl_process as etl
 from util import state
-from cassandra.cluster import Cluster
+import pymongo as pm
 from pyspark.sql import SparkSession
 import yaml
 from pyarrow import fs
@@ -102,7 +102,7 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-fileHandler = logging.FileHandler(f"run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
+fileHandler = logging.FileHandler(f"logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
 
@@ -138,8 +138,7 @@ if __name__ == "__main__":
 
     conf['tables_schema'] = tables_schema
 
-    etl_process = select_driver(db_info['db']['etl_driver'])
-    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
+    dc_json = load_from_json('docker-compose.yaml.json', static_env['docker_compose_path'])
 
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
@@ -173,39 +172,23 @@ if __name__ == "__main__":
 
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
-        print("Create tables_schema/load file")
-        load_file_data = convert_tables_info(conf['tables_schema'], conf_all)
-        write_to('load', "\n".join(load_file_data), "db/cassandra/tables_schema")
-
-        print("Create docker-compose")
-        dc = create_docker_compose(dc_json, grid['cluster_size'].val)
-        write_to('docker-compose.yaml', dc, 'db/cassandra')
-
 
     def main(env, grid, diff):
-        cluster = Cluster([env["cluster"]["node_manager"]], connect_timeout=20)
-        tries = 12
-        err_try_max = 4
+        client = pm.MongoClient(env["cluster"]["node_manager"], env["cluster"]["port"])
+        tries = 7
 
         for udf in udfs:
             data_tries = dict()
             idx = 0
-            err_try = 0
 
             while idx < tries:
-                data = etl_process(cluster, udf, spark)
+                data = etl.process(client, udf, spark)
                 hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
                 hdfs.delete_dir('./tmp')
 
-                if data is None:
-                    err_try += 1
-                    if err_try >= err_try_max:
-                        raise RuntimeError("Too many errors.")
-                    continue
-
                 data_tries[idx] = data
                 idx += 1
-                with open("pd_process.temp.json", 'a') as cmd_file:
+                with open("logs/pd_process.temp.json", 'a') as cmd_file:
                     cmd_file.write(json.dumps({
                         "udf": udf['name'],
                         "tries": data_tries,
@@ -220,13 +203,12 @@ if __name__ == "__main__":
                 "timestamp": str(datetime.now())
             }]
 
-            write_to_yaml(f"result/run_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
+            write_to_yaml(f"result/run_mongo_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
-        cluster.shutdown()
+        client.close()
 
 
     do_once_nodes = [
-        state.Node('Prepare', create_ansible_cmd('prepare.yaml', 'hosts_all', user, password, ansi_cat))
     ]
     preprocess_nodes = [
         state.Node('create_files', create_files)
@@ -236,8 +218,7 @@ if __name__ == "__main__":
         {
             "name": 'all',
             "if": lambda _, grid, diff: True,
-            "then": ['tag_prepare', 'tag_create_table_data', 'tag_files', 'tag_init_swarm', 'tag_deploy_stack',
-                     'tag_db_create_namespace', 'tag_db_create_schema', 'tag_db_fill_tables', 'tag_exec']
+            "then": ['all']
         },
     ]
 
@@ -250,5 +231,5 @@ if __name__ == "__main__":
 
     sm.loop(conf, scenarios, pos, main_only)
 
-    do_once_nodes[0].do(conf, None, None, 'all')
     create_ansible_cmd('hadoop-stop.yaml', 'hosts', user, password, ansi_cat)(None, None, None, 'all')
+    create_ansible_cmd('prepare.yaml', 'hosts_all', user, password, ansi_cat)(None, None, None, 'all')
