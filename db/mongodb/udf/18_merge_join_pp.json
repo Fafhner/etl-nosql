@@ -5,14 +5,20 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
+            "filter": { },
+      "projection": null,
       "query": "SELECT ws_sold_date_sk FROM tpc_ds.web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
+            "filter": { },
+      "projection": null,
       "query": "SELECT ws_warehouse_sk FROM tpc_ds.warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
+            "filter": { },
+      "projection": null,
       "query": "SELECT d_date_sk FROM tpc_ds.date_dim WHERE d_year=2000 ALLOW FILTERING;"
     }
   },

@@ -8,13 +8,16 @@ def line_to_json(line: str, schema):
     schema_cols = schema['cols']
     line_json = []
     for i, split in enumerate(line_split):
+        col_type = schema_cols[i]['type']
+        col_name = schema_cols[i]['col_name']
         if split != '':
-            col_type = schema_cols[i]['type']
-            col_name = schema_cols[i]['col_name']
             if col_type in ['varchar', 'ascii', 'date']:
                 line_json.append(f'"{col_name}": "{split}"')
             else:
                 line_json.append(f'"{col_name}": {split}')
+        else:
+            line_json.append(f'"{col_name}": null')
+
     return "{" + ", ".join(line_json) + "}\n"
 
 

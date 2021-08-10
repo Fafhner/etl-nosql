@@ -4,14 +4,20 @@
   "datasets": {
     "store_sales": {
       "table_schema": "store_sales",
+            "filter": { },
+      "projection": null,
       "query": "SELECT ss_ticket_number, ss_item_sk, ss_customer_sk, ss_sales_price, sr_returned_date_sk, ss_sold_date_sk\n\tFROM tpc_ds.store_sales WHERE ss_sales_price >= 10.00;"
     },
     "store_returns": {
       "table_schema": "store_returns",
+            "filter": { },
+      "projection": null,
       "query": "SELECT sr_ticket_number, sr_item_sk FROM tpc_ds.store_returns;"
     },
     "date_dim": {
       "table_schema": "date_dim",
+            "filter": { },
+      "projection": null,
       "query": "SELECT d_date, d_date_sk FROM date_dim WHERE d_year=1999;"
     }
   },
