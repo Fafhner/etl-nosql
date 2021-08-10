@@ -2,13 +2,13 @@ from math import ceil
 from timeit import default_timer as timer
 
 import pymongo as pm
-from pyspark.sql import SparkSession, Row, DataFrame
-
-BATCH_SIZE = 10000
+from pyspark.sql import SparkSession, Row
+BATCH_SIZE = 500000
 
 
 def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
     udf = udf.copy()
+    sc = spark.sparkContext
 
     dataframes = dict()
     step_time_info = {
@@ -34,7 +34,7 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
             d_start = BATCH_SIZE*count_iter
             d_stop = BATCH_SIZE*(count_iter+1)
             docs = collection.find(udf_val['filter'], udf_val['projection'], batch_size=BATCH_SIZE)[d_start:d_stop]
-            df = spark.createDataFrame([Row(**i) for i in docs])
+            df = sc.parallelize(docs).map(lambda x: Row(**x)).toDF()
             files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
             dataframes[f"{udf_val['table_schema']}"] = files
             df.write.parquet(files, mode='overwrite')

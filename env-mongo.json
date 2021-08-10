@@ -18,8 +18,6 @@
     "udfs": [
       "10_intersect_np.json",
       "10_intersect_pp.json",
-      "17_left_join.np.json",
-      "17_left_join.pp.json",
       "18_merge_join_np.json",
       "18_merge_join_pp.json",
       "20_nested_loops.np.json",
