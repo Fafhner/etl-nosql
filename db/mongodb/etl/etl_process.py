@@ -2,12 +2,12 @@ from math import ceil
 from timeit import default_timer as timer
 
 import pymongo as pm
-from pyspark.sql import Row
+from pyspark.sql import SparkSession, Row, DataFrame
 
 BATCH_SIZE = 10000
 
 
-def process(client: pm.MongoClient, udf: dict, spark):
+def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
     udf = udf.copy()
 
     dataframes = dict()
@@ -32,12 +32,11 @@ def process(client: pm.MongoClient, udf: dict, spark):
         documents = collection.find(udf_val['filter'], udf_val['projection'], batch_size=BATCH_SIZE)
 
         while count_iter < iter_:
-            df = spark.createDataFrame([Row(**i) for i in list(documents[BATCH_SIZE*count_iter:BATCH_SIZE*count_iter+1])])
+            df: DataFrame = spark.createDataFrame([Row(**i) for i in list(documents[BATCH_SIZE*count_iter:BATCH_SIZE*count_iter+1])])
             files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
-            if df.shape[0] != 0:
-                dataframes[f"{udf_val['table_schema']}"] = files
-                df.write.parquet(files, mode='overwrite')
-                file_inc += 1
+            dataframes[f"{udf_val['table_schema']}"] = files
+            df.write.parquet(files, mode='overwrite')
+            file_inc += 1
 
     dat_aq_end = timer()
 
