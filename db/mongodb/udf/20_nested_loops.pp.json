@@ -5,19 +5,19 @@
     "web_sales": {
       "table_schema": "web_sales",
       "filter": {  },
-      "projection": {"ws_warehouse_sk": 1, "ws_sold_date_sk": 1},
+      "projection": {"_id":0, "ws_warehouse_sk": 1, "ws_sold_date_sk": 1},
       "query": "SELECT ws_warehouse_sk, ws_sold_date_sk FROM tpc_ds.web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
       "filter": {  },
-      "projection": {"w_warehouse_sk": 1},
+      "projection": {"_id":0, "w_warehouse_sk": 1},
       "query": "SELECT w_warehouse_sk FROM tpc_ds.warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
       "filter": { "d_year":  { "$gte": 2000, "$lte": 2001 } },
-      "projection": {"d_date_sk": 1},
+      "projection": {"_id":0, "d_date_sk": 1},
       "query": "SELECT d_date_sk FROM tpc_ds.date_dim  WHERE d_year >= 2000 AND d_year <= 2001 ALLOW FILTERING;"
     }
   },

@@ -5,17 +5,17 @@
     "web_sales": {
       "table_schema": "web_sales",
       "filter": {},
-      "projection": null
+      "projection": {"_id":0}
     },
     "warehouse": {
       "table_schema": "warehouse",
       "filter": {},
-      "projection": null
+      "projection": {"_id":0}
     },
     "date_dim": {
       "table_schema": "date_dim",
       "filter": {},
-      "projection": null
+      "projection": {"_id":0}
     }
   },
   "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (cast(c1.ws_warehouse_sk as FLOAT)=cast(c2.w_warehouse_sk as FLOAT))\nWHERE d_year=2000;"
