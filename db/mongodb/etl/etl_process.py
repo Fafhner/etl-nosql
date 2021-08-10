@@ -32,11 +32,13 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
         documents = collection.find(udf_val['filter'], udf_val['projection'], batch_size=BATCH_SIZE)
 
         while count_iter < iter_:
-            df = spark.createDataFrame([Row(**i) for i in list(documents[BATCH_SIZE*count_iter:BATCH_SIZE*count_iter+1])])
+            dlist = list(documents[BATCH_SIZE*count_iter:BATCH_SIZE*count_iter+1])
+            df = spark.createDataFrame([Row(**i) for i in dlist])
             files = f"./tmp/{udf['name']}_{udf_val['table_schema']}_{file_inc}.parquet"
             dataframes[f"{udf_val['table_schema']}"] = files
             df.write.parquet(files, mode='overwrite')
             file_inc += 1
+            count_iter += 1
 
     dat_aq_end = timer()
 
