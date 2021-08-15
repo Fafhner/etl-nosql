@@ -3,10 +3,9 @@ from timeit import default_timer as timer
 
 import pymongo as pm
 from pyspark.sql import SparkSession, Row
-BATCH_SIZE = 400000
 
 
-def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
+def process(client: pm.MongoClient, udf: dict, spark: SparkSession, conn_uri):
     udf = udf.copy()
     sc = spark.sparkContext
 
@@ -23,6 +22,15 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession):
 
     for udf_val in udf['datasets'].values():
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf['name']}_{udf_val['table_schema']}*"
+        df = spark.read.format("mongo") \
+            .option("uri", f"{conn_uri}/db.{udf_val['table_schema']}") \
+            .load() \
+
+        df.createOrReplaceTempView("temp")
+        spark.sql(udf_val['query']).write.parquet("tmp2/date_dim.parquet")
+
+
+
         file_inc = 0
         count_iter = 0
 

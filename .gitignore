@@ -5,3 +5,5 @@ dask-worker-space
 *_test.result.json
 *.log
 *.pyc
+result/data.txt
+result/processResult

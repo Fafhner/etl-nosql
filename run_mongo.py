@@ -147,9 +147,7 @@ if __name__ == "__main__":
 
     spark = SparkSession \
         .builder \
-        .master("yarn") \
-        .config(conf=SparkConf().set("spark.driver.memory", "3g")) \
-        .appName(f"Run_experiments_{datetime.now().strftime('%Y%m%d')}") \
+        .appName(f"Mongo_experiments_{datetime.now().strftime('%Y%m%d')}") \
         .getOrCreate()
 
 
