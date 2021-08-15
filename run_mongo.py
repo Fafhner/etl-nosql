@@ -183,7 +183,7 @@ if __name__ == "__main__":
             idx = 0
 
             while idx < tries:
-                data = etl.process(client, udf, spark)
+                data = etl.process(client, udf, spark, f"mongodb://{env['cluster']['node_manager']}")
                 hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
                 hdfs.delete_dir('./tmp')
 

@@ -7,3 +7,5 @@ dask-worker-space
 *.pyc
 result/data.txt
 result/processResult
+result/data.txt
+result/processResult
