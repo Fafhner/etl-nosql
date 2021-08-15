@@ -19,9 +19,17 @@ if __name__ == "__main__":
 
     t1 = timer()
     spark.read.format("mongo") \
-        .option("uri", "mongodb://127.0.0.1/db.date_dim") \
+        .option("uri", "mongodb://192.168.55.16/db.date_dim") \
         .load() \
         .write.parquet("tmp2/date_dim.parquet")
+    spark.read.format("mongo") \
+        .option("uri", "mongodb://192.168.55.16/db.store_sales") \
+        .load() \
+        .write.parquet("tmp2/store_sales.parquet")
+    spark.read.format("mongo") \
+        .option("uri", "mongodb://192.168.55.16/db.store_sales") \
+        .load() \
+        .write.parquet("tmp2/catalog_sales.parquet")
     t2 = timer()
-    
+
     print(f"Time: {t2-t1}")

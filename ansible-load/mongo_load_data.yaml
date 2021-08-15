@@ -33,7 +33,7 @@
   tasks:
     - name: Create folder for shards
       file:
-        path: "/home/magisterka/etl-nosql/db/mongodb/data/{{cluster_size}}/{{scale}}/shard/db"
+        path: "/home/magisterka/etl-nosql/db/mongodb/{{mongo_catalog}}/{{cluster_size}}/{{scale}}/shard/db"
         state: directory
 
 
@@ -41,13 +41,13 @@
   tasks:
     - name: Create folder for config server
       file:
-        path: "/home/magisterka/etl-nosql/db/mongodb/data/{{cluster_size}}/{{scale}}/config/db"
+        path: "/home/magisterka/etl-nosql/db/mongodb/{{mongo_catalog}}/{{cluster_size}}/{{scale}}/config/db"
         state: directory
       tags: tag_files
 
     - name: Create folder for router
       file:
-        path: "/home/magisterka/etl-nosql/db/mongodb/data/{{cluster_size}}/{{scale}}/router/db"
+        path: "/home/magisterka/etl-nosql/db/mongodb/{{mongo_catalog}}/{{cluster_size}}/{{scale}}/router/db"
         state: directory
       tags: tag_files
 

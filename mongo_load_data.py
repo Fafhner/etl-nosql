@@ -110,13 +110,12 @@ if __name__ == "__main__":
 
     static_env = {
         "cluster": {
-            "node_manager": "192.168.55.20",
+            "node_manager": "192.168.55.16",
             "node_workers": [
-                "192.168.55.20",
+                "192.168.55.16",
                 "192.168.55.19",
                 "192.168.55.18",
                 "192.168.55.17",
-                "192.168.55.16",
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
@@ -124,6 +123,7 @@ if __name__ == "__main__":
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
+        "mongo_catalog": "data2",
         "tables_schema": [
             "date_dim",
             "store_sales",
