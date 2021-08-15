@@ -5,17 +5,20 @@
     "web_sales": {
       "table_schema": "web_sales",
       "filter": {},
-      "projection": {"_id":0}
+      "projection": {"_id":0},
+      "query": "SELECT * FROM tpc_ds.web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
       "filter": {},
-      "projection": {"_id":0}
+      "projection": {"_id":0},
+      "query": "SELECT * FROM tpc_ds.warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
       "filter": {},
-      "projection": {"_id":0}
+      "projection": {"_id":0},
+      "query": "SELECT * FROM tpc_ds.date_dim;"
     }
   },
   "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (c1.ws_warehouse_sk>=c2.w_warehouse_sk)\nWHERE d_year>= 2000 AND d_year<=2001;"

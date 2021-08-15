@@ -18,7 +18,7 @@
       "table_schema": "date_dim",
       "filter": { "d_year":  { "$gte": 2000, "$lte": 2001 } },
       "projection": {"_id":0, "d_date_sk": 1},
-      "query": "SELECT d_date_sk FROM tpc_ds.date_dim  WHERE d_year >= 2000 AND d_year <= 2001 ALLOW FILTERING;"
+      "query": "SELECT d_date_sk FROM tpc_ds.date_dim  WHERE d_year >= 2000 AND d_year <= 2001;"
     }
   },
   "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (c1.ws_warehouse_sk>=c2.w_warehouse_sk);"
