@@ -148,6 +148,7 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .appName(f"Mongo_experiments_{datetime.now().strftime('%Y%m%d')}") \
+        .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1') \
         .getOrCreate()
 
 
@@ -183,7 +184,7 @@ if __name__ == "__main__":
             idx = 0
 
             while idx < tries:
-                data = etl.process(client, udf, spark, f"mongodb://{env['cluster']['node_manager']}")
+                data = etl.process(client, udf, spark, f"mongodb://192.168.55.16")
                 hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
                 hdfs.delete_dir('./tmp')
 

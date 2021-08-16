@@ -1,9 +1,9 @@
 {
   "static": {
     "cluster": {
-      "node_manager": "192.168.55.20",
+      "node_manager": "192.168.55.16",
       "node_workers": [
-        "192.168.55.20",
+        "192.168.55.16",
         "192.168.55.19",
         "192.168.55.18"
       ],
@@ -29,10 +29,7 @@
       "context": "table_data",
       "priority": 999,
       "data": [
-        1,
-        2,
-        3,
-        5
+        2
       ]
     },
     "cluster_size": {

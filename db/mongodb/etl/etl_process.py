@@ -1,13 +1,11 @@
-from math import ceil
 from timeit import default_timer as timer
 
 import pymongo as pm
-from pyspark.sql import SparkSession, Row
+from pyspark.sql import SparkSession
 
 
 def process(client: pm.MongoClient, udf: dict, spark: SparkSession, conn_uri):
     udf = udf.copy()
-    sc = spark.sparkContext
 
     dataframes = dict()
     step_time_info = {
@@ -20,7 +18,7 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession, conn_uri):
 
     for udf_val in udf['datasets'].values():
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf['name']}_{udf_val['table_schema']}*"
-        df = spark.read.format("mongo") \
+        df = spark.read.format("com.mongodb.spark.sql.DefaultSource") \
             .option("uri", f"{conn_uri}/db.{udf_val['table_schema']}") \
             .load() \
 

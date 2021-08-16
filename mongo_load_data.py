@@ -123,7 +123,7 @@ if __name__ == "__main__":
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
-        "mongo_catalog": "data2",
+        "mongo_catalog": "data3",
         "tables_schema": [
             "date_dim",
             "store_sales",
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         "scale": {
             "context": "table_data",
             "priority": 999,
-            "data": [1, 2, 3, 5]
+            "data": [2]
         },
         "cluster_size": {
             "context": "cluster",
