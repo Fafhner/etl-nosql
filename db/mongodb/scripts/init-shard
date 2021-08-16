@@ -3,9 +3,16 @@ rs.initiate({
  version: 1,
  members:
   [{
-     _id:
-      0,
-      host : "shard01:27017"
+     _id: 0,
+      host : "shard01a:27017"
+   },
+   {
+     _id: 1,
+      host : "shard01b:27017"
+   },
+   {
+     _id: 2,
+      host : "shard01c:27017"
    }]
 })
 rs.initiate({
@@ -13,9 +20,16 @@ rs.initiate({
  version: 1,
  members:
   [{
-     _id:
-      0,
-      host : "shard02:27017"
+     _id: 0,
+      host : "shard02a:27017"
+   },
+   {
+     _id: 1,
+      host : "shard02b:27017"
+   },
+   {
+     _id: 2,
+      host : "shard02c:27017"
    }]
 })
 rs.initiate({
@@ -23,8 +37,15 @@ rs.initiate({
  version: 1,
  members:
   [{
-     _id:
-      0,
-      host : "shard03:27017"
-   }]
+     _id: 0,
+      host : "shard03a:27017"
+   },
+   {
+     _id: 1,
+      host : "shard03b:27017"
+   },
+   {
+     _id: 2,
+      host : "shard03c:27017"
+   ]
 })

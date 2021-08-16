@@ -207,8 +207,6 @@ if __name__ == "__main__":
 
             write_to_yaml(f"result/run_mongo_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
-        client.close()
-
 
     do_once_nodes = [
     ]

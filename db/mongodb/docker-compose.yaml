@@ -38,8 +38,8 @@ services:
     networks:
       - mongonet
 
-  ## Shards
-  shard01:
+  ## Shards A - hostname==magisterka-Lenovo-Y700-17ISK-20
+  shard01a:
     image: mongo:4.4
     deploy:
       placement:
@@ -48,7 +48,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
       - "~/etl-nosql/db/mongodb/scripts:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01a/db:/data/db"
     ports:
       - 27017
       - 27018
@@ -56,7 +56,7 @@ services:
     networks:
       - mongonet
 
-  shard02:
+  shard01b:
     image: mongo:4.4
     deploy:
       placement:
@@ -65,7 +65,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
       - "~/etl-nosql/db/mongodb/scripts:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01b/db:/data/db"
     ports:
       - 27017
       - 27018
@@ -73,7 +73,7 @@ services:
     networks:
       - mongonet
 
-  shard03:
+  shard01c:
     image: mongo:4.4
     deploy:
       placement:
@@ -82,7 +82,112 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
       - "~/etl-nosql/db/mongodb/scripts:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01c/db:/data/db"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+ ## Shards 2 - magisterka-OptiPlex-780-19
+  shard02a:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02a/db:/data/db"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard02b:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02b/db:/data/db"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard02c:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-18
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02c/db:/data/db"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+
+ ## Shards C - magisterka-OptiPlex-780-18
+  shard03a:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03a/db:/data/db"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard03b:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03b/db:/data/db"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard03c:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-18
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts:/scripts"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03c/db:/data/db"
     ports:
       - 27017
       - 27018
