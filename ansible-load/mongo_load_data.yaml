@@ -111,7 +111,7 @@
     - name: Get shards container id
       ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}_shard* "
       register: shard_ids
-      until: "shard_id.stdout_lines | length == 3"
+      until: "shard_ids.stdout_lines | length == 3"
       retries: 5
       delay: 10
       tags: tag_deploy_stack, tag_init_shard
