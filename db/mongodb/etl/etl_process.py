@@ -22,7 +22,7 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession, conn_uri):
             .option("uri", f"{conn_uri}/db.{udf_val['table_schema']}") \
             .load() \
 
-        df.createOrReplaceTempView("temp")
+        df.createOrReplaceTempView(udf_val['table_schema'])
         spark.sql(udf_val['query']).write.parquet(f"tmp/{udf_val['table_schema']}.parquet")
 
 
