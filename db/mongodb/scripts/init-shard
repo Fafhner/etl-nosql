@@ -15,6 +15,7 @@ rs.initiate({
       host : "shard01c:27017"
    }]
 })
+
 rs.initiate({
  _id: "rs-shard-02",
  version: 1,
@@ -32,6 +33,7 @@ rs.initiate({
       host : "shard02c:27017"
    }]
 })
+
 rs.initiate({
  _id: "rs-shard-03",
  version: 1,
@@ -47,5 +49,5 @@ rs.initiate({
    {
      _id: 2,
       host : "shard03c:27017"
-   ]
+   }]
 })

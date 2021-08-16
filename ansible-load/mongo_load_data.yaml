@@ -116,7 +116,7 @@
     - name: Init shards
       ansible.builtin.command: "docker exec {{item}} sh -c 'mongo < /scripts/init-shard'"
       tags: tag_deploy_stack, tag_init_shard
-      loop: "{{shard_ids}}"
+      loop: "{{shard_ids.stdout_lines}}"
 
 
 - hosts: cluster_node_manager
