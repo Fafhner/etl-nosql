@@ -176,7 +176,7 @@ if __name__ == "__main__":
 
     def main(env, grid, diff):
         client = pm.MongoClient(env["cluster"]["node_manager"], env["cluster"]["port"])
-        tries = 1
+        tries = 3
 
         for udf in udfs:
             data_tries = dict()
