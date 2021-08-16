@@ -4,7 +4,7 @@ import pymongo as pm
 from pyspark.sql import SparkSession
 
 
-def process(client: pm.MongoClient, udf: dict, spark: SparkSession, conn_uri):
+def process(udf: dict, spark: SparkSession, conn_uri):
     udf = udf.copy()
 
     dataframes = dict()

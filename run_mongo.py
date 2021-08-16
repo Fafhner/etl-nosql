@@ -176,7 +176,8 @@ if __name__ == "__main__":
 
 
     def main(env, grid, diff):
-        client = pm.MongoClient(env["cluster"]["node_manager"], env["cluster"]["port"])
+        hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
+        hdfs.delete_dir('./tmp')
         tries = 3
 
         for udf in udfs:
@@ -184,8 +185,7 @@ if __name__ == "__main__":
             idx = 0
 
             while idx < tries:
-                data = etl.process(client, udf, spark, f"mongodb://192.168.55.16")
-                hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
+                data = etl.process(udf, spark, f"mongodb://192.168.55.16")
                 hdfs.delete_dir('./tmp')
 
                 data_tries[idx] = data
