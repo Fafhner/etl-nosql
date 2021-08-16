@@ -17,7 +17,7 @@ def process(client: pm.MongoClient, udf: dict, spark: SparkSession, conn_uri):
     dat_aq_start = ov_time_start
 
     for udf_val in udf['datasets'].values():
-        dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf['name']}_{udf_val['table_schema']}*"
+        dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
         df = spark.read.format("com.mongodb.spark.sql.DefaultSource") \
             .option("uri", f"{conn_uri}/db.{udf_val['table_schema']}") \
             .load() \
