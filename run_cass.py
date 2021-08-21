@@ -179,7 +179,12 @@ if __name__ == "__main__":
 
     def main(env, grid, diff):
         hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-        hdfs.delete_dir('./tmp')
+        try:
+            hdfs.delete_dir('./tmp')
+        except OSError as os_err:
+            if "not a directory" not in os_err.strerror:
+                exit(-1)
+
         tries = 7
 
         for udf in udfs:
