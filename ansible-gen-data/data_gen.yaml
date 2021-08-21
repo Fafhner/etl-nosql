@@ -8,12 +8,12 @@
       tags: make_dirs
 
     - name: Generate data
-        ansible.builtin.command: "{{ gen_path}}/dsdgen -DIR {{ tables_dest }}/{{ item.0 }} -SCALE {{ item.0 }} -TERMINATE {{ terminate }} -RNGSEED {{ rngseed }} -FORCE {{ force }} -DISTRIBUTIONS {{ distr }} -TABLE {{ item.1 }}"
-        with_nested:
-          - "{{ sizes }}"
-          - "{{ tables }}"
-        ignore_errors: true
-        tags: tag_create_table_data
+      ansible.builtin.command: "{{ gen_path }}/dsdgen -DIR {{ tables_dest }}/{{ item.0 }} -SCALE {{ item.0 }} -TERMINATE {{ terminate }} -RNGSEED {{ rngseed }} -FORCE {{ force }} -DISTRIBUTIONS {{ distr }} -TABLE {{ item.1 }}"
+      with_nested:
+        - "{{ sizes }}"
+        - "{{ tables }}"
+      ignore_errors: true
+      tags: tag_create_table_data
 
 
 
