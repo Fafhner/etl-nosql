@@ -19,8 +19,8 @@ def load_from(file_name, path=None):
 
 if __name__ == '__main__':
     cluster_size = int(sys.argv[1])
-    data_size = int(sys.argv[2])
-    cpu = int(sys.argv[3])
+    data_size = sys.argv[2]
+    cpu = sys.argv[3]
 
     dc_json = load_from('docker-compose.yaml.json', ".")
     parts = dc_json['parts'][0:cluster_size] + [dc_json['end']]

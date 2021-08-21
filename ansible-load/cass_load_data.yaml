@@ -57,7 +57,7 @@
     - name: Restore files, change parameters
       block:
         - name: Create docker compose
-          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} 4"
+          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} 2.0"
           args:
             chdir: "{{database_info_path}}"
       tags: tag_files
