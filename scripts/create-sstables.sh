@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 ansible-playbook -i /home/magisterka/etl-nosql/ansible-gen-data/hosts \
  -u magisterka \
