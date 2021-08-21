@@ -157,5 +157,5 @@
 
     - name: Wait
       pause:
-        seconds: 10
+        seconds: 15
 

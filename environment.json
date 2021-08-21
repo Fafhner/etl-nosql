@@ -1,17 +1,13 @@
 {
   "static": {
-    "make_dirs": [
-    ],
-    "copy_files": [
-    ],
     "cluster": {
       "node_manager": "192.168.55.20",
       "node_workers": [
-        "192.168.55.16",
-        "192.168.55.17",
-        "192.168.55.18",
+        "192.168.55.20",
         "192.168.55.19",
-        "192.168.55.20"
+        "192.168.55.18",
+        "192.168.55.17",
+        "192.168.55.16"
       ]
     },
     "database_info_path": "db/cassandra",
@@ -37,17 +33,30 @@
     "scale": {
       "context": "table_data",
       "priority": 999,
-      "data": [1, 3, 5, 10, 15, 35]
+      "data": [
+        1,
+        3,
+        5,
+        10,
+        15,
+        35
+      ]
     },
     "cluster_size": {
       "context": "cluster",
       "priority": 998,
-      "data": [3, 4, 5]
+      "data": [
+        3,
+        4,
+        5
+      ]
     },
     "rep_factor": {
       "context": "db-keyspace",
       "priority": 2,
-      "data": [3]
+      "data": [
+        3
+      ]
     },
     "java_xms": {
       "context": "db-file",

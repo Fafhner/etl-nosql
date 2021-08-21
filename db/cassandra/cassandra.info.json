@@ -10,7 +10,7 @@
   "configs": [
     {
       "file_name": "jvm.options",
-      "file_path": "~/etl-nosql/db/cassandra/etc/cassandra",
+      "file_path": "/home/magisterka/etl-nosql/db/cassandra/etc/cassandra",
       "params": [
         {
           "regex": "#-Xms4G",
@@ -21,37 +21,7 @@
           "replace": "-Xmx{{java_xms}}M"
         }
       ]
-    },
-    {
-      "file_name": "keyspace",
-      "file_path": "~/etl-nosql/db/cassandra/tables_schema",
-      "params": [
-        {
-          "regex": "__keyspace__",
-          "replace": "{{namespace}}"
-        },
-        {
-          "regex": "__rep_factor__",
-          "replace": "{{rep_factor}}"
-        }
-      ]
-    },
-    {
-      "file_name": "keyspace_update",
-      "file_path": "~/etl-nosql/db/cassandra/tables_schema",
-      "params": [
-        {
-          "regex": "__keyspace__",
-          "replace": "{{namespace}}"
-        },
-        {
-          "regex": "__rep_factor__",
-          "replace": "{{rep_factor}}"
-        }
-      ]
     }
   ],
-  "namespace": "tpc_ds",
-  "exec_file": "cqlsh -f  ",
-  "exec_string": "cqlsh -e "
+  "namespace": "tpc_ds"
 }

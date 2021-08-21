@@ -2,7 +2,9 @@ from timeit import default_timer as timer
 from pyspark.sql import SparkSession
 
 
-def process(udf: dict, spark: SparkSession):
+def process(udf: dict, spark: SparkSession, conn_uri):
+    udf = udf.copy()
+
     dataframes = dict()
     step_time_info = {
         "data_acquisition_time": -1,
@@ -14,8 +16,8 @@ def process(udf: dict, spark: SparkSession):
 
     for udf_val in udf['datasets'].values():
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
-        df = spark.read.format("org.apache.spark.sql.cassandra") \
-            .options(table=udf_val['table_schema'], keyspace="tpc_ds") \
+        df = spark.read.format("com.mongodb.spark.sql.DefaultSource") \
+            .option("uri", f"{conn_uri}/db.{udf_val['table_schema']}") \
             .load() \
 
         df.createOrReplaceTempView(udf_val['table_schema'])
@@ -40,4 +42,4 @@ def process(udf: dict, spark: SparkSession):
     step_time_info['etl_processing_time'] = etl_proc_end - etl_proc_start
     step_time_info['overall_time'] = ov_time_end - ov_time_start
 
-    return step_time_info
+    return step_time_info, sqlDF
