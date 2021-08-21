@@ -160,19 +160,19 @@
 
 ###############################
 
-#- hosts: cluster_node_manager
-#  tasks:
-#    - name: Create schema
-#      block:
-#        - name: Get container ID 3
-#          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-#          register: container_id
-#
-#
-#        - name: Create schema
-#          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}"
-#          loop: "{{tables_schema}}"
-#      tags: tag_db_create_schema
+- hosts: cluster_node_manager
+  tasks:
+    - name: Create schema
+      block:
+        - name: Get container ID 3
+          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
+          register: container_id
+
+
+        - name: Create schema
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}.cqlsh"
+          loop: "{{tables_schema}}"
+      tags: tag_db_create_schema
 
 
 ###############################
