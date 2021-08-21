@@ -183,7 +183,7 @@ if __name__ == "__main__":
             hdfs.delete_dir('./tmp')
         except OSError as os_err:  # when dir './tmp' does not exists
             pass
-
+        print("---------------START-------------------")
         tries = 7
 
         for udf in udfs:
@@ -191,6 +191,7 @@ if __name__ == "__main__":
             idx = 0
 
             while idx < tries:
+                print(f"---------------TRY {idx}-------------------")
                 result, result_df = etl.process(udf, spark)
                 data_tries[idx] = result
                 idx += 1
@@ -202,13 +203,13 @@ if __name__ == "__main__":
                         "scenario": getVals(grid),
                         "timestamp": str(datetime.now())
                     }, indent=4))
-
+                print(f"---------------TRY {idx}- save try result-------------------")
                 result_df.write.parquet(f"df/results/{udf['name']}/{pretty_dict(getVals(grid))}/try_{idx}.parquet")
                 try:
                     hdfs.delete_dir('./tmp')
                 except OSError as os_err:  # when dir './tmp' does not exists
                     pass
-                
+
             res = [{
                 "udf": udf['name'],
                 "tries": data_tries,
