@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
         cass_schema = SCHEMA_STR.format(schema['namespace'],
                                         schema['table'],
-                                        "\n".join([f"    {col['col_name']} {col['type']}" for col in schema['cols']]),
+                                        ",\n".join([f"    {col['col_name']} {col['type']}" for col in schema['cols']]),
                                         schema['primary_key'])
 
         with open(f"{tables_schema_dest}/{table}.cqlsh", 'w') as schema_write:

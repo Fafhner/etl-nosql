@@ -1,15 +1,15 @@
 CREATE TABLE tpc_ds.customer_address (
-    ca_address_sk bigint
-    ca_address_id varchar
-    ca_street_number varchar
-    ca_street_name varchar
-    ca_street_type varchar
-    ca_suite_number varchar
-    ca_city varchar
-    ca_county varchar
-    ca_state varchar
-    ca_zip varchar
-    ca_country varchar
-    ca_gmt_offset decimal
+    ca_address_sk bigint,
+    ca_address_id varchar,
+    ca_street_number varchar,
+    ca_street_name varchar,
+    ca_street_type varchar,
+    ca_suite_number varchar,
+    ca_city varchar,
+    ca_county varchar,
+    ca_state varchar,
+    ca_zip varchar,
+    ca_country varchar,
+    ca_gmt_offset decimal,
     ca_location_type varchar,
     PRIMARY KEY (ca_address_sk) );

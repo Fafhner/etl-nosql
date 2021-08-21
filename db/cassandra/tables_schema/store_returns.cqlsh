@@ -1,22 +1,22 @@
 CREATE TABLE tpc_ds.store_returns (
-    sr_returned_date_sk bigint
-    sr_return_time_sk bigint
-    sr_item_sk bigint
-    sr_customer_sk bigint
-    sr_cdemo_sk bigint
-    sr_hdemo_sk bigint
-    sr_addr_sk bigint
-    sr_store_sk bigint
-    sr_reason_sk bigint
-    sr_ticket_number bigint
-    sr_return_quantity int
-    sr_return_amt decimal
-    sr_return_tax decimal
-    sr_return_amt_inc_tax decimal
-    sr_fee decimal
-    sr_return_ship_cost decimal
-    sr_refunded_cash decimal
-    sr_reversed_charge decimal
-    sr_store_credit decimal
+    sr_returned_date_sk bigint,
+    sr_return_time_sk bigint,
+    sr_item_sk bigint,
+    sr_customer_sk bigint,
+    sr_cdemo_sk bigint,
+    sr_hdemo_sk bigint,
+    sr_addr_sk bigint,
+    sr_store_sk bigint,
+    sr_reason_sk bigint,
+    sr_ticket_number bigint,
+    sr_return_quantity int,
+    sr_return_amt decimal,
+    sr_return_tax decimal,
+    sr_return_amt_inc_tax decimal,
+    sr_fee decimal,
+    sr_return_ship_cost decimal,
+    sr_refunded_cash decimal,
+    sr_reversed_charge decimal,
+    sr_store_credit decimal,
     sr_net_loss decimal,
     PRIMARY KEY (sr_ticket_number) );
