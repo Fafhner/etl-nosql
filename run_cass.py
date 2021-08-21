@@ -192,8 +192,6 @@ if __name__ == "__main__":
 
             while idx < tries:
                 result, result_df = etl.process(udf, spark)
-                hdfs.delete_dir('./tmp')
-
                 data_tries[idx] = result
                 idx += 1
                 with open("logs/pd_process.temp.json", 'a') as cmd_file:
@@ -206,7 +204,11 @@ if __name__ == "__main__":
                     }, indent=4))
 
                 result_df.write.parquet(f"df/results/{udf['name']}/{pretty_dict(getVals(grid))}/try_{idx}.parquet")
-
+                try:
+                    hdfs.delete_dir('./tmp')
+                except OSError as os_err:  # when dir './tmp' does not exists
+                    pass
+                
             res = [{
                 "udf": udf['name'],
                 "tries": data_tries,
