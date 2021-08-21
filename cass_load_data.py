@@ -205,5 +205,3 @@ if __name__ == "__main__":
     sm.ansbile_f = create_ansible_cmd('cass_load_data.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios)
-
-    do_once_nodes[0].do(conf, None, None, 'all')
