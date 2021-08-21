@@ -187,8 +187,6 @@
         - name: Load data
           ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -v -d localhost /table_data/sstables/{{scale}}/tpc_ds/{{item}}"
           loop: "{{tables_schema}}"
-
-
       tags: tag_db_fill_tables
 
 

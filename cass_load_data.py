@@ -124,7 +124,7 @@ if __name__ == "__main__":
         "docker_compose_file": "/home/magisterka/etl-nosql/db/cassandra/docker-compose.yaml",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
         "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
-                            "web_sales", "warehouse", "customer", "customer_address"],
+                            "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
 
     }
 
