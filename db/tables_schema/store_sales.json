@@ -96,5 +96,6 @@
     }
   ],
   "primary_key": "ss_ticket_number",
-  "clustering_key": ""
+  "clustering_key": ["ss_sales_price", "ss_ticket_number", "ss_customer_sk"]
+
 }

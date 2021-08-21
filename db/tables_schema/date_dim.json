@@ -116,5 +116,5 @@
     }
   ],
   "primary_key": "d_date_sk",
-  "clustering_key": ""
+  "clustering_key": ["d_year", "d_qoy", "d_dom", "d_date"]
 }

@@ -60,5 +60,5 @@
     }
   ],
   "primary_key": "w_warehouse_sk",
-  "clustering_key": ""
+  "clustering_key": []
 }

@@ -140,5 +140,5 @@
     }
   ],
   "primary_key": "ws_order_number",
-  "clustering_key": ""
+  "clustering_key": ["ws_sales_price", "ws_sold_date_sk"]
 }

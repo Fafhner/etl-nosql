@@ -1,1 +1,0 @@
-CREATE KEYSPACE __keyspace__ WITH REPLICATION = {'class':  'SimpleStrategy', 'replication_factor': __rep_factor__ };

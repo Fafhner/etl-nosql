@@ -112,5 +112,5 @@
     }
   ],
   "primary_key": "cr_order_number",
-  "clustering_key": ""
+  "clustering_key": []
 }

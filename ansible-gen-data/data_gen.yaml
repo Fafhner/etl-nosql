@@ -1,0 +1,21 @@
+---
+
+- hosts: data_gen_node
+  tasks:
+    - name: Make directories
+      ansible.builtin.command: "mkdir -p {{ tables_dest }}/{{ item }}"
+      with_items: "{{ sizes }}"
+      tags: make_dirs
+
+    - name: Generate data
+        ansible.builtin.command: "{{ gen_path}}/dsdgen -DIR {{ tables_dest }}/{{ item.0 }} -SCALE {{ item.0 }} -TERMINATE {{ terminate }} -RNGSEED {{ rngseed }} -FORCE {{ force }} -DISTRIBUTIONS {{ distr }} -TABLE {{ item.1 }}"
+        with_nested:
+          - "{{ sizes }}"
+          - "{{ tables }}"
+        ignore_errors: true
+        tags: tag_create_table_data
+
+
+
+
+

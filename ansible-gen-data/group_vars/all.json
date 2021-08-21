@@ -1,0 +1,18 @@
+{
+  "tables_dest": "/home/magisterka/etl-nosql/db/table_data",
+  "gen_path": "/home/magisterka/etl-nosql/tools/tpc-ds-tool/tools",
+  "terminate": "N",
+  "rngseed": 200,
+  "force": "N",
+  "distr": "/home/magisterka/etl-nosql/tools/tpc-ds-tool/tools/tpcds.idx",
+  "tables": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+              "web_sales", "warehouse", "customer", "customer_address"],
+  "sizes": [1, 3, 6, 9, 12],
+
+  "namespace": "tpc_ds",
+  "tables_schema_src": "/home/magisterka/etl-nosql/db/tables_schema",
+  "outputDir" : "/home/magisterka/etl-nosql/db/table_data/sstables",
+  "out_file_name" : "config.json",
+
+  "cassTbConv_path" : "/home/magisterka/etl-nosql/tools/CassTbConv"
+}

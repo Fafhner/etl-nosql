@@ -1,46 +1,284 @@
 {
     "infos": [
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/catalog_returns",
-            "dataSrcPath": "../../db/table_data/2/catalog_returns.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/catalog_returns",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/catalog_returns.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_returns.json",
             "tableName": "catalog_returns"
         },
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/date_dim",
-            "dataSrcPath": "../../db/table_data/2/date_dim.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/date_dim",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/date_dim.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/date_dim.json",
             "tableName": "date_dim"
         },
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/store_sales",
-            "dataSrcPath": "../../db/table_data/2/store_sales.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/store_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/store_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/store_sales.json",
             "tableName": "store_sales"
         },
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/catalog_sales",
-            "dataSrcPath": "../../db/table_data/2/catalog_sales.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/catalog_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/catalog_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_sales.json",
             "tableName": "catalog_sales"
         },
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/web_sales",
-            "dataSrcPath": "../../db/table_data/2/web_sales.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/web_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/web_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/web_sales.json",
             "tableName": "web_sales"
         },
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/warehouse",
-            "dataSrcPath": "../../db/table_data/2/warehouse.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/warehouse",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/warehouse.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/warehouse.json",
             "tableName": "warehouse"
         },
         {
-            "outputDir": "../../db/table_data/sstables",
-            "outputDirName": "2/tpc_ds/customer",
-            "dataSrcPath": "../../db/table_data/2/customer.dat",
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/customer",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/customer.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer.json",
             "tableName": "customer"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "1/tpc_ds/customer_address",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/1/customer_address.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer_address.json",
+            "tableName": "customer_address"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/catalog_returns",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/catalog_returns.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_returns.json",
+            "tableName": "catalog_returns"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/date_dim",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/date_dim.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/date_dim.json",
+            "tableName": "date_dim"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/store_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/store_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/store_sales.json",
+            "tableName": "store_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/catalog_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/catalog_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_sales.json",
+            "tableName": "catalog_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/web_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/web_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/web_sales.json",
+            "tableName": "web_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/warehouse",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/warehouse.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/warehouse.json",
+            "tableName": "warehouse"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/customer",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/customer.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer.json",
+            "tableName": "customer"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "3/tpc_ds/customer_address",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/3/customer_address.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer_address.json",
+            "tableName": "customer_address"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/catalog_returns",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/catalog_returns.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_returns.json",
+            "tableName": "catalog_returns"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/date_dim",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/date_dim.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/date_dim.json",
+            "tableName": "date_dim"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/store_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/store_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/store_sales.json",
+            "tableName": "store_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/catalog_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/catalog_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_sales.json",
+            "tableName": "catalog_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/web_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/web_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/web_sales.json",
+            "tableName": "web_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/warehouse",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/warehouse.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/warehouse.json",
+            "tableName": "warehouse"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/customer",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/customer.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer.json",
+            "tableName": "customer"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "6/tpc_ds/customer_address",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/6/customer_address.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer_address.json",
+            "tableName": "customer_address"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/catalog_returns",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/catalog_returns.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_returns.json",
+            "tableName": "catalog_returns"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/date_dim",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/date_dim.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/date_dim.json",
+            "tableName": "date_dim"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/store_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/store_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/store_sales.json",
+            "tableName": "store_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/catalog_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/catalog_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_sales.json",
+            "tableName": "catalog_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/web_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/web_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/web_sales.json",
+            "tableName": "web_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/warehouse",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/warehouse.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/warehouse.json",
+            "tableName": "warehouse"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/customer",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/customer.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer.json",
+            "tableName": "customer"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "9/tpc_ds/customer_address",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/9/customer_address.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer_address.json",
+            "tableName": "customer_address"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/catalog_returns",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/catalog_returns.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_returns.json",
+            "tableName": "catalog_returns"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/date_dim",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/date_dim.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/date_dim.json",
+            "tableName": "date_dim"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/store_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/store_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/store_sales.json",
+            "tableName": "store_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/catalog_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/catalog_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/catalog_sales.json",
+            "tableName": "catalog_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/web_sales",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/web_sales.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/web_sales.json",
+            "tableName": "web_sales"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/warehouse",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/warehouse.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/warehouse.json",
+            "tableName": "warehouse"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/customer",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/customer.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer.json",
+            "tableName": "customer"
+        },
+        {
+            "outputDir": "/home/magisterka/etl-nosql/db/table_data/sstables",
+            "outputDirName": "12/tpc_ds/customer_address",
+            "dataSrcPath": "/home/magisterka/etl-nosql/db/table_data/12/customer_address.dat",
+            "tableSchemaSrcPath": "/home/magisterka/etl-nosql/db/tables_schema/customer_address.json",
+            "tableName": "customer_address"
         }
     ]
 }
