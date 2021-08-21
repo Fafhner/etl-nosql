@@ -181,9 +181,8 @@ if __name__ == "__main__":
         hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
         try:
             hdfs.delete_dir('./tmp')
-        except OSError as os_err:
-            if "not a directory" not in os_err.strerror:
-                exit(-1)
+        except OSError as os_err:  # when dir './tmp' does not exists
+            pass
 
         tries = 7
 
