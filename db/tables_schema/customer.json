@@ -1,6 +1,6 @@
 {
   "namespace": "tpc_ds",
-  "table": "Customer",
+  "table": "customer",
   "cols": [
     {
       "col_name": "c_customer_sk",

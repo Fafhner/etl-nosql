@@ -1,6 +1,6 @@
 {
   "namespace": "tpc_ds",
-  "table": "Catalog_sales",
+  "table": "catalog_sales",
   "cols": [
     {
       "col_name": "cs_sold_date_sk",

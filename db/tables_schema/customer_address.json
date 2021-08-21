@@ -1,6 +1,6 @@
 {
   "namespace": "tpc_ds",
-  "table": "Customer",
+  "table": "customer_address",
   "cols": [
     {
       "col_name": "ca_address_sk",

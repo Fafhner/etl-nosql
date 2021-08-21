@@ -1,6 +1,6 @@
 {
   "namespace": "tpc_ds",
-  "table": "Catalog_returns",
+  "table": "catalog_returns",
   "cols": [
     {
       "col_name": "cr_returned_date_sk",

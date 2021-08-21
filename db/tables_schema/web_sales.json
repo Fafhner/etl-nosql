@@ -1,6 +1,6 @@
 {
   "namespace": "tpc_ds",
-  "table": "Web_sales",
+  "table": "web_sales",
   "cols": [
     {
       "col_name": "ws_sold_date_sk",

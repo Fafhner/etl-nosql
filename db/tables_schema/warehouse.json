@@ -1,6 +1,6 @@
 {
   "namespace": "tpc_ds",
-  "table": "Warehouse",
+  "table": "warehouse",
   "cols": [
     {
       "col_name": "w_warehouse_sk",
