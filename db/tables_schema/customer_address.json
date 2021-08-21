@@ -56,5 +56,5 @@
     }
   ],
   "primary_key": "ca_address_sk",
-  "clustering_key": ["ca_city"]
+  "clustering_key": []
 }

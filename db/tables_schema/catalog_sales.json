@@ -140,5 +140,5 @@
     }
   ],
   "primary_key": "cs_order_number",
-  "clustering_key": ["cs_ext_sales_price", "cs_sold_date_sk", "cs_quantity"]
+  "clustering_key": []
 }
