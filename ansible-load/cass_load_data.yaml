@@ -142,21 +142,6 @@
       pause:
         seconds: 10
 
-###############################
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
-          ignore_errors: true
-      tags: tag_db_create_namespace
-
 
 ###############################
 
@@ -168,6 +153,8 @@
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
+        - name: DB create namespace
+            ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
 
         - name: Create schema
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}.cqlsh"
