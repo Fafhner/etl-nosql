@@ -11,7 +11,7 @@ from util import state
 from pyspark.sql import SparkSession
 import yaml
 from pyarrow import fs
-
+import uuid
 
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
@@ -183,16 +183,23 @@ if __name__ == "__main__":
             hdfs.delete_dir('./tmp')
         except OSError as os_err:  # when dir './tmp' does not exists
             pass
-        print("---------------START-------------------")
         tries = 7
 
         for udf in udfs:
             data_tries = dict()
             idx = 0
+            result_df = None
+            omit_udf = False
 
             while idx < tries:
-                print(f"---------------TRY {idx}-------------------")
-                result, result_df = etl.process(udf, spark)
+
+                try:
+                    result, result_df = etl.process(udf, spark)
+                except Exception as e:
+                    omit_udf = True
+                    logging.exception(e)
+                    break
+
                 data_tries[idx] = result
                 idx += 1
                 with open("logs/pd_process.temp.json", 'a') as cmd_file:
@@ -203,21 +210,24 @@ if __name__ == "__main__":
                         "scenario": getVals(grid),
                         "timestamp": str(datetime.now())
                     }, indent=4))
-                print(f"---------------TRY {idx}- save try result-------------------")
-                result_df.write.parquet(f"df/results/{udf['name']}/{pretty_dict(getVals(grid))}/try_{idx}.parquet")
+
                 try:
                     hdfs.delete_dir('./tmp')
                 except OSError as os_err:  # when dir './tmp' does not exists
                     pass
 
-            res = [{
-                "udf": udf['name'],
-                "tries": data_tries,
-                "scenario": getVals(grid),
-                "timestamp": str(datetime.now())
-            }]
-
-            write_to_yaml(f"result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
+            if not omit_udf:
+                id_ = str(uuid.uuid4())
+                res = [{
+                    "udf": udf['name'],
+                    "tries": data_tries,
+                    "scenario": getVals(grid),
+                    "timestamp": str(datetime.now()),
+                    "uuid": id_
+                }]
+                if result_df is not None:
+                    result_df.write.csv(f"df/results/{udf['name']}/{id_}.csv")
+                write_to_yaml(f"result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
 
 
