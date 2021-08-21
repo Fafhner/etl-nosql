@@ -3,6 +3,9 @@ services:
   cassandra-1:
     image: cassandra:3.11.11
     deploy:
+      resources:
+        limits:
+          cpus: {cpu}
       placement:
         constraints:
           - node.labels.node==n1

@@ -118,7 +118,6 @@ if __name__ == "__main__":
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
-        "udf_path": "/home/magisterka/etl-nosql/db/cassandra/udf",
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",

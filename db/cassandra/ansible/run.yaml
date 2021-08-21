@@ -27,13 +27,6 @@
       tags: tag_prepare
       ignore_errors: true
 
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Create Folder
-      file:
-        path: "/home/magisterka/etl-nosql/db/cassandra/var/lib/cassandra/{{cluster_size}}/{{scale}}"
-        state: directory
-
 
 ######################
 - hosts: cluster_node_manager
@@ -52,14 +45,38 @@
       pause:
         seconds: 10
 
+
+
+###############################
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Restore files, change parameters
+      block:
+        - name: Restore files
+          ansible.builtin.copy:
+            src: "{{ item.file_path }}/{{ item.file_name }}.backup"
+            dest: "{{ item.file_path }}/{{ item.file_name }}"
+          loop: "{{ configs }}"
+
+        - name: Change params
+          ansible.builtin.replace:
+            path: "{{ item.0.file_path }}/{{ item.0.file_name }}"
+            regexp: "{{ item.1.regex }}"
+            replace: "{{ item.1.replace }}"
+          with_subelements:
+            - "{{ configs }}"
+            - params
+      tags: tag_files
+
 - hosts: cluster_node_manager
   tasks:
     - name: Restore files, change parameters
       block:
         - name: Create docker compose
-          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} 4"
+          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} {{cpu}}"
           args:
             chdir: "{{docker_compose_path}}"
+
       tags: tag_files
 
 ###############################
@@ -141,59 +158,4 @@
     - name: Wait
       pause:
         seconds: 10
-
-###############################
-
-- hosts: cluster_node_manager
-  tasks:
-    - name: Create DB namespace
-      block:
-        - name: Get container ID
-          ansible.builtin.command: "docker ps -q --filter 'name={{db['docker_stack_name']}}*' "
-          register: container_id
-
-        - name: DB create namespace
-          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
-          ignore_errors: true
-      tags: tag_db_create_namespace
-
-
-###############################
-
-#- hosts: cluster_node_manager
-#  tasks:
-#    - name: Create schema
-#      block:
-#        - name: Get container ID 3
-#          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-#          register: container_id
-#
-#
-#        - name: Create schema
-#          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}"
-#          loop: "{{tables_schema}}"
-#      tags: tag_db_create_schema
-
-
-###############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: Load data to DB
-      block:
-        - name: Get container ID 3
-          ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-          register: container_id
-
-        - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout}} sstableloader -v -d localhost /table_data/sstables/{{scale}}/tpc_ds/{{item}}"
-          loop: "{{tables_schema}}"
-
-
-      tags: tag_db_fill_tables
-
-
-
-
-
-
 

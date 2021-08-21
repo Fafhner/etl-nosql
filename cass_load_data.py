@@ -112,29 +112,19 @@ if __name__ == "__main__":
         "cluster": {
             "node_manager": "192.168.55.20",
             "node_workers": [
-                "192.168.55.16",
-                "192.168.55.17",
-                "192.168.55.18",
+                "192.168.55.20",
                 "192.168.55.19",
-                "192.168.55.20"
+                "192.168.55.18",
+                "192.168.55.17",
+                "192.168.55.16"
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/cassandra",
-        "udf_path": "/home/magisterka/etl-nosql/db/cassandra/udf",
         "database_info_file": "cassandra.info.json",
-        "docker_compose_path": "/home/magisterka/etl-nosql/db/cassandra",
-        "docker_compose_file_gen": "/home/magisterka/etl-nosql/db/cassandra/",
         "docker_compose_file": "/home/magisterka/etl-nosql/db/cassandra/docker-compose.yaml",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
-        "generate_scripts_only": False,
-        "tables_schema": [
-            "date_dim",
-            "store_sales",
-            "catalog_sales",
-            "web_sales",
-            "warehouse",
-            "customer"
-        ]
+        "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+                            "web_sales", "warehouse", "customer", "customer_address"],
 
     }
 
@@ -142,26 +132,13 @@ if __name__ == "__main__":
         "scale": {
             "context": "table_data",
             "priority": 999,
-            "data": [1, 3, 5, 10, 15, 35]
+            "data": [1, 3, 6, 9, 12]
         },
         "cluster_size": {
             "context": "cluster",
             "priority": 998,
             "data": [3, 4, 5]
-        },
-        "rep_factor": {
-            "context": "db-keyspace",
-            "priority": 2,
-            "data": [3]
-        },
-        "java_xms": {
-            "context": "db-file",
-            "priority": 2,
-            "data": [
-                5000
-            ]
         }
-
     }
 
     db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
@@ -225,7 +202,7 @@ if __name__ == "__main__":
 
 
     sm.setMain(_main_)
-    sm.ansbile_f = create_ansible_cmd('load_data.yaml', 'hosts', user, password, ansi_cat)
+    sm.ansbile_f = create_ansible_cmd('cass_load_data.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios)
 
