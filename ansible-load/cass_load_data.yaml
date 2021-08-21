@@ -154,7 +154,7 @@
           register: container_id
 
         - name: DB create namespace
-            ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
+          ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/keyspace"
 
         - name: Create schema
           ansible.builtin.command: "docker exec {{container_id.stdout}} cqlsh -f /tables_schema/{{item}}.cqlsh"
