@@ -179,18 +179,13 @@ if __name__ == "__main__":
 
     def main(env, grid, diff):
         hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-        try:
-            hdfs.delete_dir('./tmp')
-        except OSError as os_err:  # when dir './tmp' does not exists
-            pass
         tries = 7
 
         for udf in udfs:
             data_tries = dict()
             idx = 0
-            result_df = None
             omit_udf = False
-
+            id_ = str(uuid.uuid4())
             while idx < tries:
 
                 try:
@@ -210,14 +205,9 @@ if __name__ == "__main__":
                         "scenario": getVals(grid),
                         "timestamp": str(datetime.now())
                     }, indent=4))
-
-                try:
-                    hdfs.delete_dir('./tmp')
-                except OSError as os_err:  # when dir './tmp' does not exists
-                    pass
+                result_df.write.csv(f"df/results/{udf['name']}/{id_}/try_{idx}.csv")
 
             if not omit_udf:
-                id_ = str(uuid.uuid4())
                 res = [{
                     "udf": udf['name'],
                     "tries": data_tries,
@@ -225,8 +215,6 @@ if __name__ == "__main__":
                     "timestamp": str(datetime.now()),
                     "uuid": id_
                 }]
-                if result_df is not None:
-                    result_df.write.csv(f"df/results/{udf['name']}/{id_}.csv")
                 write_to_yaml(f"result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
 
 

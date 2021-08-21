@@ -19,7 +19,7 @@ def process(udf: dict, spark: SparkSession):
             .load() \
 
         df.createOrReplaceTempView(udf_val['table_schema'])
-        spark.sql(udf_val['query']).write.parquet(f"tmp/{udf_val['table_schema']}.parquet")
+        spark.sql(udf_val['query']).write.parquet(f"tmp/{udf_val['table_schema']}.parquet", mode='overwrite')
 
 
     dat_aq_end = timer()
