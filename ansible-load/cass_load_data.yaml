@@ -59,7 +59,7 @@
         - name: Create docker compose
           ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} 4"
           args:
-            chdir: "{{docker_compose_path}}"
+            chdir: "{{database_info_path}}"
       tags: tag_files
 
 ###############################
