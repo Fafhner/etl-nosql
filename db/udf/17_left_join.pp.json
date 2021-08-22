@@ -1,5 +1,5 @@
 {
-  "name": "17_left_join_np",
+  "name": "17_left_join_pp",
   "type": "partial-pushdown",
   "datasets": {
     "date_dim": {
@@ -12,13 +12,13 @@
       "table_schema": "store_sales",
       "filter": { "ss_sales_price":  { "$gte": 10.00 } },
       "projection": {"_id":0, "ss_ticket_number": 1, "ss_item_sk":  1, "ss_customer_sk": 1, "ss_sales_price":  1, "sr_returned_date_sk": 1, "ss_sold_date_sk":  1},
-      "query": "SELECT ss_ticket_number, ss_item_sk, ss_customer_sk, ss_sales_price, sr_returned_date_sk, ss_sold_date_sk\n\tFROM store_sales WHERE ss_sales_price >= 10.00;"
+      "query": "SELECT ss_ticket_number, ss_item_sk, ss_customer_sk, ss_sales_price, ss_sold_date_sk\n\tFROM store_sales WHERE ss_sales_price >= 10.00;"
     },
     "store_returns": {
       "table_schema": "store_returns",
       "filter": { },
       "projection": {"_id":0, "sr_ticket_number": 1, "sr_item_sk":  1},
-      "query": "SELECT sr_ticket_number, sr_item_sk FROM store_returns;"
+      "query": "SELECT sr_ticket_number, sr_item_sk, sr_returned_date_sk FROM store_returns;"
     }
   },
   "spark_sql": "SELECT COUNT(*) FROM (\n  SELECT d_date, ss_ticket_number, ss_item_sk, ss_customer_sk, ss_sales_price, sr_returned_date_sk \n  FROM store_sales ss\n  JOIN date_dim ON (ss_sold_date_sk=d_date_sk)\n  LEFT JOIN store_returns sr ON(ss_ticket_number=sr_ticket_number AND ss_item_sk=sr_item_sk))"

@@ -180,6 +180,7 @@ if __name__ == "__main__":
     def main(env, grid, diff):
         hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
         tries = 7
+        udfs = [load_from_json(udf, static_env['udf_path']) for udf in static_env['udfs']]
 
         for udf in udfs:
             data_tries = dict()

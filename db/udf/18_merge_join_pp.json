@@ -1,6 +1,6 @@
 
 {
-  "name": "18_merge_join_pp.json",
+  "name": "18_merge_join_pp",
   "type": "partial-pushdown",
   "datasets": {
     "web_sales": {

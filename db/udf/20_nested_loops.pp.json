@@ -1,5 +1,5 @@
 {
-  "name": "20-nested_loops_np.json",
+  "name": "20-nested_loops_np",
   "type": "pp-pushdown",
   "datasets": {
     "web_sales": {
@@ -21,5 +21,5 @@
       "query": "SELECT d_date_sk FROM date_dim  WHERE d_year >= 2000 AND d_year <= 2001;"
     }
   },
-  "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (c1.ws_warehouse_sk>=c2.w_warehouse_sk);"
+  "spark_sql": "SELECT COUNT(*) FROM web_sales c1  INNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk) INNER JOIN warehouse c2 ON (c1.ws_warehouse_sk>=c2.w_warehouse_sk);"
 }
