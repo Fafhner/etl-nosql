@@ -15,6 +15,7 @@ def process(udf: dict, spark: SparkSession):
     for udf_val in udf['datasets'].values():
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
         df = spark.read.format("org.apache.spark.sql.cassandra") \
+            .option("spark.cassandra.connection.host", "192.168.55.20") \
             .options(table=udf_val['table_schema'], keyspace="tpc_ds") \
             .load() \
 

@@ -4,7 +4,7 @@
   "datasets": {
     "date_dim": {
       "table_schema": "date_dim",
-      "query": "SELECT * FROM date_dim WHERE d_year=1999 AND d_dom <=4;",
+      "query": "SELECT d_date_sk FROM date_dim WHERE d_year=1999 AND d_dom <=4;",
       "filter": { "d_year":  { "$eq": 1999 }, "d_dom":  { "$lte": 4} },
       "projection": {"_id":0, "d_date_sk":  1}
     },
