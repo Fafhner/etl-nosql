@@ -1,65 +1,67 @@
 db.createCollection("store_returns", {
   "validator": {
     "$jsonSchema": {
-      "sr_returned_date_sk": {
-        "bsonType": "long"
-      },
-      "sr_return_time_sk": {
-        "bsonType": "long"
-      },
-      "sr_item_sk": {
-        "bsonType": "long"
-      },
-      "sr_customer_sk": {
-        "bsonType": "long"
-      },
-      "sr_cdemo_sk": {
-        "bsonType": "long"
-      },
-      "sr_hdemo_sk": {
-        "bsonType": "long"
-      },
-      "sr_addr_sk": {
-        "bsonType": "long"
-      },
-      "sr_store_sk": {
-        "bsonType": "long"
-      },
-      "sr_reason_sk": {
-        "bsonType": "long"
-      },
-      "sr_ticket_number": {
-        "bsonType": "long"
-      },
-      "sr_return_quantity": {
-        "bsonType": "int"
-      },
-      "sr_return_amt": {
-        "bsonType": "decimal"
-      },
-      "sr_return_tax": {
-        "bsonType": "decimal"
-      },
-      "sr_return_amt_inc_tax": {
-        "bsonType": "decimal"
-      },
-      "sr_fee": {
-        "bsonType": "decimal"
-      },
-      "sr_return_ship_cost": {
-        "bsonType": "decimal"
-      },
-      "sr_refunded_cash": {
-        "bsonType": "decimal"
-      },
-      "sr_reversed_charge": {
-        "bsonType": "decimal"
-      },
-      "sr_store_credit": {
-        "bsonType": "decimal"
-      },
-      "sr_net_loss": {
-        "bsonType": "decimal"
+      "properties": {
+        "sr_returned_date_sk": {
+          "bsonType": "long"
+        },
+        "sr_return_time_sk": {
+          "bsonType": "long"
+        },
+        "sr_item_sk": {
+          "bsonType": "long"
+        },
+        "sr_customer_sk": {
+          "bsonType": "long"
+        },
+        "sr_cdemo_sk": {
+          "bsonType": "long"
+        },
+        "sr_hdemo_sk": {
+          "bsonType": "long"
+        },
+        "sr_addr_sk": {
+          "bsonType": "long"
+        },
+        "sr_store_sk": {
+          "bsonType": "long"
+        },
+        "sr_reason_sk": {
+          "bsonType": "long"
+        },
+        "sr_ticket_number": {
+          "bsonType": "long"
+        },
+        "sr_return_quantity": {
+          "bsonType": "int"
+        },
+        "sr_return_amt": {
+          "bsonType": "decimal"
+        },
+        "sr_return_tax": {
+          "bsonType": "decimal"
+        },
+        "sr_return_amt_inc_tax": {
+          "bsonType": "decimal"
+        },
+        "sr_fee": {
+          "bsonType": "decimal"
+        },
+        "sr_return_ship_cost": {
+          "bsonType": "decimal"
+        },
+        "sr_refunded_cash": {
+          "bsonType": "decimal"
+        },
+        "sr_reversed_charge": {
+          "bsonType": "decimal"
+        },
+        "sr_store_credit": {
+          "bsonType": "decimal"
+        },
+        "sr_net_loss": {
+          "bsonType": "decimal"
+        }
       }
     }
   }

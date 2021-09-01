@@ -14,9 +14,13 @@ def line_to_json(line: str, schema):
         if split != '':
             if col_type in ['varchar', 'ascii']:
                 line_json.append(f'"{col_name}": "{split}"')
-            if col_type == 'date':
+            elif col_type == 'date':
                 date = datetime.strptime(split, '%Y-%m-%d').isoformat() + 'Z'
                 line_json.append(f'"{col_name}": {{ "$date": "{date}" }}"')
+            elif col_type == 'bigint':
+                line_json.append(f'"{col_name}": {{ "numberLong": "{split}" }}"')
+            elif col_type == 'decimal':
+                line_json.append(f'"{col_name}": {{ "numberDecimal": "{split}" }}"')
             else:
                 line_json.append(f'"{col_name}": {split}')
         else:

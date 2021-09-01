@@ -15,7 +15,7 @@ def create_schema(schema_json):
             mongo_type = col['type']
         properties[col['col_name']] = {"bsonType": mongo_type }
 
-    options = {"validator": {"$jsonSchema": properties}}
+    options = {"validator": {"$jsonSchema": { "properties": properties }}}
 
     return f"db.createCollection(\"{schema_json['table']}\", {json.dumps(options, indent=2)})"
 
