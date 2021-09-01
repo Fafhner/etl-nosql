@@ -28,6 +28,7 @@ services:
           - node.hostname==magisterka-Lenovo-Y700-17ISK-20
     command: mongos --port 27017 --configdb rs-config-server/configsvr:27017 --bind_ip_all
     volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-coll:/scripts/init-coll"
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-router:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/router/db:/data/db"
       - "~/etl-nosql/db/table_data/json/{data_size}:/importdata"
