@@ -10,7 +10,7 @@ services:
     image: mongo:4.4
     command: mongod --configsvr --replSet rs-config-server --port 27017 --dbpath /data/db --bind_ip_all
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-config:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/config/db:/data/db"
     ports:
       - 27017
@@ -28,7 +28,7 @@ services:
           - node.hostname==magisterka-Lenovo-Y700-17ISK-20
     command: mongos --port 27017 --configdb rs-config-server/configsvr:27017 --bind_ip_all
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-router:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/router/db:/data/db"
       - "~/etl-nosql/db/table_data/json/{data_size}:/importdata"
       - "~/etl-nosql/db/mongodb/tables_schema:/tables_schema"
@@ -50,9 +50,10 @@ services:
           - node.hostname==magisterka-Lenovo-Y700-17ISK-20
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-1:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01a/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+
     ports:
       - 27017
       - 27018
@@ -68,7 +69,7 @@ services:
           - node.hostname==magisterka-OptiPlex-780-19
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01b/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -86,7 +87,7 @@ services:
           - node.hostname==magisterka-OptiPlex-780-18
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01c/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -105,7 +106,7 @@ services:
           - node.hostname==magisterka-Lenovo-Y700-17ISK-20
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-2:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02a/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -123,7 +124,7 @@ services:
           - node.hostname==magisterka-OptiPlex-780-19
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02b/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -141,7 +142,7 @@ services:
           - node.hostname==magisterka-OptiPlex-780-18
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02c/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -161,7 +162,7 @@ services:
           - node.hostname==magisterka-Lenovo-Y700-17ISK-20
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-3:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03a/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -179,7 +180,7 @@ services:
           - node.hostname==magisterka-OptiPlex-780-19
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03b/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
@@ -197,7 +198,7 @@ services:
           - node.hostname==magisterka-OptiPlex-780-18
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
-      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03c/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:

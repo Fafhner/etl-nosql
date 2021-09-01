@@ -119,7 +119,7 @@
 
     - name: Wait for containers
       pause:
-        seconds: 15
+        seconds: 60
       tags: tag_deploy_stack
 
 - hosts: cluster_node_manager:cluster_node_workers
@@ -130,7 +130,7 @@
       tags: tag_deploy_stack, tag_init_shard
 
     - name: Init shards
-      ansible.builtin.command: "docker exec {{item}} sh -c 'mongo < /scripts/init-shard'"
+      ansible.builtin.command: "docker exec {{item}} sh -c 'mongo < /scripts/init-script'"
       tags: tag_deploy_stack, tag_init_shard
       loop: "{{shard_ids.stdout_lines}}"
 
@@ -143,7 +143,7 @@
       tags: tag_deploy_stack, tag_init_config
 
     - name: Init config server
-      ansible.builtin.command: "docker exec {{config_id.stdout}} sh -c 'mongo < /scripts/init-config'"
+      ansible.builtin.command: "docker exec {{config_id.stdout}} sh -c 'mongo < /scripts/init-script'"
       tags: tag_deploy_stack, tag_init_config
 
     - name: Wait for config server init
@@ -157,7 +157,7 @@
       tags: tag_deploy_stack
 
     - name: Init router
-      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
+      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-script'"
       register: result
       until: result.stdout.find("failed") == -1
       retries: 5
