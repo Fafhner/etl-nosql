@@ -4,43 +4,43 @@
   "cols": [
     {
       "col_name": "ss_sold_date_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_sold_time_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_item_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_customer_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_cdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_hdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_addr_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_store_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_promo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_ticket_number",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "ss_quantity",
