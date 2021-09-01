@@ -31,8 +31,8 @@ def line_to_json(line: str, schema):
 
 if __name__ == '__main__':
     schema_path = '../../db/tables_schema'
-    tables = ["date_dim"]  #["catalog_returns", "date_dim", "store_sales", "catalog_sales",
-                           #"web_sales", "warehouse", "customer", "customer_address", "store_returns"]
+    tables = ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+              "web_sales", "warehouse", "customer", "customer_address", "store_returns"]
     data_sizes = [1, 3, 6, 9, 12]
     data_path = '../../db/table_data'
     json_write_path = '../../db/table_data/json'
