@@ -216,7 +216,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-04
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03a/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard04a/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
@@ -234,7 +234,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-04
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03b/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard04b/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
@@ -252,7 +252,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-04
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03c/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard04c/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
@@ -272,7 +272,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-05
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03a/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard05a/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
@@ -290,7 +290,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-05
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03b/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard05b/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
@@ -308,7 +308,7 @@ services:
     command: mongod --port 27017 --shardsvr --replSet rs-shard-05
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
-      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03c/db:/data/db"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard05c/db:/data/db"
       - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
