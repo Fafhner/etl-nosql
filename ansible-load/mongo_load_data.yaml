@@ -171,9 +171,9 @@
       tags: tag_load_data
 
     - name: Wait
-        pause:
-          seconds: 600
-        tags: tag_deploy_stack
+      pause:
+        seconds: 600
+      tags: tag_deploy_stack
 
 
 
