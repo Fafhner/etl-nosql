@@ -165,11 +165,6 @@
       tags: tag_deploy_stack
 
     - name: Init db and collection
-      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /tables_schema/{{item}}.mongo'"
-      loop: "{{tables_schema}}"
-      tags: tag_deploy_stack, tag_init_coll
-
-    - name: Init db and collection
       ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-coll'"
       tags: tag_deploy_stack, tag_init_coll
 
