@@ -52,7 +52,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01a/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -70,7 +70,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01b/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -88,7 +88,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01c/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -107,7 +107,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02a/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -125,7 +125,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02b/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -143,7 +143,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02c/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -163,7 +163,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03a/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -181,7 +181,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03b/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
@@ -199,7 +199,7 @@ services:
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03c/db:/data/db"
-      - "~/etl-nosql/db/mognodb/etc/mongod.conf:/etc/mongod.conf"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
     ports:
       - 27017
       - 27018
