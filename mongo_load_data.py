@@ -10,7 +10,6 @@ from util.grid import create_scenarios
 from util import state
 
 
-
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
         file_name = f"{output_path}/{file_name}"
@@ -115,6 +114,8 @@ if __name__ == "__main__":
                 "192.168.55.20",
                 "192.168.55.19",
                 "192.168.55.18",
+                "192.168.55.17",
+                "192.168.55.16",
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
@@ -122,30 +123,38 @@ if __name__ == "__main__":
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
         "mongo_catalog": "data",
-        "tables_schema": [
-            "catalog_sales",
-            "catalog_returns",
-        ],
+        "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+                          "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
+
         "shards_dir": ["shard01a", "shard01b", "shard01c",
                        "shard02a", "shard02b", "shard02c",
-                       "shard03a", "shard03b", "shard03c"]
+                       "shard03a", "shard03b", "shard03c",
+                       "shard04a", "shard04b", "shard04c",
+                       "shard05a", "shard05b", "shard05c"]
     }
 
     dynamic_env = {
         "scale": {
             "context": "table_data",
             "priority": 999,
-            "data": [10]
+            "data": [1, 3, 6, 9, 12]
         },
         "cluster_size": {
             "context": "cluster",
             "priority": 998,
-            "data": [3]
+            "data": [3, 4, 5]
+        },
+        "cache_size": {
+            "context": "db-file",
+            "priority": 2,
+            "data": [
+                2000
+            ]
         }
+
     }
 
     db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
-    dc_json = load_from_json('docker-compose.yaml.json', static_env['docker_compose_path'])
 
     conf = {**static_env,
             **db_info}

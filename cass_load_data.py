@@ -121,7 +121,7 @@ if __name__ == "__main__":
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/cassandra",
         "database_info_file": "cassandra.info.json",
-        "docker_compose_file": "/home/magisterka/etl-nosql/db/cassandra/docker-compose.yaml",
+        "docker_compose_file": "/home/magisterka/etl-nosql/db/cassandra/docker-compose_sh3.yaml",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
         "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
                             "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
@@ -142,7 +142,6 @@ if __name__ == "__main__":
     }
 
     db_info = load_from_json(static_env['database_info_file'], static_env['database_info_path'])
-    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
 
     conf = {**static_env,
             **db_info}

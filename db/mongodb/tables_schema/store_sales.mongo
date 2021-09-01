@@ -1,0 +1,75 @@
+db.createCollection("store_sales", {
+  "validator": {
+    "$jsonSchema": {
+      "ss_sold_date_sk": {
+        "bsonType": "long"
+      },
+      "ss_sold_time_sk": {
+        "bsonType": "long"
+      },
+      "ss_item_sk": {
+        "bsonType": "long"
+      },
+      "ss_customer_sk": {
+        "bsonType": "long"
+      },
+      "ss_cdemo_sk": {
+        "bsonType": "long"
+      },
+      "ss_hdemo_sk": {
+        "bsonType": "long"
+      },
+      "ss_addr_sk": {
+        "bsonType": "long"
+      },
+      "ss_store_sk": {
+        "bsonType": "long"
+      },
+      "ss_promo_sk": {
+        "bsonType": "long"
+      },
+      "ss_ticket_number": {
+        "bsonType": "long"
+      },
+      "ss_quantity": {
+        "bsonType": "int"
+      },
+      "ss_wholesale_cost": {
+        "bsonType": "decimal"
+      },
+      "ss_list_price": {
+        "bsonType": "decimal"
+      },
+      "ss_sales_price": {
+        "bsonType": "decimal"
+      },
+      "ss_ext_discount_amt": {
+        "bsonType": "decimal"
+      },
+      "ss_ext_sales_price": {
+        "bsonType": "decimal"
+      },
+      "ss_ext_wholesale_cost": {
+        "bsonType": "decimal"
+      },
+      "ss_ext_list_price": {
+        "bsonType": "decimal"
+      },
+      "ss_ext_tax": {
+        "bsonType": "decimal"
+      },
+      "ss_coupon_amt": {
+        "bsonType": "decimal"
+      },
+      "ss_net_paid": {
+        "bsonType": "decimal"
+      },
+      "ss_net_paid_inc_tax": {
+        "bsonType": "decimal"
+      },
+      "ss_net_profit": {
+        "bsonType": "decimal"
+      }
+    }
+  }
+})

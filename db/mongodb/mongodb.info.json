@@ -14,7 +14,7 @@
       "params": [
         {
           "regex": "<number>",
-          "replace": "{{cacheSize}}"
+          "replace": "{{cache_size}}"
         }
       ]
     }

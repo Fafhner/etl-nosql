@@ -1,0 +1,45 @@
+db.createCollection("customer_address", {
+  "validator": {
+    "$jsonSchema": {
+      "ca_address_sk": {
+        "bsonType": "long"
+      },
+      "ca_address_id": {
+        "bsonType": "string"
+      },
+      "ca_street_number": {
+        "bsonType": "string"
+      },
+      "ca_street_name": {
+        "bsonType": "string"
+      },
+      "ca_street_type": {
+        "bsonType": "string"
+      },
+      "ca_suite_number": {
+        "bsonType": "string"
+      },
+      "ca_city": {
+        "bsonType": "string"
+      },
+      "ca_county": {
+        "bsonType": "string"
+      },
+      "ca_state": {
+        "bsonType": "string"
+      },
+      "ca_zip": {
+        "bsonType": "string"
+      },
+      "ca_country": {
+        "bsonType": "string"
+      },
+      "ca_gmt_offset": {
+        "bsonType": "decimal"
+      },
+      "ca_location_type": {
+        "bsonType": "string"
+      }
+    }
+  }
+})

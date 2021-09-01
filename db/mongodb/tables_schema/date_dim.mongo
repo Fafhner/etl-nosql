@@ -1,0 +1,90 @@
+db.createCollection("date_dim", {
+  "validator": {
+    "$jsonSchema": {
+      "d_date_sk": {
+        "bsonType": "long"
+      },
+      "d_date_id": {
+        "bsonType": "string"
+      },
+      "d_date": {
+        "bsonType": "date"
+      },
+      "d_month_seq": {
+        "bsonType": "int"
+      },
+      "d_week_seq": {
+        "bsonType": "int"
+      },
+      "d_quarter_seq": {
+        "bsonType": "int"
+      },
+      "d_year": {
+        "bsonType": "int"
+      },
+      "d_dow": {
+        "bsonType": "int"
+      },
+      "d_moy": {
+        "bsonType": "int"
+      },
+      "d_dom": {
+        "bsonType": "int"
+      },
+      "d_qoy": {
+        "bsonType": "int"
+      },
+      "d_fy_year": {
+        "bsonType": "int"
+      },
+      "d_fy_quarter_seq": {
+        "bsonType": "int"
+      },
+      "d_fy_week_seq": {
+        "bsonType": "int"
+      },
+      "d_day_name": {
+        "bsonType": "string"
+      },
+      "d_quarter_name": {
+        "bsonType": "string"
+      },
+      "d_holiday": {
+        "bsonType": "string"
+      },
+      "d_weekend": {
+        "bsonType": "string"
+      },
+      "d_following_holiday": {
+        "bsonType": "string"
+      },
+      "d_first_dom": {
+        "bsonType": "int"
+      },
+      "d_last_dom": {
+        "bsonType": "int"
+      },
+      "d_same_day_ly": {
+        "bsonType": "int"
+      },
+      "d_same_day_lq": {
+        "bsonType": "int"
+      },
+      "d_current_day": {
+        "bsonType": "string"
+      },
+      "d_current_week": {
+        "bsonType": "string"
+      },
+      "d_current_month": {
+        "bsonType": "string"
+      },
+      "d_current_quarter": {
+        "bsonType": "string"
+      },
+      "d_current_year": {
+        "bsonType": "string"
+      }
+    }
+  }
+})

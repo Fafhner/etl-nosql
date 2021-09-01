@@ -115,7 +115,7 @@
       ignore_errors: true
 
     - name: Docker stack up
-      ansible.builtin.command: "docker stack deploy -c {{database_info_path}}/docker-compose.yaml {{db['docker_stack_name']}}"
+      ansible.builtin.command: "docker stack deploy -c {{database_info_path}}/docker-compose_sh{{cluster_size}}.yaml {{db['docker_stack_name']}}"
       tags: tag_deploy_stack
 
     - name: Wait for first container and get container ID

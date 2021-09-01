@@ -139,7 +139,7 @@ if __name__ == "__main__":
     conf['tables_schema'] = tables_schema
 
     etl_process = select_driver(db_info['db']['etl_driver'])
-    dc_json = load_from_json('docker-compose.yaml.json', 'db/cassandra')
+    dc_json = load_from_json('docker-compose_sh3.yaml.json', 'db/cassandra')
 
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
         print("Create docker-compose")
         dc = create_docker_compose(dc_json, grid['cluster_size'].val)
-        write_to('docker-compose.yaml', dc, 'db/cassandra')
+        write_to('docker-compose_sh3.yaml', dc, 'db/cassandra')
 
 
     def main(env, grid, diff):
