@@ -4,20 +4,14 @@
   "datasets": {
     "date_dim": {
       "table_schema": "date_dim",
-      "filter": {},
-      "projection": {"_id":0},
       "query": "SELECT * FROM date_dim;"
     },
     "store_sales": {
       "table_schema": "store_sales",
-      "filter": {},
-      "projection": {"_id":0},
       "query": "SELECT * FROM store_sales;"
     },
     "catalog_sales": {
       "table_schema": "catalog_sales",
-      "filter": {},
-      "projection": {"_id":0},
       "query": "SELECT * FROM catalog_sales;"
     }
   },

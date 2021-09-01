@@ -21,12 +21,12 @@
       "10_intersect_pp.json",
       "16_large_agg_fp.json",
       "16_large_agg_np.json",
-      "17_left_join.np.json",
-      "17_left_join.pp.json",
+      "17_left_join_np.json",
+      "17_left_join_pp.json",
       "18_merge_join_np.json",
       "18_merge_join_pp.json",
-      "20_nested_loops.np.json",
-      "20_nested_loops.pp.json"
+      "20_nested_loops_np.json",
+      "20_nested_loops_pp.json"
     ]
   },
   "dynamic": {

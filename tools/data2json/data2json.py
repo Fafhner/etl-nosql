@@ -1,5 +1,6 @@
 import os
 import json
+from datetime import datetime
 
 
 def line_to_json(line: str, schema):
@@ -11,8 +12,11 @@ def line_to_json(line: str, schema):
         col_type = schema_cols[i]['type']
         col_name = schema_cols[i]['col_name']
         if split != '':
-            if col_type in ['varchar', 'ascii', 'date']:
+            if col_type in ['varchar', 'ascii']:
                 line_json.append(f'"{col_name}": "{split}"')
+            if col_type == 'date':
+                date = datetime.strptime(split, '%Y-%m-%d').isoformat() + 'Z'
+                line_json.append(f'"{col_name}": {{ $date: {date} }}"')
             else:
                 line_json.append(f'"{col_name}": {split}')
         else:
@@ -23,8 +27,9 @@ def line_to_json(line: str, schema):
 
 if __name__ == '__main__':
     schema_path = '../../db/tables_schema'
-    tables = ['catalog_returns', 'catalog_sales', 'customer', 'date_dim', 'store_sales', 'warehouse', 'web_sales']
-    data_sizes = [1, 2, 3, 5]
+    tables=  ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+                      "web_sales", "warehouse", "customer", "customer_address", "store_returns"]
+    data_sizes = [1, 3, 6, 9, 12]
     data_path = '../../db/table_data'
     json_write_path = '../../db/table_data/json'
 

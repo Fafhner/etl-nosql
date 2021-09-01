@@ -4,20 +4,14 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
-      "filter": {},
-      "projection": {"_id":0},
       "query": "SELECT * FROM web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
-      "filter": {},
-      "projection": {"_id":0},
       "query": "SELECT * FROM warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
-      "filter": {},
-      "projection": {"_id":0},
       "query": "SELECT * FROM date_dim;"
     }
   },

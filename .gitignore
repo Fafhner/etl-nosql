@@ -5,7 +5,6 @@ dask-worker-space
 *_test.result.json
 *.log
 *.pyc
-result/data.txt
-result/processResult
-result/data.txt
-result/processResult
+result/*
+*.png
+*.csv

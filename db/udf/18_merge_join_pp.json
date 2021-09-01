@@ -5,20 +5,14 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
-      "filter": {},
-      "projection": {"_id":0, "ws_sold_date_sk": 1, "ws_warehouse_sk": 1},
       "query": "SELECT ws_sold_date_sk, ws_warehouse_sk FROM web_sales;"
     },
     "warehouse": {
       "table_schema": "warehouse",
-      "filter": {},
-      "projection": {"_id":0, "w_warehouse_sk": 1},
       "query": "SELECT w_warehouse_sk FROM warehouse;"
     },
     "date_dim": {
       "table_schema": "date_dim",
-      "filter": { "d_year": { "$eq": 2000 } },
-      "projection": {"_id":0, "d_date_sk": 1},
       "query": "SELECT d_date_sk FROM date_dim WHERE d_year=2000;"
     }
   },
