@@ -31,7 +31,7 @@ services:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}:/scripts"
       - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/router/db:/data/db"
       - "~/etl-nosql/db/table_data/json/{data_size}:/importdata"
-      - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
+      - "~/etl-nosql/db/mongodb/tables_schema:/tables_schema"
     ports:
       - 27017:27017
       - 27018:27018
