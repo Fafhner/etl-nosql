@@ -148,7 +148,7 @@ if __name__ == "__main__":
             "context": "db-file",
             "priority": 2,
             "data": [
-                2000
+                2
             ]
         }
 

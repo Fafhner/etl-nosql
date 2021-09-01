@@ -59,6 +59,6 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "w_warehouse_sk",
+  "primary_key": ["w_warehouse_sk"],
   "clustering_key": []
 }

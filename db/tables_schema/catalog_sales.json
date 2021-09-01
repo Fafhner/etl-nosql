@@ -139,6 +139,6 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "cs_order_number",
+  "primary_key": ["cs_item_sk", "cs_order_number"],
   "clustering_key": []
 }

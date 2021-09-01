@@ -115,6 +115,6 @@
       "type": "ascii"
     }
   ],
-  "primary_key": "d_date_sk",
+  "primary_key": ["d_date_sk"],
   "clustering_key": []
 }

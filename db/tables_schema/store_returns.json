@@ -83,7 +83,7 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "sr_ticket_number",
+  "primary_key": ["sr_item_sk", "sr_ticket_number"],
   "clustering_key": []
 
 }

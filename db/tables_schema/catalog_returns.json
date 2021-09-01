@@ -111,6 +111,6 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "cr_order_number",
+  "primary_key": ["cr_item_sk", "cr_order_number"],
   "clustering_key": []
 }

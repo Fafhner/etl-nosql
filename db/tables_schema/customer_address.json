@@ -55,6 +55,6 @@
       "type": "varchar"
     }
   ],
-  "primary_key": "ca_address_sk",
+  "primary_key": ["ca_address_sk"],
   "clustering_key": []
 }

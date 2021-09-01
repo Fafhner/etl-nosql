@@ -75,6 +75,6 @@
       "type": "bigint"
     }
   ],
-  "primary_key": "c_customer_sk",
+  "primary_key": ["c_customer_sk"],
   "clustering_key": []
 }
