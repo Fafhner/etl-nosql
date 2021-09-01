@@ -18,9 +18,9 @@ def line_to_json(line: str, schema):
                 date = datetime.strptime(split, '%Y-%m-%d').isoformat() + 'Z'
                 line_json.append(f'"{col_name}": {{ "$date": "{date}" }}')
             elif col_type == 'bigint':
-                line_json.append(f'"{col_name}": {{ "numberLong": "{split}" }}')
+                line_json.append(f'"{col_name}": {{ "$numberLong": "{split}" }}')
             elif col_type == 'decimal':
-                line_json.append(f'"{col_name}": {{ "numberDecimal": "{split}" }}')
+                line_json.append(f'"{col_name}": {{ "$numberDecimal": "{split}" }}')
             else:
                 line_json.append(f'"{col_name}": {split}')
         else:
