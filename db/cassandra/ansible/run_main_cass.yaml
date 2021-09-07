@@ -1,0 +1,174 @@
+---
+#############################
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - remove stack
+      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
+      tags: tag_prepare
+      ignore_errors: true
+
+    - name: Manager - remove network
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
+      tags: tag_prepare
+      ignore_errors: true
+
+- hosts: cluster_node_workers
+  tasks:
+    - name: Workers - Leave cluster
+      ansible.builtin.command: "docker swarm leave"
+      tags: tag_prepare
+      ignore_errors: true
+
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - Leave cluster
+      ansible.builtin.command: "docker swarm leave --force"
+      tags: tag_prepare
+      ignore_errors: true
+
+
+######################
+- hosts: cluster_node_manager
+  tasks:
+    - name: Manager - remove network
+      ansible.builtin.command: "docker network rm {{db['network_name']}}"
+      tags: tag_rm_stack
+      ignore_errors: true
+
+    - name: Manager - remove stack
+      ansible.builtin.command: "docker stack rm {{db['docker_stack_name']}}"
+      tags: tag_rm_stack
+      ignore_errors: true
+
+    - name: Wait
+      pause:
+        seconds: 10
+
+
+
+###############################
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Restore files, change parameters
+      block:
+        - name: Restore files
+          ansible.builtin.copy:
+            src: "{{ item.file_path }}/{{ item.file_name }}.backup"
+            dest: "{{ item.file_path }}/{{ item.file_name }}"
+          loop: "{{ configs }}"
+
+        - name: Change params
+          ansible.builtin.replace:
+            path: "{{ item.0.file_path }}/{{ item.0.file_name }}"
+            regexp: "{{ item.1.regex }}"
+            replace: "{{ item.1.replace }}"
+          with_subelements:
+            - "{{ configs }}"
+            - params
+      tags: tag_files
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Restore files, change parameters
+      block:
+        - name: Create docker compose
+          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} {{cpu}}"
+          args:
+            chdir: "{{docker_compose_path}}"
+
+      tags: tag_files
+
+###############################
+- hosts: cluster_node_manager
+  tasks:
+    - name: Init docker swarm node manager
+      block:
+        - name: Init swarm
+          ansible.builtin.command:  docker swarm init
+
+        - name: Register swarm worker token
+          ansible.builtin.command: docker swarm join-token -q worker
+          register: cluster_token
+      tags: tag_init_swarm
+
+
+- hosts: cluster_node_workers
+  tasks:
+    - name: Init docker swarm workers
+      block:
+        - name: Init swarm workers
+          ansible.builtin.command:  "docker swarm join --token {{ hostvars[cluster['node_manager']]['cluster_token'].stdout }} {{cluster['node_manager']}}:2377"
+      tags: tag_init_swarm
+
+- hosts: cluster_node_manager
+  tasks:
+    - name: Get nodes id, add labels
+      block:
+        - name: Get manager id
+          ansible.builtin.command:  "docker node ls -q -f 'role=manager'"
+          register: cluster_manager_id
+
+        - name: Get worker id
+          ansible.builtin.command:  "docker node ls -q -f 'role=worker'"
+          register: cluster_worker_id
+
+        - name: Add manager label
+          ansible.builtin.command: "docker node update --label-add node=n1 {{ cluster_manager_id.stdout }}"
+
+        - name: Add node labels
+          ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+2 }} {{ item }}"
+          loop: "{{ cluster_worker_id.stdout_lines }}"
+          loop_control:
+            index_var: node_idx
+      tags: tag_init_swarm
+
+###############################
+- hosts: cluster_node_manager
+  tasks:
+    - name: Create docker network
+      ansible.builtin.command: "docker network create -d overlay {{ db['network_name'] }}"
+      tags: tag_deploy_stack
+      ignore_errors: true
+
+    - name: Docker stack up
+      ansible.builtin.command: "docker stack deploy -c {{docker_compose_path}}/docker-compose_sh3.yaml {{db['docker_stack_name']}}"
+      tags: tag_deploy_stack
+
+    - name: Wait for first container and get container ID
+      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
+      register: container_id
+      until: container_id.stdout != ""
+      retries: 20
+      delay: 5
+      tags: tag_deploy_stack
+
+    - name: Wait for first container
+      pause:
+        seconds: 30
+
+    - name: Wait for all nodes in cluster
+      ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
+      register: cmd_res_wait
+      until: "cmd_res_wait.stdout_lines | length == cluster_size + 5"
+      retries: 10
+      delay: 60
+      tags: tag_deploy_stack
+
+    - name: Wait
+      pause:
+        seconds: 30
+
+
+###############################
+- hosts: cluster_node_manager
+  tasks:
+    - name: RUN Expermiments
+      ansible.builtin.command: 'nohup spark-submit \
+                                --master "yarn" \
+                                --conf spark.cassandra.connection.host=192.168.55.20 \
+                                --packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 \
+                                --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions \
+                                run_cass_test.py home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json '
+      tags: run_exp
+      ignore_errors: true
