@@ -169,6 +169,6 @@
                                 --conf spark.cassandra.connection.host=192.168.55.20 \
                                 --packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 \
                                 --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions \
-                                run_cass_test.py home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json '
+                                /home/magisterka/etl-nosql/run_cass_test.py /home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json'
       tags: run_exp
       ignore_errors: true
