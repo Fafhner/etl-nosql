@@ -101,28 +101,6 @@
           ansible.builtin.command:  "docker swarm join --token {{ hostvars[cluster['node_manager']]['cluster_token'].stdout }} {{cluster['node_manager']}}:2377"
       tags: tag_init_swarm
 
-- hosts: cluster_node_manager
-  tasks:
-    - name: Get nodes id, add labels
-      block:
-        - name: Get manager id
-          ansible.builtin.command:  "docker node ls -q -f 'role=manager'"
-          register: cluster_manager_id
-
-        - name: Get worker id
-          ansible.builtin.command:  "docker node ls -q -f 'role=worker'"
-          register: cluster_worker_id
-
-        - name: Add manager label
-          ansible.builtin.command: "docker node update --label-add node=n1 {{ cluster_manager_id.stdout }}"
-
-        - name: Add node labels
-          ansible.builtin.command: "docker node update --label-add node=n{{ node_idx+2 }} {{ item }}"
-          loop: "{{ cluster_worker_id.stdout_lines }}"
-          loop_control:
-            index_var: node_idx
-      tags: tag_init_swarm
-
 ###############################
 - hosts: cluster_node_manager
   tasks:
@@ -159,15 +137,3 @@
       pause:
         seconds: 30
 
-
-###############################
-- hosts: cluster_node_manager
-  tasks:
-    - name: RUN Expermiments
-      ansible.builtin.shell: '/home/magisterka/miniconda3/bin/spark-submit  \
-                                --master "yarn" \
-                                --conf spark.cassandra.connection.host=192.168.55.16 \
-                                --packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 \
-                                --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions \
-                                /home/magisterka/etl-nosql/run_cass_test.py /home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json'
-      tags: run_exp

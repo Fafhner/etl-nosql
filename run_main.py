@@ -8,8 +8,6 @@ from util.grid import create_scenarios
 from util import state
 
 
-
-
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
         file_name = f"{output_path}/{file_name}"
@@ -115,7 +113,6 @@ if __name__ == "__main__":
     scenarios = create_scenarios(dynamic_env)
 
 
-
     def create_files(conf, grid, diff):
         print("Generating hosts file")
         print(f"Grid: {grid}")
@@ -139,10 +136,14 @@ if __name__ == "__main__":
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
 
-
     def main(env, grid, diff):
-        pass
+        cmd = 'spark-submit --master "yarn" --conf spark.cassandra.connection.host=192.168.55.16  --packages ' \
+              'com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 --conf ' \
+              'spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
+              '/home/magisterka/etl-nosql/run_cass_test.py ' \
+              '/home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json '
 
+        run_cmd(cmd, path=".")
 
 
     do_once_nodes = [
