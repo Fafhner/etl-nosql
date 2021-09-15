@@ -164,11 +164,10 @@
 - hosts: cluster_node_manager
   tasks:
     - name: RUN Expermiments
-      ansible.builtin.command: 'nohup spark-submit \
+      ansible.builtin.shell: '/home/magisterka/miniconda3/bin/spark-submit  \
                                 --master "yarn" \
                                 --conf spark.cassandra.connection.host=192.168.55.16 \
                                 --packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 \
                                 --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions \
                                 /home/magisterka/etl-nosql/run_cass_test.py /home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json'
       tags: run_exp
-      ignore_errors: true

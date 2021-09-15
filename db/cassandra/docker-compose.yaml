@@ -3,7 +3,6 @@ services:
   cassandra-1:
     image: cassandra:3.11.11
     deploy:
-
       placement:
         constraints:
           - node.labels.node==n1

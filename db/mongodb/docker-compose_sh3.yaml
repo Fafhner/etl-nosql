@@ -1,74 +1,216 @@
-version: '3.3'
-services:
-  cassandra-1:
-    image: cassandra:3.11.11
-    deploy:
-      placement:
-        constraints:
-          - node.labels.node==n1
-    environment:
-      CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-1
-    volumes:
-      - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
-      - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
-      - type: bind
-        source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
-        target: "/etc/cassandra/jvm.options"
-    ports:
-      - "7000:7000"
-      - "9042:9042"
-    networks:
-      - cassandra
+version: '3'
 
-  cassandra-2:
-    image: cassandra:3.11.11
+services:
+  ## Config server
+  configsvr:
     deploy:
       placement:
         constraints:
-          - node.labels.node==n2
-    environment:
-      CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-2
-      CASSANDRA_SEEDS: "tasks.cassandra-1"
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    image: mongo:4.4
+    command: mongod --configsvr --replSet rs-config-server --port 27017 --dbpath /data/db --bind_ip_all
     volumes:
-      - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
-      - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
-      - type: bind
-        source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
-        target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-config:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/config/db:/data/db"
     ports:
-      - 7000
-      - 9042
+      - 27017
+      - 27018
+      - 27019
     networks:
-      - cassandra
-  cassandra-3:
-    image: cassandra:3.11.11
+      - mongonet
+
+  ## Router
+  router:
+    image: mongo:4.4
     deploy:
       placement:
         constraints:
-          - node.labels.node==n3
-    environment:
-      CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-3
-      CASSANDRA_SEEDS: "tasks.cassandra-1, tasks.cassandra-2"
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    command: mongos --port 27017 --configdb rs-config-server/configsvr:27017 --bind_ip_all
     volumes:
-      - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
-      - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
-      - type: bind
-        source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
-        target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-coll:/scripts/init-coll"
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-router:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/router/db:/data/db"
+      - "~/etl-nosql/db/table_data/json/{data_size}:/importdata"
+      - "~/etl-nosql/db/mongodb/tables_schema:/tables_schema"
+
+
     ports:
-      - 7000
-      - 9042
+      - 27017:27017
+      - 27018:27018
+      - 27019:27019
     networks:
-      - cassandra
+      - mongonet
+
+  ## Shard 1/abc - 20, 19, 18
+  shard01a:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-1:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01a/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard01b:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01b/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard01c:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-18
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard01c/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+ ## Shard 2/abc - 20, 19, 18
+  shard02a:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-2:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02a/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard02b:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02b/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard02c:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-18
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard02c/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+
+ ## Shard 3/abc - 20, 19, 18
+  shard03a:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-3:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03a/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard03b:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03b/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
+
+  shard03c:
+    image: mongo:4.4
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-18
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
+      - "~/etl-nosql/db/mongodb/data/{cluster_size}/{data_size}/shard03c/db:/data/db"
+      - "~/etl-nosql/db/mongodb/etc/mongod.conf:/etc/mongod.conf"
+    ports:
+      - 27017
+      - 27018
+      - 27019
+    networks:
+      - mongonet
 
 networks:
-  cassandra:
+  mongonet:
     external:
-      name: cassandraNet
+      name: mongoNet
+

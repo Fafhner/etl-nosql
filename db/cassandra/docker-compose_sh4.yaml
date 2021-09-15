@@ -3,12 +3,9 @@ services:
   cassandra-1:
     image: cassandra:3.11.11
     deploy:
-      resources:
-        limits:
-          cpus: '1'
       placement:
         constraints:
-          - node.labels.node==n1
+          - node.hostname==magisterka-OptiPlex-780-16
     environment:
       CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-1
     volumes:
@@ -27,12 +24,9 @@ services:
   cassandra-2:
     image: cassandra:3.11.11
     deploy:
-      resources:
-        limits:
-          cpus: '1'
       placement:
         constraints:
-          - node.labels.node==n2
+          - node.hostname==magisterka-OptiPlex-780-17
     environment:
       CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-2
       CASSANDRA_SEEDS: "tasks.cassandra-1"
@@ -53,12 +47,9 @@ services:
   cassandra-3:
     image: cassandra:3.11.11
     deploy:
-      resources:
-        limits:
-          cpus: '1'
       placement:
         constraints:
-          - node.labels.node==n3
+          - node.hostname==magisterka-OptiPlex-780-18
     environment:
       CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-3
       CASSANDRA_SEEDS: "tasks.cassandra-1, tasks.cassandra-2"
@@ -80,12 +71,9 @@ services:
   cassandra-4:
     image: cassandra:3.11.11
     deploy:
-      resources:
-        limits:
-          cpus: '1'
       placement:
         constraints:
-          - node.labels.node==n4
+          - node.hostname==magisterka-OptiPlex-780-19
     environment:
       CASSANDRA_LISTEN_ADDRESS: tasks.cassandra-4
       CASSANDRA_SEEDS: "tasks.cassandra-1, tasks.cassandra-2, tasks.cassandra-3"
