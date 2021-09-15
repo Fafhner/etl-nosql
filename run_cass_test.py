@@ -137,11 +137,13 @@ if __name__ == "__main__":
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
     tries = 60
 
+    header = "udf, rd, rk, po, ts, uuid, result"
+    result_file = f"result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
+    write_to_yaml(result_file, header, ".", mode='a')
 
     for udf in udfs:
         data_tries = dict()
         idx = 0
-        omit_udf = False
         id_ = str(uuid.uuid4())
         while idx < tries:
 
@@ -154,23 +156,6 @@ if __name__ == "__main__":
 
             data_tries[idx] = result
             idx += 1
-            with open("logs/pd_process.temp.json", 'a') as cmd_file:
-                cmd_file.write(json.dumps({
-                    "udf": udf['name'],
-                    "try": idx,
-                    "result": result,
-                    "scenario": params,
-                    "timestamp": str(datetime.now())
-                }, indent=4))
-            result_df.write.csv(f"df/results/{udf['name']}/{id_}/try_{idx}.csv")
-
-        if not omit_udf:
-            res = [{
-                "udf": udf['name'],
-                "tries": data_tries,
-                "scenario": params,
-                "timestamp": str(datetime.now()),
-                "uuid": id_
-            }]
-            write_to_yaml(f"result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml", res, ".", mode='a')
+            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_}, {result}"
+            write_to_yaml(result_file, a_data, ".", mode='a')
 

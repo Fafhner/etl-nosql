@@ -1,0 +1,60 @@
+{
+  "namespace": "tpc_ds",
+  "table": "customer_address",
+  "cols": [
+    {
+      "col_name": "ca_address_sk",
+      "type": "int"
+    },
+    {
+      "col_name": "ca_address_id",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_street_number",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_street_name",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_street_type",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_suite_number",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_city",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_county",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_state",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_zip",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_country",
+      "type": "varchar"
+    },
+    {
+      "col_name": "ca_gmt_offset",
+      "type": "decimal"
+    },
+    {
+      "col_name": "ca_location_type",
+      "type": "varchar"
+    }
+  ],
+  "primary_key": "ca_address_sk",
+  "clustering_key": []
+}

@@ -1,0 +1,64 @@
+{
+  "namespace": "tpc_ds",
+  "table": "warehouse",
+  "cols": [
+    {
+      "col_name": "w_warehouse_sk",
+      "type": "int"
+    },
+    {
+      "col_name": "w_warehouse_id",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_warehouse_name",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_warehouse_sq_ft",
+      "type": "int"
+    },
+    {
+      "col_name": "w_street_number",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_street_name",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_street_type",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_suite_number",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_city",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_county",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_state",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_zip",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_country",
+      "type": "varchar"
+    },
+    {
+      "col_name": "w_gmt_offset",
+      "type": "decimal"
+    }
+  ],
+  "primary_key": "w_warehouse_sk",
+  "clustering_key": []
+}

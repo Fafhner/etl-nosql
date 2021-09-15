@@ -10,7 +10,7 @@
   "sizes": [1, 3, 6, 9, 12],
 
   "namespace": "tpc_ds",
-  "tables_schema_src": "/home/magisterka/etl-nosql/db/tables_schema",
+  "tables_schema_src": "/home/magisterka/etl-nosql/db/tables_schema2",
   "outputDir" : "/home/magisterka/etl-nosql/db/table_data/sstables",
   "out_file_name" : "config.json",
 

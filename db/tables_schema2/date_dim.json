@@ -1,0 +1,120 @@
+{
+  "namespace": "tpc_ds",
+  "table": "date_dim",
+  "cols": [
+    {
+      "col_name": "d_date_sk",
+      "type": "int"
+    },
+    {
+      "col_name": "d_date_id",
+      "type": "varchar"
+    },
+    {
+      "col_name": "d_date",
+      "type": "date"
+    },
+    {
+      "col_name": "d_month_seq",
+      "type": "int"
+    },
+    {
+      "col_name": "d_week_seq",
+      "type": "int"
+    },
+    {
+      "col_name": "d_quarter_seq",
+      "type": "int"
+    },
+    {
+      "col_name": "d_year",
+      "type": "int"
+    },
+    {
+      "col_name": "d_dow",
+      "type": "int"
+    },
+    {
+      "col_name": "d_moy",
+      "type": "int"
+    },
+    {
+      "col_name": "d_dom",
+      "type": "int"
+    },
+    {
+      "col_name": "d_qoy",
+      "type": "int"
+    },
+    {
+      "col_name": "d_fy_year",
+      "type": "int"
+    },
+    {
+      "col_name": "d_fy_quarter_seq",
+      "type": "int"
+    },
+    {
+      "col_name": "d_fy_week_seq",
+      "type": "int"
+    },
+    {
+      "col_name": "d_day_name",
+      "type": "varchar"
+    },
+    {
+      "col_name": "d_quarter_name",
+      "type": "varchar"
+    },
+    {
+      "col_name": "d_holiday",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_weekend",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_following_holiday",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_first_dom",
+      "type": "int"
+    },
+    {
+      "col_name": "d_last_dom",
+      "type": "int"
+    },
+    {
+      "col_name": "d_same_day_ly",
+      "type": "int"
+    },
+    {
+      "col_name": "d_same_day_lq",
+      "type": "int"
+    },
+    {
+      "col_name": "d_current_day",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_current_week",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_current_month",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_current_quarter",
+      "type": "ascii"
+    },
+    {
+      "col_name": "d_current_year",
+      "type": "ascii"
+    }
+  ],
+  "primary_key": "d_date_sk",
+  "clustering_key": []
+}
