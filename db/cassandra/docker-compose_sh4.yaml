@@ -14,7 +14,7 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/4/3:/var/lib/cassandra"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
@@ -39,7 +39,7 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/4/3:/var/lib/cassandra"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
@@ -65,7 +65,7 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/4/3:/var/lib/cassandra"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
@@ -92,7 +92,7 @@ services:
     volumes:
       - "~/etl-nosql/db/cassandra/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
-      - "~/etl-nosql/db/cassandra/var/lib/cassandra/4/3:/var/lib/cassandra"
+      - "~/etl-nosql/db/cassandra/var/lib/cassandra/{cluster_size}/{data_size}:/var/lib/cassandra"
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
