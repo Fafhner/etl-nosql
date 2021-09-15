@@ -37,13 +37,9 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
-    ports:
-      - 7000
-      - 9042
     networks:
       - cassandra
+      - 
   cassandra-3:
     image: cassandra:3.11.11
     deploy:
@@ -60,11 +56,6 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
-    ports:
-      - 7000
-      - 9042
     networks:
       - cassandra
 
@@ -84,11 +75,6 @@ services:
       - type: bind
         source: "~/etl-nosql/db/cassandra/etc/cassandra/jvm.options"
         target: "/etc/cassandra/jvm.options"
-    depends_on:
-      - "cassandra-1"
-    ports:
-      - 7000
-      - 9042
     networks:
       - cassandra
 

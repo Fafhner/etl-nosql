@@ -138,7 +138,7 @@ if __name__ == "__main__":
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
     tries = 60
 
-    header = "udf, rd, rk, po, ts, uuid, result"
+    header = "udf, rd, rk, po, ts, uuid, result\n"
     result_file = f"/home/magisterka/etl-nosql/result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
     write_to(result_file, header, mode='a')
 
@@ -157,6 +157,6 @@ if __name__ == "__main__":
 
             data_tries[idx] = result
             idx += 1
-            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_}, {result}"
+            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_}, {result['overall_time']}\n"
             write_to(result_file, a_data, mode='a')
 
