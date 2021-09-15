@@ -1,74 +1,75 @@
+
 {
   "namespace": "tpc_ds",
   "table": "catalog_returns",
   "cols": [
     {
       "col_name": "cr_returned_date_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_returned_time_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_item_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_refunded_customer_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_refunded_cdemo_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_refunded_hdemo_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_refunded_addr_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_returning_customer_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_returning_cdemo_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_returning_hdemo_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_returning_addr_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_call_center_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_catalog_page_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_ship_mode_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_warehouse_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_reason_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_order_number",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "cr_return_quantity",
@@ -113,3 +114,4 @@
   ],
   "primary_key": "cr_order_number",
   "clustering_key": []
+}

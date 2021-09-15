@@ -1,10 +1,11 @@
+
 {
   "namespace": "tpc_ds",
   "table": "warehouse",
   "cols": [
     {
       "col_name": "w_warehouse_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "w_warehouse_id",

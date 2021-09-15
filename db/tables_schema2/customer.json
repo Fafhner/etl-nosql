@@ -1,10 +1,11 @@
+
 {
   "namespace": "tpc_ds",
   "table": "customer",
   "cols": [
     {
       "col_name": "c_customer_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "c_customer_id",
@@ -12,23 +13,23 @@
     },
     {
       "col_name": "c_current_cdemo_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "c_current_hdemo_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "c_current_addr_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "c_first_shipto_date_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "c_first_sales_date_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "c_salutation",
@@ -72,7 +73,7 @@
     },
     {
       "col_name": "c_last_review_date_sk",
-      "type": "int"
+      "type": "bigint"
     }
   ],
   "primary_key": "c_customer_sk",
