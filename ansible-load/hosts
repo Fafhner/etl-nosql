@@ -1,7 +1,6 @@
 [cluster_node_manager]
-192.168.55.20
-[cluster_node_workers]
 192.168.55.16
+[cluster_node_workers]
 192.168.55.17
 192.168.55.18
 192.168.55.19
