@@ -46,13 +46,6 @@
       "data": [
         4000
       ]
-    },
-    "cpu": {
-      "context": "cpu",
-      "priority": 997,
-      "data": [
-        1
-      ]
     }
   }
 }

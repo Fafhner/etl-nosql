@@ -1,10 +1,11 @@
+
 {
   "namespace": "tpc_ds",
   "table": "customer_address",
   "cols": [
     {
       "col_name": "ca_address_sk",
-      "type": "int"
+      "type": "bigint"
     },
     {
       "col_name": "ca_address_id",
@@ -55,6 +56,6 @@
       "type": "varchar"
     }
   ],
-  "primary_key": ["ca_address_sk"],
+  "primary_key": "ca_address_sk",
   "clustering_key": []
 }

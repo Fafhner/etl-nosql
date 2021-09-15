@@ -1,47 +1,46 @@
-
 {
   "namespace": "tpc_ds",
   "table": "store_returns",
   "cols": [
     {
       "col_name": "sr_returned_date_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_return_time_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_item_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_customer_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_cdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_hdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_addr_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_store_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_reason_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_ticket_number",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "sr_return_quantity",
@@ -84,7 +83,7 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "sr_ticket_number",
+  "primary_key": ["sr_item_sk", "sr_ticket_number"],
   "clustering_key": []
 
 }

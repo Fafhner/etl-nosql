@@ -7,16 +7,14 @@
                 "192.168.55.18"
             ]
         },
-  "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
+  "database_info_path": "/home/magisterka/etl-nosql/db/cassandra",
   "udf_path": "/home/magisterka/etl-nosql/db/cassandra/udf",
   "database_info_file": "mongodb.info.json",
-  "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
+  "docker_compose_path": "/home/magisterka/etl-nosql/db/cassandra",
   "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
   "mongo_catalog": "data",
-  "tables_schema": [
-    "catalog_sales",
-    "catalog_returns"
-  ],
+  "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+              "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
   "shards_dir": [
     "shard01a",
     "shard01b",

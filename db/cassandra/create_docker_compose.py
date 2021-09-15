@@ -1,5 +1,4 @@
 import sys
-import json
 
 
 def write_to(file_name, data, output_path=None, mode='w'):
@@ -13,16 +12,14 @@ def load_from(file_name, path=None):
     if path is not None:
         file_name = f"{path}/{file_name}"
     with open(file_name) as of:
-        jfile = json.load(of)
-    return jfile
+        file_content = of.read()
+    return file_content
 
 
 if __name__ == '__main__':
-    cluster_size = int(sys.argv[1])
+    cluster_size = sys.argv[1]
     data_size = sys.argv[2]
-    cpu = sys.argv[3]
 
-    dc_json = load_from('docker-compose.yaml.json', ".")
-    parts = dc_json['parts'][0:cluster_size] + [dc_json['end']]
-    write_to('docker-compose.yaml', ("\n".join(parts)).format(data_size=data_size, cluster_size=cluster_size, cpu=cpu))
+    dc = load_from(f'docker-compose_sh{cluster_size}.yaml', ".")
+    write_to('docker-compose.yaml', dc.format(data_size=data_size, cluster_size=cluster_size))
 

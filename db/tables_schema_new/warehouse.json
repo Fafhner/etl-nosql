@@ -1,11 +1,10 @@
-
 {
   "namespace": "tpc_ds",
   "table": "warehouse",
   "cols": [
     {
       "col_name": "w_warehouse_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "w_warehouse_id",
@@ -60,6 +59,6 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "w_warehouse_sk",
+  "primary_key": ["w_warehouse_sk"],
   "clustering_key": []
 }
