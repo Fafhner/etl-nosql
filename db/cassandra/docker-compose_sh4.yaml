@@ -39,7 +39,7 @@ services:
         target: "/etc/cassandra/jvm.options"
     networks:
       - cassandra
-      - 
+
   cassandra-3:
     image: cassandra:3.11.11
     deploy:
