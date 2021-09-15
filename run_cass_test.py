@@ -13,6 +13,7 @@ import yaml
 from pyarrow import fs
 import uuid
 
+
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
         file_name = f"{output_path}/{file_name}"
@@ -139,7 +140,7 @@ if __name__ == "__main__":
 
     header = "udf, rd, rk, po, ts, uuid, result"
     result_file = f"/home/magisterka/etl-nosql/result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
-    write_to_yaml(result_file, header, ".", mode='a')
+    write_to(result_file, header, mode='a')
 
     for udf in udfs:
         data_tries = dict()
@@ -157,5 +158,5 @@ if __name__ == "__main__":
             data_tries[idx] = result
             idx += 1
             a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_}, {result}"
-            write_to_yaml(result_file, a_data, ".", mode='a')
+            write_to(result_file, a_data, mode='a')
 
