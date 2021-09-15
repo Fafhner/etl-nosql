@@ -129,11 +129,6 @@
       ansible.builtin.command: "docker exec {{container_id.stdout}} nodetool status"
       register: cmd_res_wait
       until: "cmd_res_wait.stdout_lines | length == cluster_size + 5"
-      retries: 10
+      retries: 5
       delay: 60
       tags: tag_deploy_stack
-
-    - name: Wait
-      pause:
-        seconds: 30
-
