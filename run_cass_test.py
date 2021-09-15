@@ -105,7 +105,7 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-fileHandler = logging.FileHandler(f"logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
+fileHandler = logging.FileHandler(f"/home/magisterka/etl-nosql/logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     tries = 60
 
     header = "udf, rd, rk, po, ts, uuid, result"
-    result_file = f"result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
+    result_file = f"/home/magisterka/etl-nosql/result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
     write_to_yaml(result_file, header, ".", mode='a')
 
     for udf in udfs:

@@ -73,7 +73,7 @@
     - name: Restore files, change parameters
       block:
         - name: Create docker compose
-          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} {{cpu}}"
+          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}}"
           args:
             chdir: "{{docker_compose_path}}"
 
@@ -166,7 +166,7 @@
     - name: RUN Expermiments
       ansible.builtin.command: 'nohup spark-submit \
                                 --master "yarn" \
-                                --conf spark.cassandra.connection.host=192.168.55.20 \
+                                --conf spark.cassandra.connection.host=192.168.55.16 \
                                 --packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 \
                                 --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions \
                                 /home/magisterka/etl-nosql/run_cass_test.py /home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json'
