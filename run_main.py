@@ -41,7 +41,7 @@ def run_cmd(cmd, path, acc_error=None):
 
     for stderr_line in out.stderr.splitlines():
         logging.warning(stderr_line.strip())
-        
+
     if out.stderr != '':
         if acc_error is None or acc_error not in out.stderr:
             pass
