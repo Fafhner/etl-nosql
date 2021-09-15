@@ -13,10 +13,13 @@ def process(udf: dict, spark: SparkSession):
     dat_aq_start = ov_time_start
 
     for udf_val in udf['datasets'].values():
+        spark.sql("CLEAR CACHE;")
+
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
         df = spark.read.format("org.apache.spark.sql.cassandra") \
             .options(table=udf_val['table_schema'], keyspace="tpc_ds") \
             .load()
+
             # .option("spark.cassandra.connection.host", "192.168.55.20") \
             # .option("spark.cassandra.connection.keepAliveMS", 10000) \
 

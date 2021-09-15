@@ -12,7 +12,7 @@ from pyspark.sql import SparkSession
 import yaml
 from pyarrow import fs
 import uuid
-
+from pyspark import SparkContext
 
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
@@ -150,6 +150,7 @@ if __name__ == "__main__":
 
             try:
                 result, result_df = etl.process(udf, spark)
+                hdfs.delete_dir_contents("./tmp")
             except Exception as e:
                 omit_udf = True
                 logging.exception(e)
@@ -157,6 +158,6 @@ if __name__ == "__main__":
 
             data_tries[idx] = result
             idx += 1
-            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_}, {result['overall_time']}\n"
+            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_},{result['overall_time']}\n"
             write_to(result_file, a_data, mode='a')
 
