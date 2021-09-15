@@ -35,11 +35,18 @@ def generate_hosts_file(manager, workers):
 def run_cmd(cmd, path, acc_error=None):
     out = subprocess.run(cmd, shell=True, cwd=path, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, text=True)
-    print(out)
+
+    for stdout_line in out.stdout.splitlines():
+        logging.info(stdout_line.strip())
+
+    for stderr_line in out.stderr.splitlines():
+        logging.warning(stderr_line.strip())
+        
     if out.stderr != '':
         if acc_error is None or acc_error not in out.stderr:
-            exit(-1)
-    return out.stderr
+            pass
+            # exit(-1)
+    return out
 
 
 def create_ansible_cmd(notebook, hosts, user, password, path):
@@ -112,6 +119,7 @@ if __name__ == "__main__":
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
 
+    print(f"------ Scenarios: {len(scenarios)} ---------------")
 
     def create_files(conf, grid, diff):
         print("Generating hosts file")
