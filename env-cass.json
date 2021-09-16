@@ -25,10 +25,9 @@
       "context": "table_data",
       "priority": 999,
       "data": [
-        3,
-        6,
+        1,
         9,
-        12
+        6
       ]
     },
     "cluster_size": {

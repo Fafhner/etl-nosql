@@ -74,19 +74,15 @@ rootLogger = logging.getLogger()
 rootLogger.setLevel(logging.DEBUG)
 print = rootLogger.info
 
-py4j_logger = logging.getLogger('py4j')
-py4j_logger.setLevel(logging.DEBUG)
-
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
-py4j_logger.addHandler(consoleHandler)
 
 
 fileHandler = logging.FileHandler(f"logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
-py4j_logger.addHandler(fileHandler)
+
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:

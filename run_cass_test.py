@@ -14,18 +14,7 @@ from pyarrow import fs
 import uuid
 from pyspark import SparkContext
 
-logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-rootLogger = logging.getLogger()
-rootLogger.setLevel(logging.DEBUG)
-print = rootLogger.info
 
-consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
-rootLogger.addHandler(consoleHandler)
-
-fileHandler = logging.FileHandler(f"spark_log_cass{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
-fileHandler.setFormatter(logFormatter)
-rootLogger.addHandler(fileHandler)
 
 def write_to(file_name, data, output_path=None, mode='w'):
     if output_path is not None:
@@ -112,16 +101,22 @@ def pretty_dict(dict_: dict, delim='|'):
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
-rootLogger.setLevel(logging.INFO)
+rootLogger.setLevel(logging.DEBUG)
 print = rootLogger.info
+
+py4j_logger = logging.getLogger('py4j')
+py4j_logger.setLevel(logging.DEBUG)
 
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-fileHandler = logging.FileHandler(f"/home/magisterka/etl-nosql/logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
+fileHandler = logging.FileHandler(f"spark_log_cass{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
+
+py4j_logger.addHandler(consoleHandler)
+py4j_logger.addHandler(fileHandler)
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
