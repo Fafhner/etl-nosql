@@ -145,13 +145,14 @@ if __name__ == "__main__":
 
 
     def main(env, grid, diff):
-        cmd = 'spark-submit --master "yarn" --conf spark.cassandra.connection.host=192.168.55.16  --packages ' \
-              'com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 --conf ' \
-              'spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
-              '/home/magisterka/etl-nosql/run_cass_test.py ' \
-              '/home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json '
+        for udf_ in static_env['udfs']:
+            cmd = 'spark-submit --master "yarn" --conf spark.cassandra.connection.host=192.168.55.16  --packages ' \
+                  'com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 --conf ' \
+                  'spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
+                  '/home/magisterka/etl-nosql/run_cass_test.py ' \
+                  '/home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json ' + udf_
 
-        run_cmd(cmd, path=".")
+            run_cmd(cmd, path=".")
 
 
     do_once_nodes = [
