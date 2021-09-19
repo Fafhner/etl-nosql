@@ -15,14 +15,16 @@ def process(udf: dict, spark: SparkSession, conn_uri):
     dat_aq_start = ov_time_start
 
     for udf_val in udf['datasets'].values():
+        spark.sql("CLEAR CACHE;")
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
         df = spark.read.format("com.mongodb.spark.sql.DefaultSource") \
             .option("uri", f"{conn_uri}/db.{udf_val['table_schema']}") \
             .load() \
 
         df.createOrReplaceTempView(udf_val['table_schema'])
-        spark.sql(udf_val['query']).write.parquet(f"tmp/{udf_val['table_schema']}.parquet")
-
+        spark.sql(udf_val['query']).write.parquet(f"tmp/{udf_val['table_schema']}.parquet", mode='overwrite')
+        spark.sql(f"UNCACHE TABLE {udf_val['table_schema']}")
+        df.unpersist()
 
     dat_aq_end = timer()
 
@@ -37,6 +39,10 @@ def process(udf: dict, spark: SparkSession, conn_uri):
     etl_proc_end = timer()
 
     ov_time_end = etl_proc_end
+
+    for df_k in dataframes.keys():
+        spark.sql(f"UNCACHE TABLE {df_k}")
+
 
     step_time_info['data_acquisition_time'] = dat_aq_end - dat_aq_start
     step_time_info['etl_processing_time'] = etl_proc_end - etl_proc_start
