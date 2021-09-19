@@ -109,22 +109,21 @@ if __name__ == "__main__":
 
     static_env = {
         "cluster": {
-            "node_manager": "192.168.55.20",
+            "node_manager": "192.168.55.16",
             "node_workers": [
-                "192.168.55.20",
                 "192.168.55.19",
                 "192.168.55.18",
                 "192.168.55.17",
                 "192.168.55.16",
+                "192.168.55.15"
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
-        "mongo_catalog": "data",
-        "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
-                          "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
+        "mongo_catalog": "data_10",
+        "tables_schema": ["date_dim", "store_sales", "catalog_sales"],
 
         "shards_dir": ["shard01a", "shard01b", "shard01c",
                        "shard02a", "shard02b", "shard02c",
@@ -142,7 +141,7 @@ if __name__ == "__main__":
         "cluster_size": {
             "context": "cluster",
             "priority": 998,
-            "data": [3, 4, 5]
+            "data": [4]
         },
         "cache_size": {
             "context": "db-file",
