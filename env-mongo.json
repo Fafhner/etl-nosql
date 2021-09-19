@@ -12,11 +12,11 @@
       "port": 27017
     },
     "database": "mongodb",
-    "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
     "udf_path": "/home/magisterka/etl-nosql/db/udf",
+    "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
     "database_info_file": "mongodb.info.json",
     "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
-    "ansible_catalog": "/home/magisterka/etl-nosql/db/mongodb/ansible",
+    "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
     "tables_schema": [],
     "mongo_catalog": "data_10",
     "udfs": [
@@ -38,7 +38,7 @@
       "context": "cluster",
       "priority": 998,
       "data": [
-        3
+        4
       ]
     },
     "cache_size": {
