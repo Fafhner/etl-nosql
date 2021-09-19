@@ -38,7 +38,7 @@
       loop: "{{shards_dir}}"
 
 
-- hosts: cluster_node_manager:cluster_node_workers
+- hosts: cluster_node_manager
   tasks:
     - name: Create folder for config server
       file:
