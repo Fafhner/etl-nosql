@@ -5,14 +5,12 @@ import subprocess
 import sys
 from datetime import datetime
 
-from util.grid import create_scenarios
-import db.cassandra.etl.etl_process as etl
-from util import state
+import db.mongodb.etl.etl_process as etl
 from pyspark.sql import SparkSession
 import yaml
 from pyarrow import fs
 import uuid
-from pyspark import SparkContext
+
 
 
 
@@ -140,15 +138,14 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .appName(f"Cassandra_experiments_{datetime.now().strftime('%Y%m%d')}") \
-        .config('spark.jars.packages', 'com.datastax.spark:spark-cassandra-connector_2.12:3.1.0') \
-        .config('spark.sql.extensions', 'com.datastax.spark.connector.CassandraSparkExtensions') \
+        .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.11:2.0.0') \
         .getOrCreate()
 
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-    tries = 60
+    tries = 100
 
-    header = "udf, rd, rk, po, ts, uuid, result\n"
-    result_file = f"/home/magisterka/etl-nosql/result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
+    header = "uuid,ts,udf,rd,rk,po,result\n"
+    result_file = f"/home/magisterka/etl-nosql/result/TEST_run_mongo_result.csv"
     write_to(result_file, header, mode='a')
 
     for udf in udfs:
@@ -158,7 +155,7 @@ if __name__ == "__main__":
         while idx < tries:
 
             try:
-                result, result_df = etl.process(udf, spark)
+                result, result_df = etl.process(udf, spark, "mongodb://192.168.55.16")
                 hdfs.delete_dir_contents("./tmp")
             except Exception as e:
                 omit_udf = True
@@ -167,6 +164,6 @@ if __name__ == "__main__":
 
             data_tries[idx] = result
             idx += 1
-            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_},{result['overall_time']}\n"
+            a_data = f"{id_},{str(datetime.now())},{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{result['overall_time']}\n"
             write_to(result_file, a_data, mode='a')
 

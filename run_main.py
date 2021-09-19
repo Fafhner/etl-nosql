@@ -78,11 +78,9 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-
 fileHandler = logging.FileHandler(f"logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
-
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
@@ -123,6 +121,7 @@ if __name__ == "__main__":
 
     print(f"------ Scenarios: {len(scenarios)} ---------------")
 
+
     def create_files(conf, grid, diff):
         print("Generating hosts file")
         print(f"Grid: {grid}")
@@ -146,15 +145,25 @@ if __name__ == "__main__":
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_cat + "/group_vars")
 
 
-    def main(env, grid, diff):
-        for udf_ in static_env['udfs']:
-            cmd = 'spark-submit --master "yarn" --conf spark.cassandra.connection.host=192.168.55.16  --packages ' \
-                  'com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 --conf ' \
-                  'spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
-                  '/home/magisterka/etl-nosql/run_cass_test.py ' \
-                  '/home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json ' + udf_
+    database = conf['database']
+    if database == 'cassandra':
+        spark_cmd = \
+            'spark-submit --master "yarn" ' \
+            '--conf spark.cassandra.connection.host=192.168.55.16 ' \
+            '--packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 ' \
+            '--conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
+            '/home/magisterka/etl-nosql/run_cass_test.py ' \
+            '/home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json '
+    else:
+        spark_cmd = \
+            'spark-submit --master "yarn" ' \
+            '--packages org.mongodb.spark:mongo-spark-connector_2.11:2.0.0' \
+            '/home/magisterka/etl-nosql/run_mongo_test.py ' \
+            '/home/magisterka/etl-nosql/db/mongodb/ansible/group_vars/all.json '
 
-            run_cmd(cmd, path=".")
+
+    def main(env, grid, diff):
+        run_cmd(spark_cmd, path=".")
 
 
     do_once_nodes = [
@@ -176,6 +185,6 @@ if __name__ == "__main__":
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
     sm.setMain(main)
-    sm.ansbile_f = create_ansible_cmd('run_main_cass.yaml', 'hosts', user, password, ansi_cat)
+    sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios, pos, main_only)

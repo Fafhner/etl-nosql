@@ -104,5 +104,9 @@
       tags: tag_deploy_stack
 
 
+    - name: Wait for containers
+      pause:
+        seconds: 120
+      tags: tag_deploy_stack
 
 
