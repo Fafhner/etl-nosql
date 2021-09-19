@@ -114,8 +114,6 @@ if __name__ == "__main__":
 
     conf['tables_schema'] = tables_schema
 
-    dc_json = load_from_json('docker-compose.yaml.json', static_env['docker_compose_path'])
-
     ansi_cat = static_env['ansible_catalog']
     scenarios = create_scenarios(dynamic_env)
 
