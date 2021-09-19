@@ -155,7 +155,7 @@ if __name__ == "__main__":
     else:
         spark_cmd = \
             'spark-submit --master "yarn" ' \
-            '--packages org.mongodb.spark:mongo-spark-connector_2.11:2.0.0 ' \
+            '--packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 ' \
             '/home/magisterka/etl-nosql/run_mongo_test.py ' \
             '/home/magisterka/etl-nosql/db/mongodb/ansible/group_vars/all.json '
 
