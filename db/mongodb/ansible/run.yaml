@@ -96,7 +96,7 @@
       tags: tag_deploy_stack
 
     - name: Init router
-      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-router'"
+      ansible.builtin.command: "docker exec {{router_id.stdout}} sh -c 'mongo < /scripts/init-script'"
       register: result
       until: result.stdout.find("failed") == -1
       retries: 5
