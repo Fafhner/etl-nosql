@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     params = {
         "data": conf['scale'],
-        "o_mem":  conf['java_xms'],
+        "o_mem":  conf['cache_size'],
         "cluster_size": conf['cluster_size']
     }
 
