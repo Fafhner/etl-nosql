@@ -115,15 +115,17 @@ if __name__ == "__main__":
                 "192.168.55.18",
                 "192.168.55.17",
                 "192.168.55.16",
-                "192.168.55.15"
+                "192.168.55.15",
+                "192.168.55.14"
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
-        "mongo_catalog": "data_10",
-        "tables_schema": ["date_dim", "store_sales", "catalog_sales"],
+        "mongo_catalog": "data",
+        "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
+                          "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
 
         "shards_dir": ["shard01a", "shard01b", "shard01c",
                        "shard02a", "shard02b", "shard02c",
@@ -136,12 +138,12 @@ if __name__ == "__main__":
         "scale": {
             "context": "table_data",
             "priority": 999,
-            "data": [1, 3, 6, 9, 12]
+            "data": [3, 6, 9]
         },
         "cluster_size": {
             "context": "cluster",
             "priority": 998,
-            "data": [4]
+            "data": [3, 4, 5]
         },
         "cache_size": {
             "context": "db-file",
@@ -170,7 +172,6 @@ if __name__ == "__main__":
         cluster_node_workers: list = conf['cluster']['node_workers']
         if cluster_node_manager in cluster_node_workers:
             cluster_node_workers.remove(cluster_node_manager)
-        cluster_node_workers = cluster_node_workers[0:grid['cluster_size'].val]
 
         hosts_file = generate_hosts_file(cluster_node_manager, cluster_node_workers)
         write_to('hosts', hosts_file, ansi_cat)
