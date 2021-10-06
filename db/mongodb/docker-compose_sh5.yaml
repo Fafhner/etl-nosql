@@ -6,7 +6,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+          - node.hostname==magisterka-OptiPlex-780-16
     image: mongo:4.4
     command: mongod --configsvr --replSet rs-config-server --port 27017 --dbpath /data/db --bind_ip_all
     volumes:
@@ -25,7 +25,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+          - node.hostname==magisterka-OptiPlex-780-16
     command: mongos --port 27017 --configdb rs-config-server/configsvr:27017 --bind_ip_all
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-router:/scripts/init-script"
@@ -46,7 +46,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+          - node.hostname==magisterka-OptiPlex-780-19
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-1:/scripts/init-script"
@@ -64,7 +64,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-19
+          - node.hostname==magisterka-OptiPlex-780-18
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -82,7 +82,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-18
+          - node.hostname==magisterka-OptiPlex-780-17
     command: mongod --port 27017 --shardsvr --replSet rs-shard-01
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -101,7 +101,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-17
+          - node.hostname==magisterka-OptiPlex-780-18
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-2:/scripts/init-script"
@@ -119,7 +119,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-16
+          - node.hostname==magisterka-OptiPlex-780-17
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -137,7 +137,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+          - node.hostname==magisterka-OptiPlex-780-15
     command: mongod --port 27017 --shardsvr --replSet rs-shard-02
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -157,7 +157,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-19
+          - node.hostname==magisterka-OptiPlex-780-17
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-3:/scripts/init-script"
@@ -175,7 +175,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-18
+          - node.hostname==magisterka-OptiPlex-780-15
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -193,7 +193,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-17
+          - node.hostname==magisterka-OptiPlex-780-14
     command: mongod --port 27017 --shardsvr --replSet rs-shard-03
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -213,7 +213,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-16
+          - node.hostname==magisterka-OptiPlex-780-15
     command: mongod --port 27017 --shardsvr --replSet rs-shard-04
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-4:/scripts/init-script"
@@ -231,7 +231,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-Lenovo-Y700-17ISK-20
+          - node.hostname==magisterka-OptiPlex-780-14
     command: mongod --port 27017 --shardsvr --replSet rs-shard-04
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -269,7 +269,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-18
+          - node.hostname==magisterka-OptiPlex-780-14
     command: mongod --port 27017 --shardsvr --replSet rs-shard-05
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard-5:/scripts/init-script"
@@ -287,7 +287,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-17
+          - node.hostname==magisterka-OptiPlex-780-19
     command: mongod --port 27017 --shardsvr --replSet rs-shard-05
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"
@@ -305,7 +305,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname==magisterka-OptiPlex-780-16
+          - node.hostname==magisterka-OptiPlex-780-18
     command: mongod --port 27017 --shardsvr --replSet rs-shard-05
     volumes:
       - "~/etl-nosql/db/mongodb/scripts/{cluster_size}/init-shard:/scripts/init-script"

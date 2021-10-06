@@ -147,9 +147,14 @@ if __name__ == "__main__":
     if database == 'cassandra':
         spark_cmd = \
             'spark-submit --master "yarn" ' \
+            '--driver-memory 4G ' \
+            '--executor-cores 2 ' \
             '--conf spark.cassandra.connection.host=192.168.55.16 ' \
             '--packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 ' \
             '--conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
+            '--conf spark.sql.dse.search.enableOptimization=Off ' \
+            '--conf spark.sql.dse.search.autoRatio=0.0 ' \
+            '--conf spark.cassandra.input.fetch.sizeInRows=10000 ' \
             '/home/magisterka/etl-nosql/run_cass_test.py ' \
             '/home/magisterka/etl-nosql/db/cassandra/ansible/group_vars/all.json '
     else:
@@ -160,8 +165,10 @@ if __name__ == "__main__":
             '/home/magisterka/etl-nosql/db/mongodb/ansible/group_vars/all.json '
 
 
+
     def main(env, grid, diff):
-        run_cmd(spark_cmd, path=".")
+        for udf in static_env['udfs']:
+            run_cmd(spark_cmd + " " + udf, path=".")
 
 
     do_once_nodes = [
@@ -183,6 +190,6 @@ if __name__ == "__main__":
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
     sm.setMain(main)
-    sm.ansbile_f = create_ansible_cmd('run.yaml', 'hosts', user, password, ansi_cat)
+    sm.ansbile_f = create_ansible_cmd('main.yaml', 'hosts', user, password, ansi_cat)
 
     sm.loop(conf, scenarios, pos, main_only)
