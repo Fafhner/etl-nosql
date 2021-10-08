@@ -20,7 +20,8 @@ def load_from(file_name, path=None):
 if __name__ == '__main__':
     cluster_size = sys.argv[1]
     data_size = sys.argv[2]
+    catalog = sys.argv[3]
 
     dc = load_from(f'docker-compose_sh{cluster_size}.yaml', ".")
-    write_to('docker-compose.yaml', dc.format(data_size=data_size, cluster_size=cluster_size))
+    write_to('docker-compose.yaml', dc.format(data_size=data_size, cluster_size=cluster_size, catalog=catalog))
 
