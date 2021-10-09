@@ -36,7 +36,7 @@ def process(udf: dict, spark: SparkSession, conn_uri):
     etl_proc_start = timer()
 
     sqlDF = spark.sql(udf['spark_sql'])
-    sqlDF.write.format("csv").save(f"mongo/output/{udf['id']}/output.csv")
+    sqlDF.write.format("csv").save(f"mongo/output/{udf['id']}/{udf['idx']}.csv")
 
     etl_proc_end = timer()
     ov_time_end = etl_proc_end
