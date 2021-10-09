@@ -19,10 +19,18 @@
     "ansible_catalog": "/home/magisterka/etl-nosql/db/mongodb/ansible",
 
     "tables_schema": [],
-    "mongo_catalog": "data_10",
+    "mongo_catalog": "db_data",
     "udfs": [
-      "10_intersect_np.json",
-      "10_intersect_pp.json"
+      "10_intersect_np.json"
+      "10_intersect_pp.json",
+      "16_large_agg_fp.json",
+      "16_large_agg_np.json",
+      "17_left_join_np.json",
+      "17_left_join_pp.json",
+      "18_merge_join_np.json",
+      "18_merge_join_pp.json",
+      "20_nested_loops_np.jso",
+      "20_nested_loops_pp.json"
     ]
   },
   "dynamic": {
@@ -30,23 +38,21 @@
       "context": "table_data",
       "priority": 999,
       "data": [
-        3,
-        6,
-        1
+        1, 3, 6, 9
       ]
     },
     "cluster_size": {
       "context": "cluster",
       "priority": 998,
       "data": [
-        4
+        3, 4
       ]
     },
     "cache_size": {
       "context": "db-file",
       "priority": 2,
       "data": [
-        2
+        2, 1.5, 1
       ]
     }
   }

@@ -142,10 +142,10 @@ if __name__ == "__main__":
         .getOrCreate()
 
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-    tries = 100
+    tries = 4
 
-    header = "uuid,ts,udf,rd,rk,po,result\n"
-    result_file = f"/home/magisterka/etl-nosql/result/TEST_run_mongo_result.csv"
+    header = "uuid,ts,udf,rd,rk,po,time_etl,time_all\n"
+    result_file = f"/home/magisterka/etl-nosql/result/RUN_etl_mongo.csv"
     write_to(result_file, header, mode='a')
 
     for udf in udfs:
@@ -164,6 +164,6 @@ if __name__ == "__main__":
 
             data_tries[idx] = result
             idx += 1
-            a_data = f"{id_},{str(datetime.now())},{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{result['overall_time']}\n"
+            a_data = f"{id_},{str(datetime.now())},{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{result['etl_processing_time']},{result['overall_time']}\n"
             write_to(result_file, a_data, mode='a')
 

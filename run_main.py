@@ -148,7 +148,7 @@ if __name__ == "__main__":
         spark_cmd = \
             'spark-submit --master "yarn" ' \
             '--driver-memory 4G ' \
-            '--executor-cores 2 ' \
+            '--driver-cores 2 ' \
             '--conf spark.cassandra.connection.host=192.168.55.16 ' \
             '--packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 ' \
             '--conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions ' \
@@ -160,8 +160,10 @@ if __name__ == "__main__":
     else:
         spark_cmd = \
             'spark-submit --master "yarn" ' \
+            '--driver-memory 4G ' \
+            '--driver-cores 2 ' \
             '--packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 ' \
-            '/home/magisterka/etl-nosql/run_mongo_test.py ' \
+            '/home/magisterka/etl-nosql/run_mongo_main.py ' \
             '/home/magisterka/etl-nosql/db/mongodb/ansible/group_vars/all.json '
 
 

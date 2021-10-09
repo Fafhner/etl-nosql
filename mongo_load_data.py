@@ -123,7 +123,7 @@ if __name__ == "__main__":
         "database_info_file": "mongodb.info.json",
         "docker_compose_path": "/home/magisterka/etl-nosql/db/mongodb",
         "ansible_catalog": "/home/magisterka/etl-nosql/ansible-load",
-        "mongo_catalog": "data",
+        "mongo_catalog": "db_data",
         "tables_schema": ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
                           "web_sales", "warehouse", "customer", "customer_address", "store_returns"],
 
