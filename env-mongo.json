@@ -21,7 +21,7 @@
     "tables_schema": [],
     "mongo_catalog": "db_data",
     "udfs": [
-      "10_intersect_np.json"
+      "10_intersect_np.json",
       "10_intersect_pp.json",
       "16_large_agg_fp.json",
       "16_large_agg_np.json",
