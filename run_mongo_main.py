@@ -152,8 +152,10 @@ if __name__ == "__main__":
         data_tries = dict()
         idx = 0
         id_ = str(uuid.uuid4())
-        while idx < tries:
+        udf['id'] = f"{str(datetime.now().date())}/{udf['name']}/{id_}"
 
+        while idx < tries:
+            udf['idx'] = idx
             try:
                 result, result_df = etl.process(udf, spark, "mongodb://192.168.55.16")
                 hdfs.delete_dir_contents("./tmp")
@@ -165,6 +167,5 @@ if __name__ == "__main__":
             data_tries[idx] = result
             idx += 1
             a_data = f"{id_},{str(datetime.now())},{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{result['etl_processing_time']},{result['overall_time']}\n"
-            result_df.write.parquet(f"output_df/{id_}/try_{idx}.parquet")
             write_to(result_file, a_data, mode='a')
 
