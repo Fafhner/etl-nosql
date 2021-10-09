@@ -105,8 +105,6 @@
       tags: tag_deploy_stack
       ignore_errors: true
 
-
-
     - name: Create docker compose
       ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} {{mongo_catalog}}"
       args:

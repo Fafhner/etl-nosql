@@ -27,6 +27,26 @@
       tags: tag_prepare
       ignore_errors: true
 
+###############################
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Restore files, change parameters
+      block:
+        - name: Restore files
+          ansible.builtin.copy:
+            src: "{{ item.file_path }}/{{ item.file_name }}.backup"
+            dest: "{{ item.file_path }}/{{ item.file_name }}"
+          loop: "{{ configs }}"
+
+        - name: Change params
+          ansible.builtin.replace:
+            path: "{{ item.0.file_path }}/{{ item.0.file_name }}"
+            regexp: "{{ item.1.regex }}"
+            replace: "{{ item.1.replace }}"
+          with_subelements:
+            - "{{ configs }}"
+            - params
+      tags: tag_regex_files
 
 ###############################
 
@@ -35,7 +55,7 @@
     - name: Restore files, change parameters
       block:
         - name: Create docker compose
-          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}}"
+          ansible.builtin.command: "python3 create_docker_compose.py {{cluster_size}} {{scale}} {{mongo_catalog}}"
           args:
             chdir: "{{docker_compose_path}}"
 
