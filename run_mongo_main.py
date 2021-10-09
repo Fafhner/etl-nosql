@@ -124,10 +124,11 @@ if __name__ == "__main__":
         exit(-1)
     else:
         file = sys.argv[1]
+        udf = sys.argv[2]
 
     conf = load_from_json(file)
 
-    udfs = [load_from_json(udf, conf['udf_path']) for udf in conf['udfs']]
+    udfs = [load_from_json(udf, conf['udf_path'])]
 
     params = {
         "data": conf['scale'],
