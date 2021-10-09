@@ -165,5 +165,6 @@ if __name__ == "__main__":
             data_tries[idx] = result
             idx += 1
             a_data = f"{id_},{str(datetime.now())},{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{result['etl_processing_time']},{result['overall_time']}\n"
+            result_df.write.parquet(f"output_df/{id_}/try_{idx}.parquet")
             write_to(result_file, a_data, mode='a')
 
