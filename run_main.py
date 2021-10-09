@@ -128,7 +128,6 @@ if __name__ == "__main__":
         cluster_node_workers: list = conf['cluster']['node_workers']
         if cluster_node_manager in cluster_node_workers:
             cluster_node_workers.remove(cluster_node_manager)
-        cluster_node_workers = cluster_node_workers[0:grid['cluster_size'].val]
 
         hosts_file = generate_hosts_file(cluster_node_manager, cluster_node_workers)
         write_to('hosts', hosts_file, ansi_cat)
