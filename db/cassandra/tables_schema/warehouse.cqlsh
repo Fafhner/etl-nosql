@@ -1,5 +1,5 @@
 CREATE TABLE tpc_ds.warehouse (
-    w_warehouse_sk bigint,
+    w_warehouse_sk int,
     w_warehouse_id varchar,
     w_warehouse_name varchar,
     w_warehouse_sq_ft int,

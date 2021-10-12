@@ -1,5 +1,5 @@
 CREATE TABLE tpc_ds.customer_address (
-    ca_address_sk bigint,
+    ca_address_sk int,
     ca_address_id varchar,
     ca_street_number varchar,
     ca_street_name varchar,

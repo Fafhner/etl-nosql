@@ -1,11 +1,10 @@
-
 {
   "namespace": "tpc_ds",
   "table": "date_dim",
   "cols": [
     {
       "col_name": "d_date_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "d_date_id",
@@ -116,6 +115,6 @@
       "type": "ascii"
     }
   ],
-  "primary_key": "d_date_sk",
+  "primary_key": ["d_date_sk"],
   "clustering_key": []
 }

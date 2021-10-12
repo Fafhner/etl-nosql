@@ -20,11 +20,13 @@ if __name__ == '__main__':
     for table in tables_schema:
         with open(f"{tables_schema_path}/{table}.json", 'r') as schema_read:
             schema = json.load(schema_read)
+        
+        pk = schema['primary_key'][0] if len(schema['primary_key']) == 1 else f"({','.join(schema['primary_key'])})"
 
         cass_schema = SCHEMA_STR.format(schema['namespace'],
                                         schema['table'],
                                         ",\n".join([f"    {col['col_name']} {col['type']}" for col in schema['cols']]),
-                                        schema['primary_key'])
+                                        pk)
 
         with open(f"{tables_schema_dest}/{table}.cqlsh", 'w') as schema_write:
             schema_write.write(cass_schema)

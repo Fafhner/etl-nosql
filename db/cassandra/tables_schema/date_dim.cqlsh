@@ -1,5 +1,5 @@
 CREATE TABLE tpc_ds.date_dim (
-    d_date_sk bigint,
+    d_date_sk int,
     d_date_id varchar,
     d_date date,
     d_month_seq int,

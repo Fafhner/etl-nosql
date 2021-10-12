@@ -1,79 +1,78 @@
-
 {
   "namespace": "tpc_ds",
   "table": "catalog_sales",
   "cols": [
     {
       "col_name": "cs_sold_date_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_sold_time_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_ship_date_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_bill_customer_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_bill_cdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_bill_hdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_bill_addr_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_ship_customer_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_ship_cdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_ship_hdemo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_ship_addr_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_call_center_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_catalog_page_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_ship_mode_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_warehouse_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_item_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_promo_sk",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_order_number",
-      "type": "bigint"
+      "type": "int"
     },
     {
       "col_name": "cs_quantity",
@@ -140,6 +139,6 @@
       "type": "decimal"
     }
   ],
-  "primary_key": "cs_order_number",
+  "primary_key": ["cs_item_sk", "cs_order_number"],
   "clustering_key": []
 }
