@@ -4,6 +4,7 @@ import logging
 import subprocess
 import sys
 from datetime import datetime
+from time import sleep
 
 from util.grid import create_scenarios
 import db.cassandra.etl.etl_process as etl
@@ -123,10 +124,12 @@ if __name__ == "__main__":
         print("No arguments given.")
         file = ""
         udf = ""
+        idx = -1
         exit(-1)
     else:
         file = sys.argv[1]
         udf = sys.argv[2]
+        idx = int(sys.argv[3])
     conf = load_from_json(file)
 
     # udfs = [load_from_json(udf, conf['udf_path']) for udf in conf['udfs']]
@@ -146,28 +149,27 @@ if __name__ == "__main__":
         .getOrCreate()
 
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
-    tries = 60
 
     header = "udf, rd, rk, po, ts, uuid, result\n"
     result_file = f"/home/magisterka/etl-nosql/result/run_cass_result_{datetime.now().strftime('%Y%m%d')}.yaml"
     write_to(result_file, header, mode='a')
-
+    sleep(10)
     for udf in udfs:
         data_tries = dict()
-        idx = 0
         id_ = str(uuid.uuid4())
-        while idx < tries:
+        udf['id'] = f"{str(datetime.now().date())}/{udf['name']}/{id_}"
 
-            try:
-                result, result_df = etl.process(udf, spark)
-                hdfs.delete_dir_contents("./tmp")
-            except Exception as e:
-                omit_udf = True
-                logging.exception(e)
-                break
+        udf['idx'] = idx
+        try:
+            result, result_df = etl.process(udf, spark)
+            hdfs.delete_dir_contents("./tmp")
+        except Exception as e:
+            omit_udf = True
+            logging.exception(e)
+            break
 
-            data_tries[idx] = result
-            idx += 1
-            a_data = f"{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{str(datetime.now())},{id_},{result['overall_time']}\n"
-            write_to(result_file, a_data, mode='a')
+        data_tries[idx] = result
+        idx += 1
+        a_data = f"{id_},{str(datetime.now())},{udf['name']},{params['cluster_size']},{params['data']},{params['o_mem']},{result['etl_processing_time']},{result['overall_time']}\n"
+        write_to(result_file, a_data, mode='a')
 

@@ -20,16 +20,11 @@ def process(udf: dict, spark: SparkSession):
             .options(table=udf_val['table_schema'], keyspace="tpc_ds") \
             .load()
 
-            # .option("spark.cassandra.connection.host", "192.168.55.20") \
-            # .option("spark.cassandra.connection.keepAliveMS", 10000) \
-
-
         df.createOrReplaceTempView(udf_val['table_schema'])
         spark.sql(udf_val['query']).write.parquet(f"tmp/{udf_val['table_schema']}.parquet", mode='overwrite')
-        spark.sql(f"UNCACHE TABLE {udf_val['table_schema']}")
-        df.unpersist()
     dat_aq_end = timer()
 
+    spark.sql("CLEAR CACHE;")
 
     for df_k in dataframes.keys():
         _ = spark.read.option("mergeSchema", "true").parquet(dataframes[df_k])
@@ -38,8 +33,11 @@ def process(udf: dict, spark: SparkSession):
     etl_proc_start = timer()
 
     sqlDF = spark.sql(udf['spark_sql'])
-    sqlDF.show()
+    sqlDF.write.format("csv").save(f"cassandra/output/{udf['id']}/{udf['idx']}.csv")
+
     etl_proc_end = timer()
+
+    spark.sql("CLEAR CACHE;")
 
     ov_time_end = etl_proc_end
 

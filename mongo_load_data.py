@@ -115,8 +115,7 @@ if __name__ == "__main__":
                 "192.168.55.18",
                 "192.168.55.17",
                 "192.168.55.16",
-                "192.168.55.15",
-                "192.168.55.14"
+                "192.168.55.15"
             ]
         },
         "database_info_path": "/home/magisterka/etl-nosql/db/mongodb",
@@ -137,13 +136,13 @@ if __name__ == "__main__":
     dynamic_env = {
         "scale": {
             "context": "table_data",
-            "priority": 999,
-            "data": [3, 6, 9]
+            "priority": 998,
+            "data": [3, 6, 9, 1]
         },
         "cluster_size": {
             "context": "cluster",
-            "priority": 998,
-            "data": [3, 4, 5]
+            "priority": 999,
+            "data": [3, 4]
         },
         "cache_size": {
             "context": "db-file",
