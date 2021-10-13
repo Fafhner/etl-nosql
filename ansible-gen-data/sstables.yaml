@@ -8,6 +8,6 @@
         chdir: "{{ cassTbConv_path }}"
 
     - name: Create sstables
-      ansible.builtin.command: "java -cp CassTbConv.jar tbc.Converter {{ out_file_name }}"
+      ansible.builtin.command: "java -Xmx6G -cp CassTbConv.jar tbc.Converter {{ out_file_name }}"
       args:
         chdir: "{{ cassTbConv_path }}"
