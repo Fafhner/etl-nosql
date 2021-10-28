@@ -147,12 +147,6 @@
           tags: tag_db_fill_tables
 
         - name: Load data
-          ansible.builtin.command: "docker exec {{container_id.stdout}} psql -c \"\copy {{item}} FROM '/table_data/{{item}}.dat' WITH CSV DELIMITER '|' ENCODING 'ISO-8859-1' \""
+          ansible.builtin.command: docker exec {{container_id.stdout}} psql -c "\copy {{item}} FROM '/table_data/{{item}}.dat' WITH CSV DELIMITER '|' ENCODING 'ISO-8859-1'"
           loop: "{{tables_schema}}"
           tags: tag_db_fill_tables
-
-
-
-
-
-
