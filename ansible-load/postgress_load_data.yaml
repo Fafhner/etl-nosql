@@ -87,12 +87,12 @@
 ###############################
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
-      - name: Init swarm workers
-        ansible.builtin.command:  "docker volume rm pgdata_{{cluster_size}}_{{scale}}"
+    - name: Init swarm workers
+      ansible.builtin.command:  "docker volume rm pgdata_{{cluster_size}}_{{scale}}"
       tags: tag_init_swarm, tag_init_vol
 
-      - name: Init swarm workers
-        ansible.builtin.command:  "docker volume create pgdata_{{cluster_size}}_{{scale}}"
+    - name: Init swarm workers
+      ansible.builtin.command:  "docker volume create pgdata_{{cluster_size}}_{{scale}}"
       tags: tag_init_swarm, tag_init_vol
 
 
