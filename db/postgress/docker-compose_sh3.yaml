@@ -9,13 +9,18 @@ services:
           - node.hostname==magisterka-OptiPlex-780-16
     image: "citusdata/citus:10.2.2"
     ports: ["5432:5432"]
-    labels: ["com.citusdata.role=Master"]
+    labels: ["com.citusdata.role=Master", ]
     environment: &AUTH
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: ""
       PGUSER: "postgres"
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/tables_schema}/{data_size}:/tables_schema"
+      - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/postgress/scripts:/scripts"
     networks:
       - postgress
 
@@ -63,6 +68,7 @@ services:
       - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
+
 
 networks:
   postgress:

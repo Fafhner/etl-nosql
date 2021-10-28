@@ -16,6 +16,11 @@ services:
       PGUSER: "postgres"
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/tables_schema}/{data_size}:/tables_schema"
+      - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/postgress/scripts:/scripts"
     networks:
       - postgress
 
@@ -78,6 +83,8 @@ services:
       - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
+
+
 
 networks:
   postgress:

@@ -21,5 +21,5 @@ if __name__ == '__main__':
     data_size = sys.argv[2]
 
     dc = load_from(f'docker-compose_sh{cluster_size}.yaml', ".")
-    write_to('docker-compose.yaml', dc.format(data_size=data_size, cluster_size=f"x{cluster_size}"))
+    write_to('docker-compose.yaml', dc.format(data_size=data_size, cluster_size=f"{cluster_size}"))
 
