@@ -31,7 +31,7 @@
   tasks:
     - name: Create Folder
       file:
-        path: "~/etl-nosql/db/postgress/var/lib/postgresql/data/{{cluster_size}}/{{data_size}}"
+        path: "~/etl-nosql/db/postgress/var/lib/postgresql/data/{{cluster_size}}/{{scale}}"
         state: directory
 
 
@@ -97,20 +97,9 @@
       ansible.builtin.command: "docker stack deploy -c {{database_info_path}}/docker-compose.yaml {{db['docker_stack_name']}}"
       tags: tag_deploy_stack
 
-    - name: Wait for first container and get container ID
-      ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
-      register: container_id
-      until: container_id.stdout != ""
-      retries: 20
-      delay: 5
-      tags: tag_deploy_stack
-
-    - name: Wait for all nodes in cluster
-      ansible.builtin.command: "docker exec {{container_id.stdout}} psql -c 'SELECT master_get_active_worker_nodes();'"
-      register: cmd_res_wait
-      until: "cmd_res_wait.stdout_lines | length == cluster_size + 4"
-      retries: 5
-      delay: 60
+    - name: Wait
+      pause:
+        seconds: 30
       tags: tag_deploy_stack
 
 
@@ -132,6 +121,14 @@
         - name: Add workers
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /scripts/add_workers_{{cluster_size}}.sql"
           tags: tag_db_fill_tables
+
+        - name: Wait for all nodes in cluster
+          ansible.builtin.command: "docker exec {{container_id.stdout}} psql -c 'SELECT master_get_active_worker_nodes();'"
+          register: cmd_res_wait
+          until: "cmd_res_wait.stdout_lines | length == cluster_size + 4"
+          retries: 5
+          delay: 60
+          tags: tag_deploy_stack
 
         - name: Create schema
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /tables_schema/{{item}}.sql"
