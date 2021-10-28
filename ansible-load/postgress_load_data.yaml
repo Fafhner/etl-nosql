@@ -86,6 +86,7 @@
   tasks:
     - name: Init swarm workers
       ansible.builtin.command: "docker volume rm pgdata_{{cluster_size}}_{{scale}}"
+      ignore_errors: true
       tags: tag_init_vol
 
     - name: Init swarm workers
