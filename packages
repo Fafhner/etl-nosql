@@ -1,0 +1,20 @@
+
+Cluster ETL only - Hadoop
+----------------------------
+Hadoop 3.3.1 https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+Scala 2.11.12
+    sudo apt-get remove scala-library scala
+    sudo wget https://downloads.lightbend.com/scala/2.12.12/scala-2.12.12.deb
+    sudo dpkg -i scala-2.12.12.deb
+    sudo apt-get update
+    sudo apt-get install scala
+
+
+All - apt-get install
+----------------------------
+docker.io python3 pip3 openjdk-8-jdk sshpass
+
+
+All - pip install
+----------------------------
+ansible numpy pandas pyarrow pyspark

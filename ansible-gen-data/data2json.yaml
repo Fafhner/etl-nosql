@@ -1,0 +1,9 @@
+---
+
+- hosts: data_gen_node
+  tasks:
+    - name: Use data2json tool
+      ansible.builtin.command: "python3 {{data2json_tool_path}}/data2json.py {{item.0}} {{item.1}} {{tables_schema_src}} {{tables_dest}}"
+      with_nested:
+        - "{{ sizes }}"
+        - "{{ tables }}"

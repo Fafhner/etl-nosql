@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 from datetime import datetime
 
 
@@ -30,27 +31,25 @@ def line_to_json(line: str, schema):
 
 
 if __name__ == '__main__':
-    schema_path = '../../db/tables_schema'
-    tables = ["catalog_returns", "date_dim", "store_sales", "catalog_sales",
-              "web_sales", "warehouse", "customer", "customer_address", "store_returns"]
-    data_sizes = [1, 3, 6, 9, 12]
-    data_path = '../../db/table_data'
-    json_write_path = '../../db/table_data/json'
+    data_size = sys.argv[1]
+    table = sys.argv[2]
+    schema_path = sys.argv[3]
+    data_path = sys.argv[4]
+    json_write_path = f"{data_path}/json"
 
-    for data_size in data_sizes:
-        for table in tables:
-            with open(f"{schema_path}/{table}.json", 'r') as schema_json:
-                schema = json.load(schema_json)
 
-            os.makedirs(f"{json_write_path}/{data_size}", exist_ok=True)
-            with open(f"{data_path}/{data_size}/{table}.dat", 'r', encoding="ISO-8859-1") as data_file:
-                p = f"{json_write_path}/{data_size}/{table}.json"
-                print(f"Creating... {p}")
-                with open(p, 'w') as data_json_file:
-                    line = data_file.readline()
-                    while line:
-                        data_json_file.write(line_to_json(line, schema))
-                        line = data_file.readline()
+    with open(f"{schema_path}/{table}.json", 'r') as schema_json:
+        schema = json.load(schema_json)
+
+    os.makedirs(f"{json_write_path}/{data_size}", exist_ok=True)
+    with open(f"{data_path}/{data_size}/{table}.dat", 'r', encoding="ISO-8859-1") as data_file:
+        p = f"{json_write_path}/{data_size}/{table}.json"
+        print(f"Creating... {p}")
+        with open(p, 'w') as data_json_file:
+            line = data_file.readline()
+            while line:
+                data_json_file.write(line_to_json(line, schema))
+                line = data_file.readline()
 
 
 

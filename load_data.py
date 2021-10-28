@@ -8,43 +8,33 @@ from util.util import *
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
-rootLogger.setLevel(logging.DEBUG)
+rootLogger.setLevel(logging.INFO)
 print = rootLogger.info
 
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
-fileHandler = logging.FileHandler(f"logs/run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
+fileHandler = logging.FileHandler(f"run_{datetime.now().strftime('%Y%m%d')}.output.log", mode='a')
 fileHandler.setFormatter(logFormatter)
 rootLogger.addHandler(fileHandler)
 
 if __name__ == "__main__":
-    if len(sys.argv) == 1:
-        print("No arguments given.")
-        file = ""
-        user = ""
-        password = ""
+    if len(sys.argv) != 4:
+        print(f"Wrong number of parameters. Expected 3 got {len(sys.argv) - 1}.")
+        user, password, conf_file_str = "", "", ""
         exit(-1)
     else:
-        file = sys.argv[1]
-        user = sys.argv[2]
-        password = sys.argv[3]
+        user, password, conf_file_str = sys.argv[1], sys.argv[2], sys.argv[3]
 
-    pos = int(sys.argv[4]) if len(sys.argv) >= 5 else None
-    main_only = int(sys.argv[5]) if len(sys.argv) >= 6 else None
-    env_ = load_from_json(file)
+    env_ = load_from_json(conf_file_str)
     conf = env_['static']
     conf_dynamic = env_['dynamic']
 
-
     udfs = [load_from_json(udf, conf['udf_path']) for udf in conf['udfs']]
-    ansi_catalog = conf['ansible_catalog']
-
+    ansi_catalog = conf['ansible_load_data_path']
+    ansi_file = conf['ansible_load_data_file']
     scenarios = create_scenarios(conf_dynamic)
-
-
-    print(f"------ Scenarios: {len(scenarios)} ---------------")
 
 
     def create_files(conf, grid, diff):
@@ -68,22 +58,9 @@ if __name__ == "__main__":
         write_to('all.json', json.dumps(conf_all, indent=4), ansi_catalog + "/group_vars")
 
 
-    database = conf['database']
-    spark_cmd = conf['spark_cmd']
-
-    def main_f():
-        if database == 'mongodb':
-            def main(env, grid, diff):
-                for udf in conf['udfs']:
-                    run_cmd(f"{spark_cmd} {ansi_catalog}/group_vars/all.json {udf} {conf['loops']} {conf['output']}", path=".")
-        elif database == 'cassandra':
-            def main(env, grid, diff):
-                for udf in conf['udfs']:
-                    for i in range(conf['loops']):
-                        run_cmd(f"{spark_cmd} {ansi_catalog}/group_vars/all.json {udf} {i} {conf['output']}", path=".")
-        else:
-            return None
-        return main
+    def _main_(_, __, ___):
+        print("\n\n\nLoading ended...\n\n\n")
+        return None
 
     do_once_nodes = [
     ]
@@ -103,8 +80,9 @@ if __name__ == "__main__":
     sm.setDoOnlyOnce(do_once_nodes)
     sm.addNodes(preprocess_nodes)
     sm.setFlowTree(flow_tree)
-    sm.setMain(main_f())
 
-    sm.ansbile_f = create_ansible_cmd('main.yaml', 'hosts', user, password, ansi_catalog)
 
-    sm.loop(conf, scenarios, pos, main_only)
+    sm.setMain(_main_)
+    sm.ansbile_f = create_ansible_cmd(ansi_file, 'hosts', user, password, ansi_catalog)
+
+    sm.loop(conf, scenarios)

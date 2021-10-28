@@ -3,7 +3,6 @@
     "cluster": {
       "node_manager": "192.168.55.16",
       "node_workers": [
-        "192.168.55.15",
         "192.168.55.16",
         "192.168.55.17",
         "192.168.55.18",
@@ -13,35 +12,90 @@
     "database": "cassandra",
     "database_info_path": "/home/magisterka/etl-nosql/db/cassandra",
     "udf_path": "/home/magisterka/etl-nosql/db/udf",
-    "database_info_file": "cassandra.info.json",
     "docker_compose_path": "/home/magisterka/etl-nosql/db/cassandra",
     "ansible_catalog": "/home/magisterka/etl-nosql/db/cassandra/ansible",
-    "tables_schema": [],
+    "ansible_load_data_path": "/home/magisterka/etl-nosql/ansible-load",
+    "ansible_load_data_file": "cass_load_data.yaml",
+    "output": "/home/magisterka/etl-nosql/result/run_cass.csv",
+    "tables_schema": [
+      "catalog_returns",
+      "date_dim",
+      "store_sales",
+      "catalog_sales",
+      "web_sales",
+      "warehouse",
+      "customer",
+      "customer_address",
+      "store_returns"
+    ],
+    "tables_schema_path": "/home/magisterka/etl-nosql/db/tables_schema",
+    "tables_schema_dest": "/home/magisterka/etl-nosql/db/cassandra/tables_schema",
+    "loops": 10,
     "udfs": [
       "10_intersect_np.json",
-      "10_intersect_pp.json"
-    ]
+      "10_intersect_pp.json",
+      "16_large_agg_fp.json",
+      "16_large_agg_np.json",
+      "17_left_join_np.json",
+      "17_left_join_pp.json",
+      "18_merge_join_np.json",
+      "18_merge_join_pp.json",
+      "20_nested_loops_np.json",
+      "20_nested_loops_pp.json"
+    ],
+    "db": {
+      "service_name": "cassandra",
+      "etl_driver": "cassandra",
+      "docker_stack_name": "ETL",
+      "db_tables_path": "/table_data",
+      "db_tables_schema": "/tables_schema",
+      "network_name": "cassandraNet"
+    },
+    "configs": [
+      {
+        "file_name": "jvm.options",
+        "file_path": "/home/magisterka/etl-nosql/db/cassandra/etc/cassandra",
+        "params": [
+          {
+            "regex": "#-Xms4G",
+            "replace": "-Xms{{java_xms}}M"
+          },
+          {
+            "regex": "#-Xmx4G",
+            "replace": "-Xmx{{java_xms}}M"
+          }
+        ]
+      }
+    ],
+    "namespace": "tpc_ds",
+    "spark_cmd": "spark-submit --master \"yarn\" --driver-memory 4G --driver-cores 2 --num-executors 3 --conf spark.cassandra.connection.host=192.168.55.16 --packages com.datastax.spark:spark-cassandra-connector_2.12:3.1.0 --conf spark.sql.extensions=com.datastax.spark.connector.CassandraSparkExtensions --conf spark.sql.dse.search.enableOptimization=Off --conf spark.sql.dse.search.autoRatio=0.0 --conf spark.cassandra.input.fetch.sizeInRows=10000 /home/magisterka/etl-nosql/run_main_cass.py "
   },
   "dynamic": {
     "scale": {
       "context": "table_data",
-      "priority": 999,
+      "priority": 997,
       "data": [
-        3, 6
+        1,
+        3,
+        6,
+        9
       ]
     },
     "cluster_size": {
       "context": "cluster",
       "priority": 998,
       "data": [
+        3,
         4
       ]
     },
     "java_xms": {
       "context": "db-file",
-      "priority": 2,
+      "priority": 999,
       "data": [
-        4000
+        3000,
+        4500,
+        6000
       ]
     }
   }
