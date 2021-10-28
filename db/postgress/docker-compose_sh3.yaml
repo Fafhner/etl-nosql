@@ -17,7 +17,7 @@ services:
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/{cluster_size}/{data_size}:/var/lib/postgresql"
       - "~/etl-nosql/db/postgress/tables_schema/{data_size}:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/postgress/scripts:/scripts"
@@ -35,7 +35,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/{cluster_size}/{data_size}:/var/lib/postgresql"
     networks:
       - postgress
 
@@ -50,7 +50,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/{cluster_size}/{data_size}:/var/lib/postgresql"
     networks:
       - postgress
 
@@ -65,10 +65,9 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/{cluster_size}/{data_size}:/var/lib/postgresql"
     networks:
       - postgress
-
 
 networks:
   postgress:
