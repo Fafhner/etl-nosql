@@ -31,7 +31,7 @@
   tasks:
     - name: Create Folder
       file:
-        path: "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}"
+        path: "~/etl-nosql/db/postgress/var/lib/postgresql/data/{{cluster_size}}/{{data_size}}"
         state: directory
 
 
