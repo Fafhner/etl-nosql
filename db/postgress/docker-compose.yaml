@@ -16,6 +16,11 @@ services:
       PGUSER: "postgres"
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/3/3:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/tables_schema/3:/tables_schema"
+      - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/postgress/scripts:/scripts"
     networks:
       - postgress
 
@@ -29,6 +34,8 @@ services:
     depends_on: [manager]
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    volumes:
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/3/3:/var/lib/postgresql/data"
     networks:
       - postgress
 
@@ -42,9 +49,25 @@ services:
     depends_on: [manager]
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    volumes:
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/3/3:/var/lib/postgresql/data"
     networks:
       - postgress
 
+  worker-3:
+    image: "citusdata/citus:10.2.2"
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    labels: ["com.citusdata.role=Worker"]
+    depends_on: [manager]
+    environment: *AUTH
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    volumes:
+      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/3/3:/var/lib/postgresql/data"
+    networks:
+      - postgress
 
 
 networks:
