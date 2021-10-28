@@ -16,9 +16,8 @@ services:
       PGUSER: "postgres"
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
       - "~/etl-nosql/db/postgress/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/postgress/scripts:/scripts"
@@ -36,7 +35,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
 
@@ -51,7 +50,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
 
@@ -66,7 +65,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
 
@@ -81,7 +80,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
 
@@ -96,7 +95,7 @@ services:
     environment: *AUTH
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
-      - "~/etl-nosql/db/postgress/var/lib/postgresql/data/{cluster_size}/{data_size}:/var/lib/postgresql/data"
+      - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
       - postgress
 
@@ -104,3 +103,7 @@ networks:
   postgress:
     external:
       name: postgressNet
+
+volumes:
+  pgdata_{cluster_size}_{data_size}:
+    external: true

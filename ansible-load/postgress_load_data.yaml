@@ -84,6 +84,15 @@
           ansible.builtin.command:  "docker swarm join --token {{ hostvars[cluster['node_manager']]['cluster_token'].stdout }} {{cluster['node_manager']}}:2377"
       tags: tag_init_swarm
 
+###############################
+- hosts: cluster_node_manager:cluster_node_workers
+  tasks:
+    - name: Create volume
+      block:
+        - name: Init swarm workers
+          ansible.builtin.command:  "docker volume create pgdata_{{cluster_size}}_{{scale}}"
+      tags: tag_init_swarm
+
 
 ###############################
 - hosts: cluster_node_manager
