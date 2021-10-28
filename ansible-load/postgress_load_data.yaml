@@ -31,7 +31,7 @@
   tasks:
     - name: Create Folder
       file:
-        path: "~/etl-nosql/db/postgress/var/lib/postgresql/{{cluster_size}}/{{scale}}"
+        path: "~/etl-nosql/db/postgress/var/lib/postgresql/{{cluster_size}}/{{scale}}/data"
         state: directory
 
 
@@ -144,6 +144,6 @@
           tags: tag_db_fill_tables
 
         - name: Load data
-          ansible.builtin.command: docker exec {{container_id.stdout}} psql -c "\copy {{item}} FROM '/table_data/{{item}}.dat' WITH CSV DELIMITER '|' ENCODING 'ISO-8859-1'"
+          ansible.builtin.command: docker exec {{container_id.stdout}} psql -c "\copy {{item}} FROM '/table_data/{{scale}}/{{item}}.dat' WITH CSV DELIMITER '|' ENCODING 'ISO-8859-1'"
           loop: "{{tables_schema}}"
           tags: tag_db_fill_tables
