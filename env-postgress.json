@@ -7,7 +7,8 @@
         "192.168.55.18",
         "192.168.55.17",
         "192.168.55.16",
-        "192.168.55.15"
+        "192.168.55.15",
+        "192.168.55.14"
       ],
       "port": 27017
     },
@@ -43,16 +44,7 @@
       "network_name": "postgressNet"
     },
     "configs": [
-      {
-        "file_name": "mongod.conf",
-        "file_path": "/home/magisterka/etl-nosql/db/postgress/etc",
-        "params": [
-          {
-            "regex": "<number>",
-            "replace": "{{cache_size}}"
-          }
-        ]
-      }
+
     ],
     "udfs": [
       "10_intersect_np.json",
@@ -85,16 +77,8 @@
       "priority": 998,
       "data": [
         3,
-        4
-      ]
-    },
-    "cache_size": {
-      "context": "db-file",
-      "priority": 2,
-      "data": [
-        2,
-        1.5,
-        1
+        4,
+        5
       ]
     }
   }
