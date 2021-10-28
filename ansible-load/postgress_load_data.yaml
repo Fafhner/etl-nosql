@@ -48,10 +48,6 @@
       tags: tag_rm_stack
       ignore_errors: true
 
-    - name: Wait
-      pause:
-        seconds: 10
-
 - hosts: cluster_node_manager
   tasks:
     - name: Restore files, change parameters
@@ -110,7 +106,7 @@
 
     - name: Wait
       pause:
-        seconds: 30
+        seconds: 10
       tags: tag_deploy_stack
 
 
@@ -128,12 +124,9 @@
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /scripts/add_workers_{{cluster_size}}.sql"
           tags: tag_db_fill_tables
 
-        - name: Wait for all nodes in cluster
-          ansible.builtin.command: "docker exec {{container_id.stdout}} psql -c 'SELECT master_get_active_worker_nodes();'"
-          register: cmd_res_wait
-          until: "cmd_res_wait.stdout_lines | length == cluster_size + 4"
-          retries: 5
-          delay: 60
+        - name: Wait
+          pause:
+            seconds: 30
           tags: tag_deploy_stack
 
         - name: Create schema
