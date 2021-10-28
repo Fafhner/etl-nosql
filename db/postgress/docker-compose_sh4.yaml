@@ -24,7 +24,7 @@ services:
     networks:
       - postgress
 
-  worker-1:
+  worker-17:
     image: "citusdata/citus:10.2.2"
     deploy:
       placement:
@@ -39,7 +39,7 @@ services:
     networks:
       - postgress
 
-  worker-2:
+  worker-18:
     image: "citusdata/citus:10.2.2"
     deploy:
       placement:
@@ -54,7 +54,7 @@ services:
     networks:
       - postgress
 
-  worker-3:
+  worker-19:
     image: "citusdata/citus:10.2.2"
     deploy:
       placement:
@@ -69,7 +69,7 @@ services:
     networks:
       - postgress
 
-  worker-4:
+  worker-15:
     image: "citusdata/citus:10.2.2"
     deploy:
       placement:
