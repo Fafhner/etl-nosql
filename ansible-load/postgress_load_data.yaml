@@ -87,11 +87,13 @@
 ###############################
 - hosts: cluster_node_manager:cluster_node_workers
   tasks:
-    - name: Create volume
-      block:
-        - name: Init swarm workers
-          ansible.builtin.command:  "docker volume create pgdata_{{cluster_size}}_{{scale}}"
-      tags: tag_init_swarm
+      - name: Init swarm workers
+        ansible.builtin.command:  "docker volume rm pgdata_{{cluster_size}}_{{scale}}"
+      tags: tag_init_swarm, tag_init_vol
+
+      - name: Init swarm workers
+        ansible.builtin.command:  "docker volume create pgdata_{{cluster_size}}_{{scale}}"
+      tags: tag_init_swarm, tag_init_vol
 
 
 ###############################
@@ -121,11 +123,6 @@
         - name: Get container ID 3
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
-
-        - name: Create schema
-          ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /tables_schema/{{item}}.sql"
-          loop: "{{tables_schema}}"
-          tags: tag_db_create_schema
 
         - name: Add workers
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /scripts/add_workers_{{cluster_size}}.sql"
