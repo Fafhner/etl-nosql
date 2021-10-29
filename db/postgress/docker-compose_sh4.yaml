@@ -36,7 +36,7 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-        command:
+    command:
       - "gosu postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
       - "~/etl-nosql/db/postgress/etc:/postgresql.conf:/etc/postgresql.conf"
@@ -55,7 +55,7 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-        command:
+    command:
       - "gosu postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
@@ -74,7 +74,7 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-        command:
+    command:
       - "gosu postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
@@ -92,7 +92,7 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-        command:
+    command:
       - "gosu postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
