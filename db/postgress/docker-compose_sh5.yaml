@@ -22,7 +22,7 @@ services:
       - "~/etl-nosql/db/postgress/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/postgress/scripts:/scripts"
-      - "~/etl-nosql/db/postgress/etc:/postgresql.conf:/etc/postgresql.conf"
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
@@ -39,7 +39,7 @@ services:
     command:
       - "gosu postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
-      - "~/etl-nosql/db/postgress/etc:/postgresql.conf:/etc/postgresql.conf"
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
@@ -60,7 +60,7 @@ services:
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
-      - "~/etl-nosql/db/postgress/etc:/postgresql.conf:/etc/postgresql.conf"
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
@@ -79,6 +79,7 @@ services:
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
@@ -97,6 +98,7 @@ services:
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
@@ -116,6 +118,7 @@ services:
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
