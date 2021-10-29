@@ -59,7 +59,7 @@
       "20_nested_loops_pp.json"
     ],
 
-    "spark_cmd": ""
+    "spark_cmd": "spark-submit --master \"yarn\" --driver-memory 4G --driver-cores 2 --num-executors 3 --jars $HADOOP_HOME/postgresql-42.3.0.jar --conf url=jdbc:postgresql://192.168.55.16/ --conf user='postgres' --conf password='' --conf pushDownPredicate=false /home/magisterka/etl-nosql/run_main_postgress.py "
   },
   "dynamic": {
     "scale": {

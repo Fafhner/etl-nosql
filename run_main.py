@@ -76,13 +76,12 @@ if __name__ == "__main__":
             def main(env, grid, diff):
                 for udf in conf['udfs']:
                     run_cmd(f"{spark_cmd} {ansi_catalog}/group_vars/all.json {udf} {conf['loops']} {conf['output']}", path=".")
-        elif database == 'cassandra':
+        else:
             def main(env, grid, diff):
                 for udf in conf['udfs']:
                     for i in range(conf['loops']):
                         run_cmd(f"{spark_cmd} {ansi_catalog}/group_vars/all.json {udf} {i} {conf['output']}", path=".")
-        else:
-            return None
+
         return main
 
     do_once_nodes = [

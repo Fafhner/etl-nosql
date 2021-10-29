@@ -1,7 +1,7 @@
 import sys
 from datetime import datetime
 
-import db.mongodb.etl.etl_process as etl
+import db.postgress.etl.etl_process as etl
 from pyspark.sql import SparkSession
 from pyarrow import fs
 import uuid
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     while idx < loops:
         udf['idx'] = idx
         try:
-            result, result_df = etl.process(udf, spark, "mongodb://192.168.55.16")
+            result, result_df = etl.process(udf, spark)
             hdfs.delete_dir_contents("./tmp")
         except Exception as e:
             omit_udf = True
