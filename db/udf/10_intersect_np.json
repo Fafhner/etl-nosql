@@ -4,15 +4,15 @@
   "datasets": {
     "date_dim": {
       "table_schema": "date_dim",
-      "query": "SELECT * FROM date_dim;"
+      "query": "SELECT * FROM date_dim"
     },
     "store_sales": {
       "table_schema": "store_sales",
-      "query": "SELECT * FROM store_sales;"
+      "query": "SELECT * FROM store_sales"
     },
     "catalog_sales": {
       "table_schema": "catalog_sales",
-      "query": "SELECT * FROM catalog_sales;"
+      "query": "SELECT * FROM catalog_sales"
     }
   },
   "spark_sql": "SELECT COUNT(*) FROM (\n  SELECT cs_sold_date_sk, cs_bill_customer_sk, cs_item_sk\n  FROM catalog_sales\n  JOIN date_dim ON (cs_sold_date_sk=d_date_sk)\n  WHERE d_year=1999 AND d_dom <= 4\n  INTERSECT \n  SELECT ss_sold_date_sk, ss_customer_sk, ss_item_sk\n  FROM store_sales\n  JOIN date_dim ON (ss_sold_date_sk=d_date_sk)\n  WHERE d_year=1999 AND d_dom <= 4\n)"

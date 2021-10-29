@@ -21,15 +21,14 @@
     "ansible_load_data_file": "postgress_load_data.yaml",
     "output": "/home/magisterka/etl-nosql/result/run_postgress.csv",
     "tables_schema": [
-      "catalog_returns",
       "date_dim",
-      "store_sales",
-      "catalog_sales",
-      "web_sales",
       "warehouse",
-      "customer",
       "customer_address",
-      "store_returns"
+      "customer",
+      "catalog_sales",
+      "store_sales",
+      "store_returns",
+      "web_sales"
     ],
     "tables_schema_path": "../db/tables_schema",
     "tables_schema_dest": "../db/postgress/tables_schema",
@@ -59,7 +58,7 @@
       "20_nested_loops_pp.json"
     ],
 
-    "spark_cmd": "spark-submit --master \"yarn\" --driver-memory 4G --driver-cores 2 --num-executors 3 --jars $HADOOP_HOME/postgresql-42.3.0.jar --conf url=jdbc:postgresql://192.168.55.16/ --conf user='postgres' --conf password='' --conf pushDownPredicate=false /home/magisterka/etl-nosql/run_main_postgress.py "
+    "spark_cmd": "spark-submit --master \"yarn\" --jars /home/magisterka/hadoop/postgresql-42.3.0.jar  --driver-class-path /home/magisterka/hadoop/postgresql-42.3.0.jar --driver-memory 4G --driver-cores 2 --num-executors 3 /home/magisterka/etl-nosql/run_main_postgress.py "
   },
   "dynamic": {
     "scale": {

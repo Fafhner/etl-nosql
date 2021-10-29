@@ -136,6 +136,10 @@
           loop: "{{tables_schema}}"
           tags: tag_db_fill_tables
 
+        - name: Add foreing keys
+          ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /scripts/add_foreign_keys.sql"
+          tags: tag_db_fill_tables
+
         - name: Create distribute tables
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /scripts/create_dist_table.sql"
           tags: tag_db_fill_tables

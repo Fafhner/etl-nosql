@@ -5,16 +5,16 @@
   "datasets": {
     "web_sales": {
       "table_schema": "web_sales",
-      "query": "SELECT ws_sold_date_sk, ws_warehouse_sk FROM web_sales;"
+      "query": "SELECT ws_sold_date_sk, ws_warehouse_sk FROM web_sales"
     },
     "warehouse": {
       "table_schema": "warehouse",
-      "query": "SELECT w_warehouse_sk FROM warehouse;"
+      "query": "SELECT w_warehouse_sk FROM warehouse"
     },
     "date_dim": {
       "table_schema": "date_dim",
-      "query": "SELECT d_date_sk FROM date_dim WHERE d_year=2000;"
+      "query": "SELECT d_date_sk FROM date_dim WHERE d_year=2000"
     }
   },
-  "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (cast(c1.ws_warehouse_sk as FLOAT)=cast(c2.w_warehouse_sk as FLOAT));"
+  "spark_sql": "SELECT COUNT(*)\nFROM web_sales c1 \nINNER JOIN date_dim ON (c1.ws_sold_date_sk=d_date_sk)\nINNER JOIN warehouse c2 ON (cast(c1.ws_warehouse_sk as FLOAT)=cast(c2.w_warehouse_sk as FLOAT))"
 }
