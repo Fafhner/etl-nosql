@@ -17,8 +17,6 @@ services:
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
     stop_grace_period: 60s
-    command:
-      - "gosu postgres postgres -c config_file=/etc/postgresql.conf"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
       - "~/etl-nosql/db/postgress/tables_schema:/tables_schema"
@@ -39,7 +37,6 @@ services:
     environment: *AUTH
     stop_grace_period: 60s
     command:
-      - "gosu postgres postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
       - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     volumes:
@@ -58,7 +55,6 @@ services:
     environment: *AUTH
     stop_grace_period: 60s
     command:
-      - "gosu postgres postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
@@ -77,7 +73,6 @@ services:
     environment: *AUTH
     stop_grace_period: 60s
     command:
-      - "gosu postgres postgres -c config_file=/etc/postgresql.conf"
       - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
