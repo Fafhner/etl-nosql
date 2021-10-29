@@ -54,7 +54,6 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder \
         .appName(f"Mongo_experiments_{datetime.now().strftime('%Y%m%d')}") \
-        .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.11:2.0.0') \
         .getOrCreate()
 
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
