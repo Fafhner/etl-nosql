@@ -122,14 +122,14 @@
           ansible.builtin.command: "docker ps -q --filter name={{db['docker_stack_name']}}* "
           register: container_id
 
+        - name: Wait
+          pause:
+            seconds: 60
+          tags: tag_deploy_stack
+
         - name: Add workers
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /scripts/add_workers_{{cluster_size}}.sql"
           tags: tag_db_fill_tables
-
-        - name: Wait
-          pause:
-            seconds: 30
-          tags: tag_deploy_stack
 
         - name: Create schema
           ansible.builtin.command: "docker exec {{container_id.stdout}} psql -f /tables_schema/{{item}}.sql"
@@ -147,5 +147,5 @@
 
         - name: Wait
           pause:
-            seconds: 30
+            seconds: 60
           tags: tag_db_fill_tables
