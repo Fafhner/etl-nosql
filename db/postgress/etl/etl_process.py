@@ -18,11 +18,13 @@ def process(udf: dict, spark: SparkSession):
         dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
         df = spark.read.format("jdbc") \
             .option("url", "jdbc:postgresql://192.168.55.16/") \
+            .option("driver", "org.postgresql.Driver") \
             .option("user", "postgres") \
             .option("password", "") \
             .option("query", udf_val['query']) \
             .load()
 
+                                                                                            
         df.write.parquet(f"tmp_psql/{udf_val['table_schema']}.parquet", mode='overwrite')
     dat_aq_end = timer()
 

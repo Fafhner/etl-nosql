@@ -11,11 +11,11 @@ from util.util import *
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
-rootLogger.setLevel(logging.DEBUG)
+rootLogger.setLevel(logging.INFO)
 print = rootLogger.info
 
 py4j_logger = logging.getLogger('py4j')
-py4j_logger.setLevel(logging.DEBUG)
+py4j_logger.setLevel(logging.INFO)
 
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
@@ -32,17 +32,17 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("No arguments given.")
         file = ""
-        udf = ""
+        udfs = ""
         idx = -1
         exit(-1)
     else:
         file = sys.argv[1]
-        udf = sys.argv[2]
+        udfs = sys.argv[2]
         idx = int(sys.argv[3])
         output = sys.argv[4]
     conf = load_from_json(file)
 
-    udf = load_from_json(udf, conf['udf_path'])
+    udf = load_from_json(udfs, conf['udf_path'])
 
     params = {
         "data": conf['scale'],
