@@ -22,7 +22,6 @@ services:
       - "~/etl-nosql/db/postgress/tables_schema:/tables_schema"
       - "~/etl-nosql/db/table_data:/table_data"
       - "~/etl-nosql/db/postgress/scripts:/scripts"
-      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
@@ -36,9 +35,7 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-    command:
-      - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
-      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
     networks:
@@ -54,11 +51,9 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-    command:
-      - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
-      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
 
@@ -72,14 +67,11 @@ services:
     depends_on: [manager]
     environment: *AUTH
     stop_grace_period: 60s
-    command:
-      - "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
-      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/etc/postgresql.conf"
     networks:
       - postgress
-
 
 networks:
   postgress:
