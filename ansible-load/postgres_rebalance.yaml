@@ -144,8 +144,3 @@
           ansible.builtin.command: docker exec {{container_id.stdout}} psql -c "\copy {{item}} FROM '/table_data/{{scale}}/{{item}}.dat' WITH CSV DELIMITER '|' ENCODING 'ISO-8859-1'"
           loop: "{{tables_schema}}"
           tags: tag_db_fill_tables
-
-        - name: Wait
-          pause:
-            seconds: 30
-          tags: tag_db_fill_tables

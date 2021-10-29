@@ -76,9 +76,7 @@
       "context": "cluster",
       "priority": 998,
       "data": [
-        3,
-        4,
-        5
+        3
       ]
     }
   }

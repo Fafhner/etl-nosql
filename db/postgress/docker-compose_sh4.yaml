@@ -9,13 +9,15 @@ services:
           - node.hostname==magisterka-OptiPlex-780-16
     image: "citusdata/citus:10.2.2"
     ports: ["5432:5432"]
-    labels: ["com.citusdata.role=Master", ]
+    labels: ["com.citusdata.role=Master"]
     environment: &AUTH
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: ""
       PGUSER: "postgres"
       PGPASSWORD: ""
       POSTGRES_HOST_AUTH_METHOD: "trust"
+    stop_grace_period: 60s
+
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
       - "~/etl-nosql/db/postgress/tables_schema:/tables_schema"
@@ -33,6 +35,8 @@ services:
     labels: ["com.citusdata.role=Worker"]
     depends_on: [manager]
     environment: *AUTH
+    stop_grace_period: 60s
+
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
@@ -48,6 +52,8 @@ services:
     labels: ["com.citusdata.role=Worker"]
     depends_on: [manager]
     environment: *AUTH
+    stop_grace_period: 60s
+
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
@@ -63,6 +69,8 @@ services:
     labels: ["com.citusdata.role=Worker"]
     depends_on: [manager]
     environment: *AUTH
+    stop_grace_period: 60s
+
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
@@ -78,6 +86,8 @@ services:
     labels: ["com.citusdata.role=Worker"]
     depends_on: [manager]
     environment: *AUTH
+    stop_grace_period: 60s
+
     command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
     volumes:
       - "pgdata_{cluster_size}_{data_size}:/var/lib/postgresql/data"
