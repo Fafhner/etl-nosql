@@ -19,20 +19,21 @@ def process(udf: dict, spark: SparkSession):
         df = spark.read.format("jdbc") \
             .option("url", "jdbc:postgresql://192.168.55.16/") \
             .option("driver", "org.postgresql.Driver") \
-            .option("fetchsize", 1000) \
+            .option("fetchsize", 10000) \
             .option("user", "postgres") \
             .option("password", "") \
             .option("query", udf_val['query']) \
             .load()
 
-                                                                                            
-        df.write.parquet(f"tmp_psql/{udf_val['table_schema']}.parquet", mode='overwrite')
+        df.createOrReplaceTempView(udf_val['table_schema'])
+        df.write.parquet(f"./tmp_psql/{udf_val['table_schema']}.parquet", mode='overwrite')
     dat_aq_end = timer()
 
     spark.sql("CLEAR CACHE;")
 
     for df_k in dataframes.keys():
         _ = spark.read.option("mergeSchema", "true").parquet(dataframes[df_k])
+        _.createOrReplaceTempView(f"{df_k}")
 
     etl_proc_start = timer()
 
