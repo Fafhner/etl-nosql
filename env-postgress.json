@@ -49,7 +49,7 @@
         "params": [
           {
             "regex": "shared_buffers = 128MB",
-            "replace": "{{cache_size}}GB"
+            "replace": "shared_buffers = {{cache_size}}GB"
           }
         ]
       }
