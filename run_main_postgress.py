@@ -57,8 +57,6 @@ if __name__ == "__main__":
 
     hdfs = fs.HadoopFileSystem('192.168.55.11', port=9000, user='magisterka')
 
-    result_file = f"/home/magisterka/etl-nosql/result/run_etl_mongo.csv"
-
     sleep(10)
     data_tries = dict()
     id_ = str(uuid.uuid4())
@@ -82,5 +80,5 @@ if __name__ == "__main__":
              f"{params['cluster_size']}," \
              f"{params['data']},{params['o_mem']}," \
              f"{result['overall_time']}\n"
-    write_to(result_file, a_data, mode='a')
+    write_to(output, a_data, mode='a')
 
