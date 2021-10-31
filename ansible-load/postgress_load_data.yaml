@@ -27,13 +27,6 @@
       tags: tag_prepare
       ignore_errors: true
 
-- hosts: cluster_node_manager:cluster_node_workers
-  tasks:
-    - name: Create Folder
-      file:
-        path: "~/etl-nosql/db/postgress/var/lib/postgresql/data/{{cluster_size}}/{{scale}}"
-        state: directory
-
 
 ######################
 - hosts: cluster_node_manager

@@ -1,0 +1,88 @@
+version: "3"
+
+services:
+  master:
+    hostname: "citus_master"
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-16
+    image: "citusdata/citus:10.2.2"
+    ports: ["5432:5432"]
+    labels: ["com.citusdata.role=Master"]
+    environment: &AUTH
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: ""
+      PGUSER: "postgres"
+      PGPASSWORD: ""
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    stop_grace_period: 60s
+    volumes:
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/var/lib/postgresql/data/postgresql.conf"
+      - "pgdata_3_xxx3:/var/lib/postgresql/data"
+      - "~/etl-nosql/db/postgress/tables_schema:/tables_schema"
+      - "~/etl-nosql/db/table_data:/table_data"
+      - "~/etl-nosql/db/postgress/scripts:/scripts"
+    networks:
+      - postgress
+
+  worker-17:
+    image: "citusdata/citus:10.2.2"
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-17
+    labels: ["com.citusdata.role=Worker"]
+    depends_on: [manager]
+    environment: *AUTH
+    stop_grace_period: 60s
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    volumes:
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/var/lib/postgresql/data/postgresql.conf"
+      - "pgdata_3_xxx3:/var/lib/postgresql/data"
+    networks:
+      - postgress
+
+  worker-18:
+    image: "citusdata/citus:10.2.2"
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-18
+    labels: ["com.citusdata.role=Worker"]
+    depends_on: [manager]
+    environment: *AUTH
+    stop_grace_period: 60s
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    volumes:
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/var/lib/postgresql/data/postgresql.conf"
+      - "pgdata_3_xxx3:/var/lib/postgresql/data"
+    networks:
+      - postgress
+
+  worker-19:
+    image: "citusdata/citus:10.2.2"
+    deploy:
+      placement:
+        constraints:
+          - node.hostname==magisterka-OptiPlex-780-19
+    labels: ["com.citusdata.role=Worker"]
+    depends_on: [manager]
+    environment: *AUTH
+    stop_grace_period: 60s
+    command: "gosu postgres '/usr/local/bin/docker-entrypoint.sh' 'postgres'"
+    volumes:
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/var/lib/postgresql/data/postgresql.conf"
+      - "pgdata_3_xxx3:/var/lib/postgresql/data"
+    networks:
+      - postgress
+
+networks:
+  postgress:
+    external:
+      name: postgressNet
+
+volumes:
+      - "~/etl-nosql/db/postgress/etc/postgresql.conf:/var/lib/postgresql/data/postgresql.conf"
+  pgdata_3_xxx3:
+    external: true

@@ -19,7 +19,12 @@ def load_from(file_name, path=None):
 if __name__ == '__main__':
     cluster_size = sys.argv[1]
     data_size = sys.argv[2]
+    add_conf_file = True if len(sys.argv) > 3 else False
 
     dc = load_from(f'docker-compose_sh{cluster_size}.yaml', ".")
+    if add_conf_file:
+        dc = dc.replace("volumes:\n",
+                        "volumes:\n      - \"~/etl-nosql/db/postgress/etc/postgresql.conf:/var/lib/postgresql/data/postgresql.conf\"\n")
+
     write_to('docker-compose.yaml', dc.format(data_size=data_size, cluster_size=f"{cluster_size}"))
 
