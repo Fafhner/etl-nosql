@@ -15,10 +15,11 @@ def process(udf: dict, spark: SparkSession):
     for udf_val in udf['datasets'].values():
         spark.sql("CLEAR CACHE;")
 
-        dataframes[f"{udf_val['table_schema']}"] = f"./tmp/{udf_val['table_schema']}*"
+        dataframes[f"{udf_val['table_schema']}"] = f"./tmp_psql/{udf_val['table_schema']}*"
         df = spark.read.format("jdbc") \
             .option("url", "jdbc:postgresql://192.168.55.16/") \
             .option("driver", "org.postgresql.Driver") \
+            .option("fetchsize", 1000) \
             .option("user", "postgres") \
             .option("password", "") \
             .option("query", udf_val['query']) \

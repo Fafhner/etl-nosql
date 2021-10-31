@@ -67,7 +67,7 @@ if __name__ == "__main__":
     udf['idx'] = idx
     try:
         result, result_df = etl.process(udf, spark)
-        hdfs.delete_dir_contents("./tmp")
+        hdfs.delete_dir_contents("./tmp_psql")
     except Exception as e:
         omit_udf = True
         result = None
